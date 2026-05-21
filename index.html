@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel Sales Sprint</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{
+      --font-body:'General Sans',Inter,sans-serif;
+      --font-display:'General Sans',Inter,sans-serif;
+      --text-xs:clamp(.75rem,.7rem + .25vw,.875rem);
+      --text-sm:clamp(.875rem,.8rem + .35vw,1rem);
+      --text-base:clamp(1rem,.95rem + .25vw,1.125rem);
+      --text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);
+      --text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+      --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;
+      --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;--color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
+      --color-text:#28251d;--color-text-muted:#66645d;--color-text-faint:#9f9d96;--color-text-inverse:#f9f8f4;
+      --color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;
+      --color-success:#437a22;--color-success-highlight:#d4dfcc;--color-error:#a12c7b;--color-error-highlight:#e0ced7;
+      --color-gold:#d19900;--color-gold-highlight:#e9e0c6;--color-orange:#da7101;--color-orange-highlight:#e7d7c4;
+      --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;
+      --shadow-sm:0 1px 2px oklch(0.2 0.01 80 / 0.06);--shadow-md:0 4px 12px oklch(0.2 0.01 80 / 0.08);--shadow-lg:0 12px 32px oklch(0.2 0.01 80 / 0.12);
+      --transition:180ms cubic-bezier(.16,1,.3,1);
+    }
+    [data-theme="dark"]{
+      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;--color-surface-offset:#1d1c1a;--color-border:#393836;--color-divider:#262523;
+      --color-text:#e2dfd8;--color-text-muted:#aba8a2;--color-text-faint:#77746f;--color-text-inverse:#2b2a28;
+      --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-highlight:#313b3b;
+      --color-success:#6daa45;--color-success-highlight:#3a4435;--color-error:#d163a7;--color-error-highlight:#4c3d46;
+      --color-gold:#e8af34;--color-gold-highlight:#4d4332;--color-orange:#fdab43;--color-orange-highlight:#564b3e;
+      --shadow-sm:0 1px 2px oklch(0 0 0 / 0.2);--shadow-md:0 4px 12px oklch(0 0 0 / 0.3);--shadow-lg:0 12px 32px oklch(0 0 0 / 0.4);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    body{min-height:100vh;font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:var(--color-bg);color:var(--color-text)}
+    button,input{font:inherit;color:inherit}
+    button{cursor:pointer;border:none;background:none}
+    a{color:var(--color-primary)}
+    .app{max-width:1200px;margin:0 auto;padding:var(--space-4);display:grid;gap:var(--space-4)}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);padding:var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 12%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+    .brand{display:flex;align-items:center;gap:var(--space-3)}
+    .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--color-primary-highlight),var(--color-surface-offset));display:grid;place-items:center;color:var(--color-primary)}
+    .logo svg{width:24px;height:24px}
+    .title{font-size:var(--text-lg);font-weight:700}
+    .subtitle{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .toolbar{display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center}
+    .chip,.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:.7rem 1rem;border-radius:999px;font-size:var(--text-sm);transition:all var(--transition)}
+    .chip{background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .btn-primary{background:var(--color-primary);color:var(--color-text-inverse)}
+    .btn-primary:hover{background:var(--color-primary-hover)}
+    .btn-secondary{background:var(--color-surface-offset);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    .grid{display:grid;grid-template-columns:1.15fr .9fr;gap:var(--space-4)}
+    .panel{background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+    .hero{padding:var(--space-6);display:grid;gap:var(--space-4)}
+    .hero h1{font-size:var(--text-xl);line-height:1.1;max-width:20ch}
+    .hero p{max-width:62ch;color:var(--color-text-muted)}
+    .hero-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3)}
+    .mini-card{padding:var(--space-4);background:var(--color-surface-2);border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .mini-card strong{display:block;font-size:var(--text-sm)}
+    .mini-card span{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .path{padding:var(--space-5);display:grid;gap:var(--space-3)}
+    .path h2,.section-title{font-size:var(--text-lg)}
+    .steps{display:grid;gap:var(--space-3)}
+    .step{display:grid;grid-template-columns:auto 1fr;gap:var(--space-3);padding:var(--space-4);background:var(--color-surface-2);border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .step-num{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700}
+    .layout{display:grid;grid-template-columns:1.25fr .75fr;gap:var(--space-4)}
+    .lesson{padding:var(--space-5);display:grid;gap:var(--space-4)}
+    .lesson-top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3);flex-wrap:wrap}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .7rem;border-radius:999px;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.08em;background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700}
+    .what-now{padding:var(--space-4);background:var(--color-gold-highlight);border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-gold) 24%, transparent)}
+    .what-now strong{display:block;margin-bottom:.25rem}
+    .objective{padding:var(--space-4);background:var(--color-surface-2);border-radius:var(--radius-lg);display:grid;gap:var(--space-3);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .coach{padding:var(--space-4);background:var(--color-primary-highlight);border-radius:var(--radius-lg);display:grid;gap:var(--space-2)}
+    .coach p{color:var(--color-text)}
+    .quick-links{display:flex;gap:var(--space-2);flex-wrap:wrap}
+    .link-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:999px;background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);font-size:var(--text-sm)}
+    .sheet-wrap{overflow:auto;border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    table.sheet{min-width:100%;border-collapse:collapse;background:white;color:#222}
+    [data-theme="dark"] table.sheet{background:#151515;color:#f1f1f1}
+    .sheet th,.sheet td{border:1px solid #cfcfcf;padding:.2rem .35rem;text-align:left;min-width:112px}
+    [data-theme="dark"] .sheet th,[data-theme="dark"] .sheet td{border-color:#444}
+    .sheet th{background:#eef2f4;font-size:.9rem}
+    [data-theme="dark"] .sheet th{background:#262626}
+    .sheet input{width:100%;border:none;background:transparent;padding:.2rem 0;outline:none}
+    .formula-box{display:grid;gap:var(--space-2)}
+    .formula-box label{font-size:var(--text-sm);font-weight:600}
+    .formula-input{display:flex;gap:var(--space-2);align-items:center;padding:0 var(--space-3);min-height:52px;border-radius:var(--radius-lg);background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    .formula-input span{font-weight:700;color:var(--color-primary)}
+    .formula-input input{border:none;background:transparent;flex:1;outline:none}
+    .hint,.feedback,.achievement,.break-box,.stats,.glossary-card{padding:var(--space-4);border-radius:var(--radius-lg);background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .feedback.success{background:var(--color-success-highlight);border-color:color-mix(in oklab,var(--color-success) 24%, transparent)}
+    .feedback.error{background:var(--color-error-highlight);border-color:color-mix(in oklab,var(--color-error) 24%, transparent)}
+    .sidebar{display:grid;gap:var(--space-4)}
+    .meter{display:grid;gap:var(--space-2)}
+    .bar{height:12px;background:var(--color-surface-offset);border-radius:999px;overflow:hidden}
+    .fill{height:100%;background:var(--color-primary);width:20%;transition:width .3s ease}
+    .ach-list,.checklist{display:grid;gap:var(--space-2)}
+    .ach{padding:.75rem .9rem;border-radius:var(--radius-md);background:var(--color-surface-offset);font-size:var(--text-sm)}
+    .ach.unlocked{background:var(--color-success-highlight);color:var(--color-text)}
+    .check{display:flex;gap:.65rem;align-items:flex-start;font-size:var(--text-sm)}
+    .check input{margin-top:.25rem}
+    .break-game{display:grid;gap:var(--space-3)}
+    .coffee-scene{position:relative;height:250px;border-radius:var(--radius-xl);background:linear-gradient(180deg,color-mix(in oklab,var(--color-primary-highlight) 55%, white),var(--color-surface-offset));overflow:hidden;border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    [data-theme="dark"] .coffee-scene{background:linear-gradient(180deg,#233235,#1c1b19)}
+    .counter{position:absolute;left:10%;right:10%;bottom:16%;height:58px;background:#a46b43;border-radius:18px 18px 8px 8px;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}
+    .cup{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:92px;height:78px;border-radius:0 0 22px 22px;background:#fff7ef;border:3px solid #6b4b32;display:grid;place-items:center;font-size:1.9rem;user-select:none}
+    .cup::after{content:'';position:absolute;right:-18px;top:16px;width:22px;height:28px;border:4px solid #6b4b32;border-left:none;border-radius:0 16px 16px 0}
+    .cup::before{content:'';position:absolute;top:-18px;left:18px;width:50px;height:28px;background:radial-gradient(circle at 50% 90%,rgba(255,255,255,.15),rgba(255,255,255,0) 62%),radial-gradient(circle at 50% 50%,rgba(255,255,255,.75),rgba(255,255,255,0) 60%);opacity:.7;animation:steam 2.2s ease-in-out infinite}
+    .bean{position:absolute;width:18px;height:18px;border-radius:50% 45% 50% 45%;background:#7a4d2d;box-shadow:inset -2px -2px 0 rgba(0,0,0,.15)}
+    .explosion{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+    .particle{position:absolute;width:10px;height:10px;border-radius:50%;animation:blast .9s ease-out forwards}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(20,20,20,.45);display:none;align-items:center;justify-content:center;padding:var(--space-4);z-index:60}
+    .modal{max-width:720px;width:100%;background:var(--color-surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);padding:var(--space-5);display:grid;gap:var(--space-4)}
+    .modal h3{font-size:var(--text-lg)}
+    .glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3)}
+    .footer-note{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .hidden{display:none !important}
+    @keyframes blast{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.15);opacity:0}}
+    @keyframes steam{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(-7px);opacity:.9}}
+    @media (max-width: 980px){.grid,.layout{grid-template-columns:1fr}.hero-cards,.glossary-grid{grid-template-columns:1fr}.topbar{flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+<div class="explosion" id="explosion"></div>
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div style="display:flex;justify-content:space-between;gap:1rem;align-items:center">
+      <h3 id="modalTitle">Learn this first</h3>
+      <button class="btn btn-secondary" id="closeModal">Close</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-label="Excel Sales Sprint logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M8 8h8M8 12h8M8 16h5"></path><path d="M15 3v18"></path></svg>
+      </div>
+      <div>
+        <div class="title">Excel Sales Sprint</div>
+        <div class="subtitle">Help Srbina turn spreadsheet basics into confident business instincts</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="chip" id="progressChip">Lesson 1 of 4</div>
+      <button class="btn btn-secondary" id="openGlossary">Glossary</button>
+      <button class="btn btn-secondary" data-theme-toggle aria-label="Switch theme">Theme</button>
+    </div>
+  </header>
+
+  <section class="grid">
+    <div class="panel hero">
+      <span class="badge">Start here</span>
+      <h1>Srbina is practicing. You are her coach.</h1>
+      <p>She has a spreadsheet, a list of leads, and a big conversation coming up. Each section gives her one small task, a quick explanation if she needs it, and a moment to try it herself.</p>
+      <div class="hero-cards">
+        <div class="mini-card"><strong>1. Read the task</strong><span>One clear instruction at a time.</span></div>
+        <div class="mini-card"><strong>2. Learn the concept</strong><span>Open a glossary card when a term is new.</span></div>
+        <div class="mini-card"><strong>3. Try it yourself</strong><span>Type into the sheet and submit your answer.</span></div>
+      </div>
+      <div class="quick-links">
+        <button class="link-pill" data-glossary="formula">What is a formula?</button>
+        <button class="link-pill" data-glossary="equals">Why does = matter?</button>
+        <button class="link-pill" data-glossary="cell">What is a cell reference?</button>
+      </div>
+    </div>
+
+    <aside class="panel path">
+      <h2>What you will cover</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>Read the sheet</strong><div class="subtitle">Spot which column matters and why.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>Write your first total</strong><div class="subtitle">Use =SUM to add up a column.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>Find the average</strong><div class="subtitle">Repeat the same pattern with =AVERAGE.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>Make a recommendation</strong><div class="subtitle">Turn the number into a plain English next step.</div></div></div>
+      </div>
+      <p class="footer-note">If anything feels unfamiliar, tap a glossary card. Nothing here is meant to feel rushed.</p>
+    </aside>
+  </section>
+
+  <section class="layout">
+    <main class="panel lesson">
+      <div class="lesson-top">
+        <div>
+          <span class="badge" id="lessonBadge">Lesson 1 · Spreadsheet reading</span>
+          <h2 class="section-title" id="lessonTitle">Find the column that matters</h2>
+        </div>
+        <button class="btn btn-primary" id="nextLessonTop">Next lesson</button>
+      </div>
+
+      <div class="what-now" id="whatNow">
+        <strong>What do I do now?</strong>
+        <span id="whatNowText">Read the task below, then click the correct column name.</span>
+      </div>
+
+      <div class="objective">
+        <strong id="objectiveTitle">The task</strong>
+        <p id="objectiveText">Srbina is studying a mini lead sheet. Which column tells her how much money each lead is worth?</p>
+        <div class="coach">
+          <strong>Coach tip</strong>
+          <p id="coachText">Start with the business question. If the question is about money, look for the money column.</p>
+        </div>
+      </div>
+
+      <div class="sheet-wrap">
+        <table class="sheet" aria-label="Practice spreadsheet">
+          <thead><tr><th>Lead</th><th>Region</th><th>Calls</th><th>Revenue</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Northwind</td><td>East</td><td><input value="4" data-cell="C2"></td><td><input value="1200" data-cell="D2"></td><td>Warm</td></tr>
+            <tr><td>BluePeak</td><td>West</td><td><input value="6" data-cell="C3"></td><td><input value="850" data-cell="D3"></td><td>Hot</td></tr>
+            <tr><td>Maple Desk</td><td>South</td><td><input value="3" data-cell="C4"></td><td><input value="990" data-cell="D4"></td><td>Cold</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="answerArea"></div>
+
+      <div class="hint" id="hintBox">
+        <strong>Gentle nudge</strong>
+        <p id="hintText">This question is about value, not effort.</p>
+      </div>
+
+      <div id="feedbackBox" class="feedback hidden"></div>
+
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <button class="btn btn-secondary" id="showPrereq">Learn this first</button>
+        <button class="btn btn-primary" id="submitAnswer">Check answer</button>
+        <button class="btn btn-secondary hidden" id="nextLessonBottom">Continue →</button>
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <section class="panel stats">
+        <h3 class="section-title">Srbina's progress</h3>
+        <div class="meter"><span>Excel confidence</span><div class="bar"><div class="fill" id="excelFill"></div></div></div>
+        <div class="meter"><span>Business storytelling</span><div class="bar"><div class="fill" id="salesFill" style="background:var(--color-orange)"></div></div></div>
+        <div class="meter"><span>Overall readiness</span><div class="bar"><div class="fill" id="readinessFill" style="background:var(--color-gold)"></div></div></div>
+      </section>
+
+      <section class="panel achievement">
+        <h3 class="section-title">Achievements</h3>
+        <div class="ach-list" id="achievementList">
+          <div class="ach" data-ach="first">💡 First spark</div>
+          <div class="ach" data-ach="formula">📝 Formula friend</div>
+          <div class="ach" data-ach="story">📊 Business translator</div>
+          <div class="ach" data-ach="break">☕ Lunch break champion</div>
+        </div>
+      </section>
+
+      <section class="panel break-box">
+        <h3 class="section-title">☕ Lunch break</h3>
+        <p style="color:var(--color-text-muted)">Step away from the spreadsheet. Brew some coffees, reset your head, and come back when you are ready.</p>
+        <div class="break-game">
+          <div class="coffee-scene" id="coffeeScene" aria-label="Coffee shop mini-game">
+            <div class="counter"></div>
+            <button class="cup" id="brewButton" aria-label="Tap to brew coffee">☕</button>
+          </div>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" id="autoServe"> Hire a helper barista (auto-brews every 2 seconds)</label>
+          </div>
+          <div class="quick-links">
+            <div class="chip" id="beansChip">Coffees: 0</div>
+            <div class="chip" id="ordersChip">Served: 0</div>
+            <div class="chip" id="moodChip">Vibe: calm</div>
+          </div>
+          <p class="footer-note">Tap the cup to brew. Every 5 coffees served lifts the vibe.</p>
+        </div>
+      </section>
+    </aside>
+  </section>
+</div>
+<script>
+(() => {
+  const lessons = [
+    {
+      badge:'Lesson 1 · Spreadsheet reading',
+      title:'Find the column that matters',
+      whatNow:'Click the column name that tells Srbina which leads are worth the most money.',
+      objective:'Srbina is studying a mini lead sheet. Which column tells her how much money each lead is worth?',
+      coach:'Start with the business question. If the question is about money, look for the money column.',
+      hint:'This is about value, not effort or activity.',
+      prereq:'revenue',
+      mode:'buttons',
+      options:['Calls','Revenue','Region'],
+      answer:'Revenue',
+      success:'✓ Exactly. Revenue is the value column. Strong analysts match the business question to the right field before touching any formulas.',
+      fail:'Not quite. Calls measure effort, but Revenue measures money. Try again.',
+      excel:20,sales:10,readiness:15,achievement:'first'
+    },
+    {
+      badge:'Lesson 2 · Formula basics',
+      title:'Write your first total',
+      whatNow:'Type the Excel formula that adds up all three Revenue values in cells D2 through D4. Then press Check answer.',
+      objective:'Srbina needs the total revenue from all three leads. Type the formula that adds D2, D3, and D4 together.',
+      coach:'Not sure where to start? Open the “Learn this first” card below. It explains what = means and how SUM works.',
+      hint:'The formula you need is =SUM(D2:D4). The colon means “from D2 through D4”.',
+      prereq:'formula',
+      mode:'formula',
+      placeholder:'Type your formula here',
+      answerVariants:['=SUM(D2:D4)','=sum(d2:d4)','=SUM(d2:d4)','=sum(D2:D4)'],
+      success:'✓ That is correct. You just wrote a real Excel formula. Notice the pattern: = then the function name then the range in parentheses.',
+      fail:'Not quite. Make sure it starts with = and the range is D2:D4. Example: =SUM(D2:D4)',
+      excel:45,sales:18,readiness:35,achievement:'formula'
+    },
+    {
+      badge:'Lesson 3 · Average',
+      title:'Find the average revenue',
+      whatNow:'Type the formula for the average of D2 through D4. It follows the exact same pattern as SUM.',
+      objective:'Now Srbina wants to know the typical deal size. Type the formula that averages the three Revenue values.',
+      coach:'Same shape as the last formula. Swap SUM for AVERAGE and point it at the same cells.',
+      hint:'=AVERAGE(D2:D4)',
+      prereq:'average',
+      mode:'formula',
+      placeholder:'Type your formula here',
+      answerVariants:['=AVERAGE(D2:D4)','=average(d2:d4)','=average(D2:D4)','=AVERAGE(d2:d4)'],
+      success:'✓ Nice. You reused the same formula pattern with a different function name. That is how Excel vocabulary grows.',
+      fail:'Almost. Try =AVERAGE(D2:D4) — same structure as =SUM(D2:D4) from the last lesson.',
+      excel:70,sales:28,readiness:55,achievement:null
+    },
+    {
+      badge:'Lesson 4 · Recommendation',
+      title:'Turn the number into a next step',
+      whatNow:'Write one short recommendation for Srbina. Mention the lead with the highest revenue and say what she should do next.',
+      objective:'Srbina has the numbers. Now she needs to say something useful about them. Write a short recommendation that names the top lead and suggests an action.',
+      coach:'Try this structure: name the lead, state the value, say what to do. Example: “Northwind is the top lead at 1200, so I would focus there first.”',
+      hint:'Include the word Northwind and something like priority, follow-up, or focus.',
+      prereq:'story',
+      mode:'text',
+      placeholder:'Write one short recommendation…',
+      validate:(text)=>/northwind/i.test(text) && /(priority|prioritize|follow|focus|first)/i.test(text),
+      success:'✓ That works. You connected a metric to an action, which is the habit that separates analysts who just calculate from analysts who communicate.',
+      fail:'Try again. Name the top lead (Northwind) and say what Srbina should do next, like focus on it or follow up first.',
+      excel:82,sales:70,readiness:82,achievement:'story'
+    }
+  ];
+
+  const glossary = {
+    revenue:{title:'Revenue — what it means',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Plain English</strong><p>Revenue is the money a lead or customer is worth. When choosing business priorities, this column usually matters more than activity counts like calls or emails.</p></div><div class="glossary-card"><strong>In a spreadsheet</strong><p>Look for a column labeled Revenue, Value, Deal Size, or Amount. That is the one you connect to a business question about money.</p></div></div>`},
+    formula:{title:'Excel formula basics',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Rule 1 — start with =</strong><p>Every Excel formula begins with an equals sign. Without it, Excel treats what you type as plain text and will not calculate anything.</p></div><div class="glossary-card"><strong>Rule 2 — function name</strong><p>After = comes the function name like SUM or AVERAGE. Think of it as the instruction you are giving Excel.</p></div><div class="glossary-card"><strong>Rule 3 — the range</strong><p>Inside the parentheses you put the cells you want to work with. D2:D4 means every cell from D2 down to D4. The colon means “through.”</p></div><div class="glossary-card"><strong>Full example</strong><p>=SUM(D2:D4) means: add up everything from cell D2 through cell D4.</p></div></div>`},
+    equals:{title:'Why formulas start with =',body:`<div class="glossary-card"><p>The equals sign tells Excel you want it to calculate something. If you type SUM(D2:D4) without the = at the front, Excel will just display those words as text instead of doing the math. Always start with =.</p></div>`},
+    cell:{title:'Cell references explained',body:`<div class="glossary-card"><p>Every cell in a spreadsheet has an address. D2 means column D, row 2. A range like D2:D4 means the group of cells from D2 down through D4. When you write a formula, you point it at these addresses instead of typing the actual numbers, so the formula updates automatically if the data changes.</p></div>`},
+    average:{title:'The AVERAGE formula',body:`<div class="glossary-grid"><div class="glossary-card"><strong>What it does</strong><p>=AVERAGE(D2:D4) adds the three values and divides by three. It gives you the typical deal size.</p></div><div class="glossary-card"><strong>Why it is useful</strong><p>Once you have an average, you can say whether any lead is above or below the typical value. That is a simple but meaningful business insight.</p></div></div>`},
+    story:{title:'Turning numbers into a recommendation',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The structure</strong><p>1. Name the number or lead. 2. Say what it means. 3. Recommend an action. Keep it to one or two sentences.</p></div><div class="glossary-card"><strong>Example</strong><p>“Northwind is the top lead by revenue at 1200, so I would prioritize that account for follow-up this week.”</p></div></div>`}
+  };
+
+  const state = { lesson:0, excel:10, sales:8, readiness:8, beans:0, orders:0, helper:false, unlocked:new Set(), solved:false };
+
+  const el = id => document.getElementById(id);
+  const lessonBadge=el('lessonBadge'),lessonTitle=el('lessonTitle'),whatNowText=el('whatNowText'),objectiveText=el('objectiveText'),coachText=el('coachText'),hintText=el('hintText'),answerArea=el('answerArea'),feedbackBox=el('feedbackBox');
+  const progressChip=el('progressChip'),excelFill=el('excelFill'),salesFill=el('salesFill'),readinessFill=el('readinessFill');
+  const modalBackdrop=el('modalBackdrop'),modalTitle=el('modalTitle'),modalBody=el('modalBody');
+
+  function setThemeIcon(){
+    const t=document.documentElement.getAttribute('data-theme');
+    document.querySelector('[data-theme-toggle]').textContent=t==='dark'?'☀️ Light':'🌙 Dark';
+  }
+  let theme=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',theme);setThemeIcon();
+  document.querySelector('[data-theme-toggle]').addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',theme);setThemeIcon();});
+
+  function openGlossary(key){
+    const item=glossary[key]; if(!item) return;
+    modalTitle.textContent=item.title; modalBody.innerHTML=item.body;
+    modalBackdrop.style.display='flex'; modalBackdrop.setAttribute('aria-hidden','false');
+  }
+  function closeGlossary(){modalBackdrop.style.display='none';modalBackdrop.setAttribute('aria-hidden','true');}
+  el('closeModal').addEventListener('click',closeGlossary);
+  modalBackdrop.addEventListener('click',e=>{if(e.target===modalBackdrop)closeGlossary();});
+  el('openGlossary').addEventListener('click',()=>openGlossary('formula'));
+  document.querySelectorAll('[data-glossary]').forEach(btn=>btn.addEventListener('click',()=>openGlossary(btn.dataset.glossary)));
+  el('showPrereq').addEventListener('click',()=>openGlossary(lessons[state.lesson].prereq));
+
+  function updateMeters(){
+    excelFill.style.width=state.excel+'%';
+    salesFill.style.width=state.sales+'%';
+    readinessFill.style.width=state.readiness+'%';
+  }
+
+  function unlockAchievement(key){
+    if(!key||state.unlocked.has(key))return;
+    state.unlocked.add(key);
+    const ach=document.querySelector(`[data-ach="${key}"]`);
+    if(ach)ach.classList.add('unlocked');
+  }
+
+  function explode(){
+    const root=el('explosion'); root.innerHTML='';
+    const colors=['#01696f','#da7101','#d19900','#a12c7b','#437a22'];
+    for(let i=0;i<32;i++){
+      const p=document.createElement('span'); p.className='particle';
+      p.style.left='50%'; p.style.top='45%';
+      p.style.background=colors[i%colors.length];
+      p.style.setProperty('--dx',`${(Math.random()-.5)*500}px`);
+      p.style.setProperty('--dy',`${(Math.random()-.5)*360}px`);
+      root.appendChild(p);
+    }
+    setTimeout(()=>root.innerHTML='',1000);
+  }
+
+  function renderLesson(){
+    state.solved=false;
+    const l=lessons[state.lesson];
+    lessonBadge.textContent=l.badge; lessonTitle.textContent=l.title;
+    whatNowText.textContent=l.whatNow; objectiveText.textContent=l.objective;
+    coachText.textContent=l.coach; hintText.textContent=l.hint;
+    progressChip.textContent=`Lesson ${state.lesson+1} of ${lessons.length}`;
+    feedbackBox.className='feedback hidden'; feedbackBox.textContent='';
+    el('nextLessonBottom').classList.add('hidden');
+    el('nextLessonTop').textContent=state.lesson===lessons.length-1?'Finish':'Next lesson →';
+    answerArea.innerHTML='';
+
+    if(l.mode==='buttons'){
+      const wrap=document.createElement('div'); wrap.className='quick-links';
+      l.options.forEach(opt=>{
+        const b=document.createElement('button'); b.className='link-pill btn'; b.textContent=opt; b.dataset.choice=opt;
+        b.addEventListener('click',()=>{
+          document.querySelectorAll('[data-choice]').forEach(x=>x.style.outline='none');
+          b.style.outline='2px solid var(--color-primary)'; answerArea.dataset.answer=opt;
+        });
+        wrap.appendChild(b);
+      });
+      answerArea.appendChild(wrap);
+    } else {
+      const box=document.createElement('div'); box.className='formula-box';
+      const label=document.createElement('label'); label.textContent=l.mode==='text'?'Your recommendation':'Your formula';
+      const field=document.createElement('div'); field.className='formula-input';
+      const prefix=document.createElement('span'); prefix.textContent=l.mode==='text'?'✍':'=';
+      const input=document.createElement('input'); input.id='typedAnswer'; input.placeholder=l.placeholder; input.setAttribute('autocomplete','off');
+      input.addEventListener('keydown',e=>{if(e.key==='Enter')el('submitAnswer').click();});
+      field.append(prefix,input); box.append(label,field); answerArea.appendChild(box);
+    }
+  }
+
+  function setFeedback(ok,msg){
+    feedbackBox.className=`feedback ${ok?'success':'error'}`;
+    feedbackBox.textContent=msg; feedbackBox.classList.remove('hidden');
+  }
+
+  function submitCurrent(){
+    const l=lessons[state.lesson]; let correct=false;
+    if(l.mode==='buttons') correct=answerArea.dataset.answer===l.answer;
+    else if(l.mode==='formula') correct=l.answerVariants.includes((el('typedAnswer')?.value||'').trim());
+    else if(l.mode==='text') correct=l.validate((el('typedAnswer')?.value||'').trim());
+    if(correct){
+      state.excel=Math.max(state.excel,l.excel); state.sales=Math.max(state.sales,l.sales); state.readiness=Math.max(state.readiness,l.readiness);
+      updateMeters(); unlockAchievement(l.achievement);
+      setFeedback(true,l.success); explode(); state.solved=true;
+      el('nextLessonBottom').classList.remove('hidden');
+    } else { setFeedback(false,l.fail); }
+  }
+
+  function nextLesson(){
+    if(state.lesson<lessons.length-1){ state.lesson+=1; renderLesson(); }
+    else{
+      lessonBadge.textContent='All done'; lessonTitle.textContent='Srbina is ready.';
+      whatNowText.textContent='You have finished the four lessons. Open any glossary card to review, or replay the tasks from memory.';
+      objectiveText.textContent='You practiced reading a sheet, writing =SUM, writing =AVERAGE, and turning a number into a plain English recommendation. That is the beginner analyst loop.';
+      coachText.textContent='Come back tomorrow and run the lessons again. Spaced repetition is how this becomes second nature.';
+      hintText.textContent='Try the Lunch Break mini-game when you need a reset between sessions.';
+      answerArea.innerHTML='<div class="achievement"><strong>Version 1 complete. 🎉</strong><p>Four skills practiced. Four achievements to unlock. The next version adds more scenarios.</p></div>';
+      el('submitAnswer').classList.add('hidden'); el('showPrereq').classList.add('hidden'); el('nextLessonBottom').classList.add('hidden'); el('nextLessonTop').classList.add('hidden');
+      unlockAchievement('story'); state.excel=92; state.sales=84; state.readiness=90; updateMeters();
+      setFeedback(true,'✓ All four lessons complete. Well done.');
+    }
+  }
+
+  el('submitAnswer').addEventListener('click',submitCurrent);
+  el('nextLessonBottom').addEventListener('click',nextLesson);
+  el('nextLessonTop').addEventListener('click',()=>{
+    if(state.solved||state.lesson===lessons.length-1) nextLesson();
+    else setFeedback(false,'Complete the current task first before moving on.');
+  });
+
+  const beansChip=el('beansChip'),ordersChip=el('ordersChip'),moodChip=el('moodChip');
+  function updateBreakUI(){
+    beansChip.textContent=`Coffees: ${state.beans}`;
+    ordersChip.textContent=`Served: ${state.orders}`;
+    moodChip.textContent=`Vibe: ${state.orders>=15?'excellent':state.orders>=5?'lighter':'calm'}`;
+  }
+  function dropBean(){
+    state.beans+=1; if(state.beans%3===0){state.orders+=1;}
+    if(state.orders>=5)unlockAchievement('break');
+    updateBreakUI();
+    const scene=el('coffeeScene');
+    const dot=document.createElement('div'); dot.className='bean';
+    dot.style.left=`${20+Math.random()*60}%`; dot.style.top=`${18+Math.random()*45}%`;
+    scene.appendChild(dot); setTimeout(()=>dot.remove(),700);
+  }
+  el('brewButton').addEventListener('click',dropBean);
+  el('autoServe').addEventListener('change',e=>{state.helper=e.target.checked;});
+  setInterval(()=>{if(state.helper){state.beans+=1;if(state.beans%3===0)state.orders+=1;updateBreakUI();}},2000);
+
+  updateMeters(); updateBreakUI(); renderLesson();
+})();
+</script>
+</body>
+</html>
