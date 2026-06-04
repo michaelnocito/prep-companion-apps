@@ -453,7 +453,7 @@
   }
 
   function nextLesson(){
-    if(state.lesson<lessons.length-1){ state.lesson+=1; renderLesson(); }
+    if(state.lesson<lessons.length-1){ state.lesson+=1; renderLesson(); window.scrollTo({top:0,behavior:'smooth'}); }
     else{
       lessonBadge.textContent='All done'; lessonTitle.textContent='Srbina is ready.';
       whatNowText.textContent='You have finished the four lessons. Open any glossary card to review, or replay the tasks from memory.';
