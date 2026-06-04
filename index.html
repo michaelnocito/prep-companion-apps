@@ -175,7 +175,7 @@
         <div class="step"><div class="step-num">1</div><div><strong>Read the sheet</strong><div class="subtitle">Spot which column matters and why.</div></div></div>
         <div class="step"><div class="step-num">2</div><div><strong>Write your first total</strong><div class="subtitle">Use =SUM to add up a column.</div></div></div>
         <div class="step"><div class="step-num">3</div><div><strong>Find the average</strong><div class="subtitle">Repeat the same pattern with =AVERAGE.</div></div></div>
-        <div class="step"><div class="step-num">4</div><div><strong>Make a recommendation</strong><div class="subtitle">Turn the number into a plain English next step.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>Make a recommendation</strong><div class="subtitle">Turn the number into a clear next step.</div></div></div>
       </div>
       <p class="footer-note">If anything feels unfamiliar, tap a glossary card. Nothing here is meant to feel rushed.</p>
     </aside>
@@ -338,7 +338,7 @@
   ];
 
   const glossary = {
-    revenue:{title:'Revenue — what it means',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Plain English</strong><p>Revenue is the money a lead or customer is worth. When choosing business priorities, this column usually matters more than activity counts like calls or emails.</p></div><div class="glossary-card"><strong>In a spreadsheet</strong><p>Look for a column labeled Revenue, Value, Deal Size, or Amount. That is the one you connect to a business question about money.</p></div></div>`},
+    revenue:{title:'Revenue — what it means',body:`<div class="glossary-grid"><div class="glossary-card"><strong>What it means</strong><p>Revenue is the money a lead or customer is worth. When choosing business priorities, this column usually matters more than activity counts like calls or emails.</p></div><div class="glossary-card"><strong>In a spreadsheet</strong><p>Look for a column labeled Revenue, Value, Deal Size, or Amount. That is the one you connect to a business question about money.</p></div></div>`},
     formula:{title:'Excel formula basics',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Rule 1 — start with =</strong><p>Every Excel formula begins with an equals sign. Without it, Excel treats what you type as plain text and will not calculate anything.</p></div><div class="glossary-card"><strong>Rule 2 — function name</strong><p>After = comes the function name like SUM or AVERAGE. Think of it as the instruction you are giving Excel.</p></div><div class="glossary-card"><strong>Rule 3 — the range</strong><p>Inside the parentheses you put the cells you want to work with. D2:D4 means every cell from D2 down to D4. The colon means “through.”</p></div><div class="glossary-card"><strong>Full example</strong><p>=SUM(D2:D4) means: add up everything from cell D2 through cell D4.</p></div></div>`},
     equals:{title:'Why formulas start with =',body:`<div class="glossary-card"><p>The equals sign tells Excel you want it to calculate something. If you type SUM(D2:D4) without the = at the front, Excel will just display those words as text instead of doing the math. Always start with =.</p></div>`},
     cell:{title:'Cell references explained',body:`<div class="glossary-card"><p>Every cell in a spreadsheet has an address. D2 means column D, row 2. A range like D2:D4 means the group of cells from D2 down through D4. When you write a formula, you point it at these addresses instead of typing the actual numbers, so the formula updates automatically if the data changes.</p></div>`},
@@ -457,7 +457,7 @@
     else{
       lessonBadge.textContent='All done'; lessonTitle.textContent='Srbina is ready.';
       whatNowText.textContent='You have finished the four lessons. Open any glossary card to review, or replay the tasks from memory.';
-      objectiveText.textContent='You practiced reading a sheet, writing =SUM, writing =AVERAGE, and turning a number into a plain English recommendation. That is the beginner analyst loop.';
+      objectiveText.textContent='You practiced reading a sheet, writing =SUM, writing =AVERAGE, and turning a number into a clear recommendation. That is the beginner analyst loop.';
       coachText.textContent='Come back tomorrow and run the lessons again. Spaced repetition is how this becomes second nature.';
       hintText.textContent='Try the Lunch Break mini-game when you need a reset between sessions.';
       answerArea.innerHTML='<div class="achievement"><strong>Version 1 complete. 🎉</strong><p>Four skills practiced. Four achievements to unlock. The next version adds more scenarios.</p></div>';
