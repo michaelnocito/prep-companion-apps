@@ -296,13 +296,13 @@
       whatNow:'Type the Excel formula that adds up all three Revenue values in cells D2 through D4. Then press Check answer.',
       objective:'Srbina needs the total revenue from all three leads. Type the formula that adds D2, D3, and D4 together.',
       coach:'Not sure where to start? Open the “Learn this first” card below. It explains what = means and how SUM works.',
-      hint:'The formula you need is =SUM(D2:D4). The colon means “from D2 through D4”.',
+      hint:'The formula you need is SUM(D2:D4). The colon means “from D2 through D4”.',
       prereq:'formula',
       mode:'formula',
       placeholder:'Type your formula here',
       answerVariants:['=SUM(D2:D4)','=sum(d2:d4)','=SUM(d2:d4)','=sum(D2:D4)'],
       success:'✓ That is correct. You just wrote a real Excel formula. Notice the pattern: = then the function name then the range in parentheses.',
-      fail:'Not quite. Make sure it starts with = and the range is D2:D4. Example: =SUM(D2:D4)',
+      fail:'Not quite. The range should be D2:D4. Try: SUM(D2:D4)',
       excel:45,sales:18,readiness:35,achievement:'formula'
     },
     {
@@ -311,13 +311,13 @@
       whatNow:'Type the formula for the average of D2 through D4. It follows the exact same pattern as SUM.',
       objective:'Now Srbina wants to know the typical deal size. Type the formula that averages the three Revenue values.',
       coach:'Same shape as the last formula. Swap SUM for AVERAGE and point it at the same cells.',
-      hint:'=AVERAGE(D2:D4)',
+      hint:'AVERAGE(D2:D4)',
       prereq:'average',
       mode:'formula',
       placeholder:'Type your formula here',
       answerVariants:['=AVERAGE(D2:D4)','=average(d2:d4)','=average(D2:D4)','=AVERAGE(d2:d4)'],
       success:'✓ Nice. You reused the same formula pattern with a different function name. That is how Excel vocabulary grows.',
-      fail:'Almost. Try =AVERAGE(D2:D4) — same structure as =SUM(D2:D4) from the last lesson.',
+      fail:'Almost. Try AVERAGE(D2:D4) — same structure as SUM(D2:D4) from the last lesson.',
       excel:70,sales:28,readiness:55,achievement:null
     },
     {
@@ -442,7 +442,7 @@
   function submitCurrent(){
     const l=lessons[state.lesson]; let correct=false;
     if(l.mode==='buttons') correct=answerArea.dataset.answer===l.answer;
-    else if(l.mode==='formula') correct=l.answerVariants.includes((el('typedAnswer')?.value||'').trim());
+    else if(l.mode==='formula'){ const v=(el('typedAnswer')?.value||'').trim().replace(/^=/,''); correct=l.answerVariants.includes('='+v); }
     else if(l.mode==='text') correct=l.validate((el('typedAnswer')?.value||'').trim());
     if(correct){
       state.excel=Math.max(state.excel,l.excel); state.sales=Math.max(state.sales,l.sales); state.readiness=Math.max(state.readiness,l.readiness);
