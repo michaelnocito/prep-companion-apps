@@ -132,6 +132,24 @@
     .glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3)}
     .footer-note{font-size:var(--text-sm);color:var(--color-text-muted)}
     .hidden{display:none !important}
+    /* ── Overview collapsible ── */
+    details#overviewDetails{border-radius:var(--radius-xl)}
+    details#overviewDetails>summary{display:flex;align-items:center;justify-content:space-between;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-radius:var(--radius-xl);cursor:pointer;font-size:var(--text-sm);font-weight:600;list-style:none;user-select:none;transition:background var(--transition);gap:var(--space-3)}
+    details#overviewDetails>summary::-webkit-details-marker{display:none}
+    details#overviewDetails>summary:hover{background:var(--color-surface-offset)}
+    details#overviewDetails[open]>summary{border-bottom-left-radius:0;border-bottom-right-radius:0}
+    .summary-left{display:flex;align-items:center;gap:var(--space-2)}
+    .summary-tag{font-weight:400;color:var(--color-text-muted);font-size:var(--text-xs)}
+    .summary-arrow{font-size:.7rem;color:var(--color-text-muted);transition:transform .2s;flex-shrink:0}
+    details#overviewDetails[open]>.summary-arrow,.summary-open{transform:rotate(90deg)}
+    details#overviewDetails[open] .summary-arrow{transform:rotate(90deg)}
+    details#overviewDetails>.grid{border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-top:none;border-radius:0 0 var(--radius-xl) var(--radius-xl);padding:var(--space-2) var(--space-2) var(--space-2)}
+    /* ── Focus mode ── */
+    .app.focus-mode #overviewDetails{display:none}
+    .app.focus-mode .sidebar{display:none}
+    .app.focus-mode .layout{grid-template-columns:1fr;max-width:800px;margin:0 auto}
+    #modeToggle{font-weight:600;border:2px solid color-mix(in oklab,var(--color-primary) 40%,transparent)}
+    .app.focus-mode #modeToggle{background:var(--color-primary);color:var(--color-text-inverse);border-color:var(--color-primary)}
     @keyframes blast{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.15);opacity:0}}
     @keyframes steam{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(-7px);opacity:.9}}
     @media (max-width: 860px){.layout{grid-template-columns:1fr}.glossary-grid{grid-template-columns:1fr}.topbar{flex-wrap:wrap}.steps{display:grid;grid-template-columns:1fr 1fr}}
@@ -161,11 +179,20 @@
     </div>
     <div class="toolbar">
       <div class="chip" id="progressChip">Lesson 1 of 4</div>
+      <button class="btn btn-secondary" id="modeToggle" title="Hide the overview to focus on the lesson">🎯 Focus</button>
       <button class="btn btn-secondary" id="openGlossary">Glossary</button>
       <button class="btn btn-secondary" data-theme-toggle aria-label="Switch theme">Theme</button>
     </div>
   </header>
 
+  <details id="overviewDetails" open>
+  <summary>
+    <span class="summary-left">
+      <span>Course overview</span>
+      <span class="summary-tag">Start here · What you will cover</span>
+    </span>
+    <span class="summary-arrow">▸</span>
+  </summary>
   <section class="grid">
     <div class="panel hero">
       <span class="badge">Start here</span>
@@ -194,6 +221,7 @@
       <p class="footer-note">If anything feels unfamiliar, tap a glossary card. Nothing here is meant to feel rushed.</p>
     </aside>
   </section>
+  </details>
 
   <section class="layout">
     <main class="panel lesson">
@@ -508,6 +536,22 @@
   el('brewButton').addEventListener('click',dropBean);
   el('autoServe').addEventListener('change',e=>{state.helper=e.target.checked;});
   setInterval(()=>{if(state.helper){state.beans+=1;if(state.beans%3===0)state.orders+=1;updateBreakUI();}},2000);
+
+  // ── Focus / Overview mode toggle ──
+  const modeToggleBtn=el('modeToggle');
+  const appEl=document.querySelector('.app');
+  function applyMode(mode){
+    const isFocus=mode==='focus';
+    appEl.classList.toggle('focus-mode',isFocus);
+    modeToggleBtn.textContent=isFocus?'📋 Overview':'🎯 Focus';
+    modeToggleBtn.title=isFocus?'Show course overview':'Hide overview — focus on the lesson';
+  }
+  applyMode(localStorage.getItem('excel-sprint-mode')||'overview');
+  modeToggleBtn.addEventListener('click',()=>{
+    const next=appEl.classList.contains('focus-mode')?'overview':'focus';
+    localStorage.setItem('excel-sprint-mode',next);
+    applyMode(next);
+  });
 
   updateMeters(); updateBreakUI(); renderLesson();
 })();
