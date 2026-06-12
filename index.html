@@ -132,6 +132,21 @@
     .glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3)}
     .footer-note{font-size:var(--text-sm);color:var(--color-text-muted)}
     .hidden{display:none !important}
+    /* ── Lesson stepper ── */
+    .stepper{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+    .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.65rem;font-weight:700;background:var(--color-surface-offset);color:var(--color-text-faint);border:2px solid transparent}
+    .dot.done{background:var(--color-success-highlight);color:var(--color-success)}
+    .dot.current{border-color:var(--color-primary);color:var(--color-primary);background:var(--color-primary-highlight)}
+    /* ── Sticky action bar ── */
+    #actionBar{position:sticky;bottom:0;background:var(--color-surface);border-top:1px solid var(--color-divider);padding:var(--space-2) 0;z-index:5}
+    /* ── Why + kit match lines ── */
+    .why-line{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .kit-match{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .kit-match a{font-weight:600}
+    /* ── Footer ── */
+    .site-footer{padding:var(--space-4);text-align:center;display:grid;gap:var(--space-2);color:var(--color-text-muted);font-size:var(--text-sm)}
+    .footer-cta{font-size:var(--text-base);font-weight:600}
+    .footer-kits a{white-space:nowrap}
     /* ── Overview collapsible ── */
     details#overviewDetails{border-radius:var(--radius-xl)}
     details#overviewDetails>summary{display:flex;align-items:center;justify-content:space-between;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-radius:var(--radius-xl);cursor:pointer;font-size:var(--text-sm);font-weight:600;list-style:none;user-select:none;transition:background var(--transition);gap:var(--space-3)}
@@ -178,7 +193,8 @@
       </div>
     </div>
     <div class="toolbar">
-      <div class="chip" id="progressChip">Lesson 1 of 4</div>
+      <div class="chip" id="progressChip">Lesson 1 of 14</div>
+      <div class="chip hidden" id="streakChip" title="First-try streak">🔥 0</div>
       <button class="btn btn-secondary" id="modeToggle" title="Hide the overview to focus on the lesson">🎯 Focus</button>
       <button class="btn btn-secondary" id="openGlossary">Glossary</button>
       <button class="btn btn-secondary" data-theme-toggle aria-label="Switch theme">Theme</button>
@@ -213,12 +229,15 @@
     <aside class="panel path">
       <h2>What you will cover</h2>
       <div class="steps">
-        <div class="step"><div class="step-num">1</div><div><strong>Read the sheet</strong><div class="subtitle">Spot which column matters and why.</div></div></div>
-        <div class="step"><div class="step-num">2</div><div><strong>Write your first total</strong><div class="subtitle">Use =SUM to add up a column.</div></div></div>
-        <div class="step"><div class="step-num">3</div><div><strong>Find the average</strong><div class="subtitle">Repeat the same pattern with =AVERAGE.</div></div></div>
-        <div class="step"><div class="step-num">4</div><div><strong>Make a recommendation</strong><div class="subtitle">Turn the number into a clear next step.</div></div></div>
+        <div class="step"><div class="step-num">1</div><div><strong>Read the sheet</strong><div class="subtitle">Columns, cells, text vs numbers.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>Core formulas</strong><div class="subtitle">SUM and AVERAGE.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>Logic &amp; lookups</strong><div class="subtitle">IF, COUNTIF, XLOOKUP.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>PivotTables</strong><div class="subtitle">Summarize thousands of rows.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>Clean data</strong><div class="subtitle">Spot problems, fix with TRIM and IFERROR.</div></div></div>
+        <div class="step"><div class="step-num">6</div><div><strong>Charts</strong><div class="subtitle">Pick the right picture.</div></div></div>
+        <div class="step"><div class="step-num">7</div><div><strong>Recommend</strong><div class="subtitle">Turn numbers into next steps.</div></div></div>
       </div>
-      <p class="footer-note">If anything feels unfamiliar, tap a glossary card. Nothing here is meant to feel rushed.</p>
+      <p class="footer-note">Mirrors the units in the <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Excel Prep Kit</a> — finish here, then go deeper there. Nothing here is meant to feel rushed.</p>
     </aside>
   </section>
   </details>
@@ -233,6 +252,8 @@
         <button class="btn btn-primary" id="nextLessonTop">Next lesson</button>
       </div>
 
+      <div class="stepper" id="stepper" aria-label="Lesson progress"></div>
+
       <div class="what-now" id="whatNow">
         <strong>What do I do now?</strong>
         <span id="whatNowText">Read the task below, then click the correct column name.</span>
@@ -241,6 +262,8 @@
       <div class="objective">
         <strong id="objectiveTitle">The task</strong>
         <p id="objectiveText">Srbina is studying a mini lead sheet. Which column tells her how much money each lead is worth?</p>
+        <p class="why-line" id="whyText"></p>
+        <p class="kit-match" id="kitMatchText"></p>
         <div class="coach">
           <strong>Coach tip</strong>
           <p id="coachText">Start with the business question. If the question is about money, look for the money column.</p>
@@ -267,7 +290,7 @@
 
       <div id="feedbackBox" class="feedback hidden"></div>
 
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;padding-top:var(--space-1)">
+      <div id="actionBar" style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
         <button class="btn btn-primary" id="submitAnswer">Check answer</button>
         <button class="btn btn-secondary hidden" id="nextLessonBottom">Continue →</button>
         <button class="btn btn-secondary" id="showPrereq" style="margin-left:auto">Learn this first</button>
@@ -288,6 +311,7 @@
           <div class="ach" data-ach="first">💡 First spark</div>
           <div class="ach" data-ach="formula">📝 Formula friend</div>
           <div class="ach" data-ach="story">📊 Business translator</div>
+          <div class="ach" data-ach="streak">🔥 Hot streak (3 first-try wins)</div>
           <div class="ach" data-ach="break">☕ Lunch break champion</div>
         </div>
       </section>
@@ -313,15 +337,34 @@
       </section>
     </aside>
   </section>
+
+  <footer class="site-footer">
+    <div class="footer-cta">Ready for the full course? <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Excel Prep Kit — 28 free lessons →</a></div>
+    <div class="footer-kits">More free kits:
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/sql/">SQL</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/python/">Python</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/tableau/">Tableau</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/powerbi/">Power BI</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/stats/">Stats</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/chart-literacy/">Chart Literacy</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/forecasting/">Forecasting</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/interview/">Interview</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/">All kits ↗</a>
+    </div>
+    <div class="footer-meta">Built by <a href="https://michaelnocito.github.io">Michael Nocito</a> · <a href="https://github.com/michaelnocito/excel-sales-sprint">GitHub ↗</a></div>
+  </footer>
 </div>
 <script>
 (() => {
+  const KIT_URL='https://michaelnocito.github.io/analyst-prep-kit/excel/';
   const lessons = [
     {
-      badge:'Lesson 1 · Spreadsheet reading',
+      badge:'Lesson 1 · Reading the sheet',
       title:'Find the column that matters',
       whatNow:'Click the column name that tells Srbina which leads are worth the most money.',
       objective:'Srbina is studying a mini lead sheet. Which column tells her how much money each lead is worth?',
+      why:'Analysts rarely build sheets from scratch — most days start with reading someone else’s.',
+      kitMatch:'How a Spreadsheet Is Built (the Grid)',
       coach:'Start with the business question. If the question is about money, look for the money column.',
       hint:'This is about value, not effort or activity.',
       prereq:'revenue',
@@ -330,43 +373,219 @@
       answer:'Revenue',
       success:'✓ Exactly. Revenue is the value column. Strong analysts match the business question to the right field before touching any formulas.',
       fail:'Not quite. Calls measure effort, but Revenue measures money. Try again.',
-      excel:20,sales:10,readiness:15,achievement:'first'
+      excel:14,sales:8,readiness:10,achievement:'first'
     },
     {
-      badge:'Lesson 2 · Formula basics',
+      badge:'Lesson 2 · Cell addresses',
+      title:'Name the cell',
+      whatNow:'Click the cell address where BluePeak’s revenue lives.',
+      objective:'Every cell has an address: column letter plus row number. In this sheet, Lead is column A, Region is B, Calls is C, Revenue is D, Status is E — and the header row is row 1. Which address holds BluePeak’s revenue (850)?',
+      why:'Formulas point at addresses, not values. Reading addresses fast is the skill under every other skill.',
+      kitMatch:'Cell References & the A1 Grid',
+      coach:'Find the column first (Revenue = D), then count down to BluePeak’s row.',
+      hint:'BluePeak sits on row 3. Revenue is column D.',
+      prereq:'cell',
+      mode:'buttons',
+      options:['B3','D2','D3'],
+      answer:'D3',
+      success:'✓ D3 it is — column D, row 3. You can now point at any value in any sheet.',
+      fail:'Not quite. Revenue is column D, and BluePeak is the second data row, which is row 3 (the headers take row 1).',
+      excel:20,sales:10,readiness:14,achievement:null
+    },
+    {
+      badge:'Lesson 3 · Text vs number',
+      title:'What can Excel do math on?',
+      whatNow:'Srbina pasted three values into a sheet. Click the one Excel can actually calculate with.',
+      objective:'Excel quietly stores every entry as either a number or text — and it only does math on numbers. Which of these three entries is a real number to Excel?',
+      why:'Half of all broken spreadsheets trace back to numbers that are secretly stored as text.',
+      kitMatch:'Text vs Number (& Dates)',
+      coach:'If it reads like words, Excel stores it as text — even when it describes a quantity.',
+      hint:'Excel cannot add words or error labels.',
+      prereq:'textnum',
+      mode:'buttons',
+      options:['1200','twelve hundred','N/A'],
+      answer:'1200',
+      success:'✓ Right. Digits stored as a number can be summed, averaged, and charted. “twelve hundred” and “N/A” are just text to Excel.',
+      fail:'Look again — which entry is pure digits? That is the only one Excel will calculate with.',
+      excel:26,sales:12,readiness:18,achievement:null
+    },
+    {
+      badge:'Lesson 4 · First formula',
       title:'Write your first total',
       whatNow:'Type the Excel formula that adds up all three Revenue values in cells D2 through D4. Then press Check answer.',
       objective:'Srbina needs the total revenue from all three leads. Type the formula that adds D2, D3, and D4 together.',
+      why:'Totals are the most-asked question in any sales meeting. This is the formula you will write most.',
+      kitMatch:'Your First Formula',
       coach:'Not sure where to start? Open the “Learn this first” card below. It explains what = means and how SUM works.',
       hint:'The formula you need is SUM(D2:D4). The colon means “from D2 through D4”.',
       prereq:'formula',
       mode:'formula',
       placeholder:'Type your formula here',
-      answerVariants:['=SUM(D2:D4)','=sum(d2:d4)','=SUM(d2:d4)','=sum(D2:D4)'],
+      answerVariants:['=SUM(D2:D4)'],
       success:'✓ That is correct. You just wrote a real Excel formula. Notice the pattern: = then the function name then the range in parentheses.',
       fail:'Not quite. The range should be D2:D4. Try: SUM(D2:D4)',
-      excel:45,sales:18,readiness:35,achievement:'formula'
+      excel:34,sales:16,readiness:26,achievement:'formula'
     },
     {
-      badge:'Lesson 3 · Average',
+      badge:'Lesson 5 · Average',
       title:'Find the average revenue',
       whatNow:'Type the formula for the average of D2 through D4. It follows the exact same pattern as SUM.',
       objective:'Now Srbina wants to know the typical deal size. Type the formula that averages the three Revenue values.',
+      why:'Averages turn “how much” into “what’s typical” — the first step toward benchmarks and targets.',
+      kitMatch:'What a Formula Actually Is',
       coach:'Same shape as the last formula. Swap SUM for AVERAGE and point it at the same cells.',
       hint:'AVERAGE(D2:D4)',
       prereq:'average',
       mode:'formula',
       placeholder:'Type your formula here',
-      answerVariants:['=AVERAGE(D2:D4)','=average(d2:d4)','=average(D2:D4)','=AVERAGE(d2:d4)'],
+      answerVariants:['=AVERAGE(D2:D4)'],
       success:'✓ Nice. You reused the same formula pattern with a different function name. That is how Excel vocabulary grows.',
       fail:'Almost. Try AVERAGE(D2:D4) — same structure as SUM(D2:D4) from the last lesson.',
-      excel:70,sales:28,readiness:55,achievement:null
+      excel:40,sales:20,readiness:32,achievement:null
     },
     {
-      badge:'Lesson 4 · Recommendation',
+      badge:'Lesson 6 · Logic',
+      title:'Make a decision with IF',
+      whatNow:'Type a formula that checks Northwind’s revenue (D2): if it is greater than 1000, show "Priority", otherwise show "Later".',
+      objective:'Srbina wants the sheet to flag big leads automatically. Write an IF formula on cell D2: greater than 1000 means "Priority", anything else means "Later".',
+      why:'Rules like this drive lead routing, alerts, and bonus calculations in real sales ops.',
+      kitMatch:'Make Decisions with IF',
+      coach:'IF has three parts separated by commas: the test, the value when true, the value when false.',
+      hint:'IF(D2>1000,"Priority","Later") — keep the quotes around the words.',
+      prereq:'iflogic',
+      mode:'formula',
+      placeholder:'Type your IF formula here',
+      answerVariants:['=IF(D2>1000,"Priority","Later")'],
+      success:'✓ Perfect. The sheet now decides for itself. IF is the gateway to every smart spreadsheet you will ever build.',
+      fail:'Check the three parts: IF(D2>1000,"Priority","Later") — test, value if true, value if false. Quotes go around the words.',
+      excel:48,sales:24,readiness:38,achievement:null
+    },
+    {
+      badge:'Lesson 7 · Conditional counting',
+      title:'Count the hot leads',
+      whatNow:'Type the formula that counts how many leads have a Hot status. Status lives in cells E2 through E4.',
+      objective:'Srbina’s manager asks: “How many hot leads do we have?” Count the cells in E2:E4 that say Hot.',
+      why:'“How many match?” is half the questions stakeholders ask. COUNTIF answers it in one line.',
+      kitMatch:'Count and Sum with Conditions',
+      coach:'COUNTIF takes two things: the range to look in, then the value to count — in quotes.',
+      hint:'COUNTIF(E2:E4,"Hot")',
+      prereq:'countif',
+      mode:'formula',
+      placeholder:'Type your COUNTIF formula here',
+      answerVariants:['=COUNTIF(E2:E4,"Hot")'],
+      success:'✓ One hot lead found, instantly. COUNTIF and its cousin SUMIF are the workhorses of sales reporting.',
+      fail:'Two parts: the range E2:E4, then "Hot" in quotes. Try: COUNTIF(E2:E4,"Hot")',
+      excel:54,sales:28,readiness:44,achievement:null
+    },
+    {
+      badge:'Lesson 8 · Lookups',
+      title:'Fetch a value with XLOOKUP',
+      whatNow:'Use XLOOKUP to fetch BluePeak’s revenue: look up "BluePeak" in A2:A4 and return the matching value from D2:D4.',
+      objective:'Srbina needs to pull one lead’s revenue out of the table by name. Write the XLOOKUP that finds "BluePeak" in the Lead column (A2:A4) and returns its Revenue (D2:D4).',
+      why:'Joining data across sheets is the #1 Excel skill interviewers test. XLOOKUP is the modern way.',
+      kitMatch:'Lookup Evolved: XLOOKUP',
+      coach:'XLOOKUP takes three things: what to find, where to look, what to return.',
+      hint:'XLOOKUP("BluePeak",A2:A4,D2:D4)',
+      prereq:'xlookup',
+      mode:'formula',
+      placeholder:'Type your XLOOKUP formula here',
+      answerVariants:['=XLOOKUP("BluePeak",A2:A4,D2:D4)'],
+      success:'✓ 850 retrieved by name. Once you can look values up, you can connect any two tables in a workbook.',
+      fail:'Three parts in order: "BluePeak" in quotes, the lookup range A2:A4, the return range D2:D4.',
+      excel:62,sales:32,readiness:52,achievement:null
+    },
+    {
+      badge:'Lesson 9 · PivotTables',
+      title:'Pick the right summary tool',
+      whatNow:'The real lead sheet has 5,000 rows. Click the tool that gives Srbina total revenue per region in under a minute.',
+      objective:'Three leads fit on one screen — five thousand do not. Srbina needs total revenue per region, fast, without writing a formula per region. What is the right tool?',
+      why:'Pivots are the fastest summary tool in Excel, and interviewers ask for them by name.',
+      kitMatch:'What Is a PivotTable?',
+      coach:'When the question is “total X per Y” over many rows, that is the textbook pivot moment.',
+      hint:'Sorting still leaves you adding by hand. Copying makes five sheets to maintain.',
+      prereq:'pivot',
+      mode:'buttons',
+      options:['Sort and add by hand','A PivotTable','Copy each region to its own sheet'],
+      answer:'A PivotTable',
+      success:'✓ Exactly. Drag Region to Rows, Revenue to Values — done in seconds, and it updates when the data changes.',
+      fail:'Think about maintenance: which option still works when row 5,001 arrives tomorrow?',
+      excel:68,sales:38,readiness:58,achievement:null
+    },
+    {
+      badge:'Lesson 10 · Data cleaning',
+      title:'Spot and fix dirty data',
+      whatNow:'A lookup for "BluePeak" keeps failing because the cell actually contains " BluePeak " with stray spaces. Click the function that fixes it.',
+      objective:'Invisible spaces are the most common reason lookups fail. Which function strips the extra spaces off " BluePeak " so it matches cleanly?',
+      why:'Analysts spend more time cleaning data than analyzing it. TRIM is the first tool out of the bag.',
+      kitMatch:'Spot and Fix Dirty Data',
+      coach:'You want a text-cleaning function, not a math one.',
+      hint:'The name describes trimming the edges off something.',
+      prereq:'clean',
+      mode:'buttons',
+      options:['TRIM','ROUND','MAX'],
+      answer:'TRIM',
+      success:'✓ TRIM(" BluePeak ") returns "BluePeak" — spaces gone, lookup fixed. Quiet function, massive time-saver.',
+      fail:'ROUND works on numbers and MAX finds the biggest value. You need the one that cleans text edges.',
+      excel:74,sales:42,readiness:64,achievement:null
+    },
+    {
+      badge:'Lesson 11 · Defensive formulas',
+      title:'Guard against errors with IFERROR',
+      whatNow:'Revenue per call is D2/C2 — but a zero in Calls would show an ugly error. Type the formula that shows 0 instead of an error.',
+      objective:'Srbina is adding a revenue-per-call column. If Calls is ever 0, plain division shows #DIV/0! and the sheet looks broken. Wrap the division so errors display as 0.',
+      why:'Dashboards that show #DIV/0! lose stakeholder trust instantly. Pros wrap risky math.',
+      kitMatch:'Defensive Formulas: IFERROR',
+      coach:'IFERROR takes two things: the risky calculation, then what to show if it fails.',
+      hint:'IFERROR(D2/C2,0)',
+      prereq:'iferror',
+      mode:'formula',
+      placeholder:'Type your IFERROR formula here',
+      answerVariants:['=IFERROR(D2/C2,0)'],
+      success:'✓ Armored. The math still works when data is good, and the sheet stays presentable when it is not.',
+      fail:'Two parts: the division D2/C2 first, then a comma, then the fallback 0. Try: IFERROR(D2/C2,0)',
+      excel:80,sales:46,readiness:70,achievement:null
+    },
+    {
+      badge:'Lesson 12 · Charts',
+      title:'Pick the right chart',
+      whatNow:'Srbina wants to compare total revenue across the three regions at a glance. Click the chart that fits.',
+      objective:'The numbers are ready — now they need to be seen. For comparing a value across a few categories (East vs West vs South), which chart does the job?',
+      why:'Choosing the right chart is the difference between a glance and a meeting.',
+      kitMatch:'Your First Chart',
+      coach:'Comparing amounts across categories is the home turf of one chart in particular.',
+      hint:'Pies get hard past a few slices; scatters are for two numeric variables.',
+      prereq:'chart',
+      mode:'buttons',
+      options:['Bar chart','Pie chart with 12 slices','Scatter plot'],
+      answer:'Bar chart',
+      success:'✓ Bars it is. Lengths are the easiest thing for human eyes to compare — that is why bar charts win for category comparisons.',
+      fail:'Think about what eyes compare easily. Twelve pie slices blur together; scatter plots need two numeric axes.',
+      excel:84,sales:54,readiness:76,achievement:null
+    },
+    {
+      badge:'Lesson 13 · Checkpoint',
+      title:'Sprint review: from memory',
+      whatNow:'No peeking at earlier lessons. Type the formula that totals the Calls column, cells C2 through C4.',
+      objective:'Quick retrieval check. Back in Lesson 4 you totaled Revenue. Same skill, new target: total the Calls column from memory.',
+      why:'Pulling a skill from memory — not re-reading it — is what locks it in. That is retrieval practice.',
+      kitMatch:'Unit 1: Formulas (review)',
+      coach:'Same pattern as your first total. Different column, same shape.',
+      hint:'Calls live in column C, rows 2 through 4.',
+      prereq:'formula',
+      mode:'formula',
+      placeholder:'Type the total formula from memory',
+      answerVariants:['=SUM(C2:C4)'],
+      success:'✓ 13 calls total — and you wrote it without looking back. That formula is yours now.',
+      fail:'Same shape as the Revenue total, but pointed at column C: the range is C2:C4.',
+      excel:88,sales:58,readiness:82,achievement:null
+    },
+    {
+      badge:'Lesson 14 · Recommendation',
       title:'Turn the number into a next step',
       whatNow:'Write one short recommendation for Srbina. Mention the lead with the highest revenue and say what she should do next.',
       objective:'Srbina has the numbers. Now she needs to say something useful about them. Write a short recommendation that names the top lead and suggests an action.',
+      why:'This is the step the full kit leaves to you — numbers only matter when they change what someone does next.',
+      kitMatch:null,
       coach:'Try this structure: name the lead, state the value, say what to do. Example: “Northwind is the top lead at 1200, so I would focus there first.”',
       hint:'Include the word Northwind and something like priority, follow-up, or focus.',
       prereq:'story',
@@ -375,7 +594,7 @@
       validate:(text)=>/northwind/i.test(text) && /(priority|prioritize|follow|focus|first)/i.test(text),
       success:'✓ That works. You connected a metric to an action, which is the habit that separates analysts who just calculate from analysts who communicate.',
       fail:'Try again. Name the top lead (Northwind) and say what Srbina should do next, like focus on it or follow up first.',
-      excel:82,sales:70,readiness:82,achievement:'story'
+      excel:92,sales:84,readiness:90,achievement:'story'
     }
   ];
 
@@ -385,10 +604,18 @@
     equals:{title:'Why formulas start with =',body:`<div class="glossary-card"><p>The equals sign tells Excel you want it to calculate something. If you type SUM(D2:D4) without the = at the front, Excel will just display those words as text instead of doing the math. Always start with =.</p></div>`},
     cell:{title:'Cell references explained',body:`<div class="glossary-card"><p>Every cell in a spreadsheet has an address. D2 means column D, row 2. A range like D2:D4 means the group of cells from D2 down through D4. When you write a formula, you point it at these addresses instead of typing the actual numbers, so the formula updates automatically if the data changes.</p></div>`},
     average:{title:'The AVERAGE formula',body:`<div class="glossary-grid"><div class="glossary-card"><strong>What it does</strong><p>=AVERAGE(D2:D4) adds the three values and divides by three. It gives you the typical deal size.</p></div><div class="glossary-card"><strong>Why it is useful</strong><p>Once you have an average, you can say whether any lead is above or below the typical value. That is a simple but meaningful business insight.</p></div></div>`},
+    textnum:{title:'Text vs number',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Two silent types</strong><p>Every cell is stored as either a number or text. Numbers can be summed, averaged, and charted. Text just sits there — even when it describes a quantity, like “twelve hundred”.</p></div><div class="glossary-card"><strong>How to spot text</strong><p>By default Excel right-aligns numbers and left-aligns text. A “number” hugging the left edge of its cell is usually text in disguise — and it will silently drop out of your SUM.</p></div></div>`},
+    iflogic:{title:'The IF function',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Three parts</strong><p>IF(test, value_if_true, value_if_false). First the question, then what to show when the answer is yes, then what to show when it is no.</p></div><div class="glossary-card"><strong>Example</strong><p>IF(D2&gt;1000,"Priority","Later") asks: is D2 bigger than 1000? If yes, the cell shows Priority. If no, Later. Words need quotes; numbers do not.</p></div></div>`},
+    countif:{title:'COUNTIF — counting with a condition',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Two parts</strong><p>COUNTIF(range, criteria). First where to look, then what to count. COUNTIF(E2:E4,"Hot") counts the cells in E2:E4 that say Hot.</p></div><div class="glossary-card"><strong>The family</strong><p>SUMIF adds instead of counts. AVERAGEIF averages. Same idea: only the rows that match the condition take part.</p></div></div>`},
+    xlookup:{title:'XLOOKUP — fetch by name',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Three parts</strong><p>XLOOKUP(what, where_to_look, what_to_return). XLOOKUP("BluePeak",A2:A4,D2:D4) finds BluePeak in the Lead column and returns the value on the same row from the Revenue column.</p></div><div class="glossary-card"><strong>Why it matters</strong><p>Lookups connect tables. Price lists, employee rosters, region mappings — any time two sheets share a column, a lookup joins them.</p></div></div>`},
+    pivot:{title:'What is a PivotTable?',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The idea</strong><p>A PivotTable summarizes thousands of rows into a small table — totals, counts, or averages, grouped by any column — without writing a single formula.</p></div><div class="glossary-card"><strong>When to reach for it</strong><p>Any question shaped like “total X per Y” (revenue per region, orders per month) over more rows than you can eyeball. Insert → PivotTable, drag two fields, done.</p></div></div>`},
+    clean:{title:'Dirty data and TRIM',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The usual suspects</strong><p>Stray spaces, inconsistent capitals, numbers stored as text, blank rows. Invisible problems that quietly break lookups and totals.</p></div><div class="glossary-card"><strong>TRIM</strong><p>TRIM(" BluePeak ") returns "BluePeak" — it strips spaces from both ends (and doubles in the middle). First fix to try when a lookup mysteriously fails.</p></div></div>`},
+    iferror:{title:'IFERROR — defensive formulas',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Two parts</strong><p>IFERROR(risky_calculation, fallback). If the calculation works, you get its result. If it errors, you get the fallback instead of #DIV/0! or #N/A.</p></div><div class="glossary-card"><strong>Example</strong><p>IFERROR(D2/C2,0) shows revenue per call normally, but shows 0 instead of an error when Calls is zero. Keeps dashboards presentable.</p></div></div>`},
+    chart:{title:'Picking the right chart',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The shortcuts</strong><p>Comparing categories → bar chart. Trend over time → line chart. Part of a whole (few slices) → pie. Two numeric variables → scatter.</p></div><div class="glossary-card"><strong>The test</strong><p>A good chart answers its question in one glance. If the reader has to study it, try a different type — usually a bar.</p></div></div>`},
     story:{title:'Turning numbers into a recommendation',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The structure</strong><p>1. Name the number or lead. 2. Say what it means. 3. Recommend an action. Keep it to one or two sentences.</p></div><div class="glossary-card"><strong>Example</strong><p>“Northwind is the top lead by revenue at 1200, so I would prioritize that account for follow-up this week.”</p></div></div>`}
   };
 
-  const state = { lesson:0, excel:10, sales:8, readiness:8, beans:0, orders:0, helper:false, unlocked:new Set(), solved:false };
+  const state = { lesson:0, excel:10, sales:8, readiness:8, beans:0, orders:0, helper:false, unlocked:new Set(), solved:false, completed:new Set(), streak:0, missedThisLesson:false };
 
   const el = id => document.getElementById(id);
   const lessonBadge=el('lessonBadge'),lessonTitle=el('lessonTitle'),whatNowText=el('whatNowText'),objectiveText=el('objectiveText'),coachText=el('coachText'),hintText=el('hintText'),answerArea=el('answerArea'),feedbackBox=el('feedbackBox');
@@ -428,10 +655,10 @@
     if(ach)ach.classList.add('unlocked');
   }
 
-  function explode(){
+  function explode(count=32){
     const root=el('explosion'); root.innerHTML='';
     const colors=['#01696f','#da7101','#d19900','#a12c7b','#437a22'];
-    for(let i=0;i<32;i++){
+    for(let i=0;i<count;i++){
       const p=document.createElement('span'); p.className='particle';
       p.style.left='50%'; p.style.top='45%';
       p.style.background=colors[i%colors.length];
@@ -442,13 +669,27 @@
     setTimeout(()=>root.innerHTML='',1000);
   }
 
+  function renderStepper(){
+    const root=el('stepper'); root.innerHTML='';
+    lessons.forEach((_,i)=>{
+      const d=document.createElement('div');
+      d.className='dot'+(state.completed.has(i)?' done':i===state.lesson?' current':'');
+      d.textContent=state.completed.has(i)?'✓':i+1;
+      d.title=lessons[i].title;
+      root.appendChild(d);
+    });
+  }
+
   function renderLesson(){
-    state.solved=false;
+    state.solved=false; state.missedThisLesson=false;
     const l=lessons[state.lesson];
     lessonBadge.textContent=l.badge; lessonTitle.textContent=l.title;
     whatNowText.textContent=l.whatNow; objectiveText.textContent=l.objective;
     coachText.textContent=l.coach; hintText.textContent=l.hint;
+    el('whyText').textContent=l.why?'💼 Why it matters: '+l.why:'';
+    el('kitMatchText').innerHTML=l.kitMatch?`📚 Prep-kit match: <a href="${KIT_URL}" target="_blank" rel="noopener">${l.kitMatch}</a>`:'';
     progressChip.textContent=`Lesson ${state.lesson+1} of ${lessons.length}`;
+    renderStepper();
     feedbackBox.className='feedback hidden'; feedbackBox.textContent='';
     el('nextLessonBottom').classList.add('hidden');
     el('nextLessonTop').textContent=state.lesson===lessons.length-1?'Finish':'Next lesson →';
@@ -483,28 +724,48 @@
     feedbackBox.textContent=msg; feedbackBox.classList.remove('hidden');
   }
 
+  function updateStreakChip(){
+    const chip=el('streakChip');
+    chip.textContent=`🔥 ${state.streak}`;
+    chip.classList.toggle('hidden',state.streak===0);
+  }
+
   function submitCurrent(){
     const l=lessons[state.lesson]; let correct=false;
+    if(state.solved) return;
     if(l.mode==='buttons') correct=answerArea.dataset.answer===l.answer;
-    else if(l.mode==='formula'){ const v=(el('typedAnswer')?.value||'').trim().replace(/^=/,''); correct=l.answerVariants.includes('='+v); }
+    else if(l.mode==='formula'){
+      const norm=s=>s.replace(/\s+/g,'').replace(/^=/,'').replace(/[‘’]/g,"'").replace(/[“”]/g,'"').toLowerCase();
+      const v=norm(el('typedAnswer')?.value||'');
+      correct=v.length>0 && l.answerVariants.some(a=>norm(a)===v);
+    }
     else if(l.mode==='text') correct=l.validate((el('typedAnswer')?.value||'').trim());
     if(correct){
       state.excel=Math.max(state.excel,l.excel); state.sales=Math.max(state.sales,l.sales); state.readiness=Math.max(state.readiness,l.readiness);
+      state.completed.add(state.lesson); renderStepper();
+      if(!state.missedThisLesson){ state.streak+=1; if(state.streak>=3)unlockAchievement('streak'); }
+      updateStreakChip();
       updateMeters(); unlockAchievement(l.achievement);
-      setFeedback(true,l.success); explode(); state.solved=true;
+      const hot=state.streak>=3 && !state.missedThisLesson;
+      setFeedback(true,(hot?`🔥 ${state.streak} first-try wins in a row! `:'')+l.success);
+      explode(hot?72:32); state.solved=true;
       el('nextLessonBottom').classList.remove('hidden');
-    } else { setFeedback(false,l.fail); }
+    } else {
+      state.missedThisLesson=true; state.streak=0; updateStreakChip();
+      setFeedback(false,l.fail);
+    }
   }
 
   function nextLesson(){
     if(state.lesson<lessons.length-1){ state.lesson+=1; renderLesson(); window.scrollTo({top:0,behavior:'smooth'}); }
     else{
       lessonBadge.textContent='All done'; lessonTitle.textContent='Srbina is ready.';
-      whatNowText.textContent='You have finished the four lessons. Open any glossary card to review, or replay the tasks from memory.';
-      objectiveText.textContent='You practiced reading a sheet, writing =SUM, writing =AVERAGE, and turning a number into a clear recommendation. That is the beginner analyst loop.';
+      whatNowText.textContent='You have finished all 14 lessons. Open any glossary card to review, or replay the tasks from memory.';
+      objectiveText.textContent='You covered reading a sheet, cell addresses, text vs numbers, SUM, AVERAGE, IF, COUNTIF, XLOOKUP, PivotTables, TRIM, IFERROR, chart choice, a memory checkpoint, and a written recommendation. That is the working core of analyst Excel.';
+      el('whyText').textContent=''; el('kitMatchText').innerHTML='';
       coachText.textContent='Come back tomorrow and run the lessons again. Spaced repetition is how this becomes second nature.';
       hintText.textContent='Try the Lunch Break mini-game when you need a reset between sessions.';
-      answerArea.innerHTML='<div class="achievement"><strong>Version 1 complete. 🎉</strong><p>Four skills practiced. Four achievements to unlock. The next version adds more scenarios.</p></div>';
+      answerArea.innerHTML='<div class="achievement"><strong>Sprint complete. 🎉</strong><p>Fourteen skills practiced across all seven units of the full course. Ready to go deeper? <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Continue in the Excel Prep Kit — 28 free lessons →</a></p></div>';
       el('submitAnswer').classList.add('hidden'); el('showPrereq').classList.add('hidden'); el('nextLessonBottom').classList.add('hidden'); el('nextLessonTop').classList.add('hidden');
       unlockAchievement('story'); state.excel=92; state.sales=84; state.readiness=90; updateMeters();
       setFeedback(true,'✓ All four lessons complete. Well done.');
