@@ -1,12 +1,12 @@
 # Dev guide — Sales Sprint
 
 Free browser games teaching data-analyst skills, live at
-**https://michaelnocito.github.io/sales-sprint/** (GitHub Pages, static,
+**https://michaelnocito.github.io/prep-companion-apps/** (GitHub Pages, static,
 built from `main`). Companion games to the Analyst Prep Kit
 (`github.com/michaelnocito/analyst-prep-kit`) — each sprint mirrors one
 kit, unit for unit.
 
-Local repo: `C:\Users\Mike\Projects\sales-sprint`
+Local repo: `C:\Users\Mike\Projects\prep-companion-apps`
 `ROADMAP.md` = what's next · `CHANGELOG.md` = what shipped.
 
 ## Structure

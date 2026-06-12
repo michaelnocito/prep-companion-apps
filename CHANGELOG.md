@@ -6,6 +6,15 @@ restructures or breaking changes.
 
 ---
 
+## v1.0.1 — June 12, 2026
+
+**Repo renamed** from `sales-sprint` to `prep-companion-apps` — the home
+for all companion games to the Analyst Prep Kit. Live URLs moved to
+https://michaelnocito.github.io/prep-companion-apps/ (the old
+`excel-sales-sprint` / `sql-sales-sprint` redirect stubs and all
+cross-promo links were updated to match). Game branding is unchanged —
+the series is still Sales Sprint.
+
 ## v1.0.0 — June 12, 2026
 
 **Consolidated repo.** The Excel and SQL Sales Sprints now live together

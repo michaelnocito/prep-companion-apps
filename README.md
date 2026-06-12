@@ -4,12 +4,12 @@
 
 A family of free, browser-based games for people starting out in data analytics. Each sprint is 14 bite-size lessons in one skill, with a story that carries from game to game. No install. No account. Just open it and play.
 
-→ **[Play live](https://michaelnocito.github.io/sales-sprint/)**
+→ **[Play live](https://michaelnocito.github.io/prep-companion-apps/)**
 
 | Sprint | Story | Play |
 |---|---|---|
-| **Excel Sales Sprint** | Part 1 — Srbina has a spreadsheet, a list of leads, and a big conversation coming up | [Play →](https://michaelnocito.github.io/sales-sprint/excel/) |
-| **SQL Sales Sprint** | Part 2 — the lead data outgrew the spreadsheet and moved to a real database | [Play →](https://michaelnocito.github.io/sales-sprint/sql/) |
+| **Excel Sales Sprint** | Part 1 — Srbina has a spreadsheet, a list of leads, and a big conversation coming up | [Play →](https://michaelnocito.github.io/prep-companion-apps/excel/) |
+| **SQL Sales Sprint** | Part 2 — the lead data outgrew the spreadsheet and moved to a real database | [Play →](https://michaelnocito.github.io/prep-companion-apps/sql/) |
 | Python · Tableau · Stats | Coming next | — |
 
 ---
@@ -40,7 +40,7 @@ The sprints are the warm-up; the prep kit is the full course — Excel, SQL, Pyt
 ## Repo layout
 
 ```
-sales-sprint/
+prep-companion-apps/
   index.html             ← hub page linking every sprint
   excel/index.html       ← Excel Sales Sprint (self-contained, no build step)
   sql/index.html         ← SQL Sales Sprint (self-contained, sql.js via CDN)
@@ -63,4 +63,4 @@ If you play it and something feels off, too hard, too easy, unclear, or missing 
 
 ---
 
-**→ [sales-sprint](https://github.com/michaelnocito/sales-sprint)** &nbsp;·&nbsp; HTML · JavaScript · sql.js
+**→ [prep-companion-apps](https://github.com/michaelnocito/prep-companion-apps)** &nbsp;·&nbsp; HTML · JavaScript · sql.js
