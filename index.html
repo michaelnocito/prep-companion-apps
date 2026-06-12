@@ -175,7 +175,7 @@
 <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div style="display:flex;justify-content:space-between;gap:1rem;align-items:center">
-      <h3 id="modalTitle">Learn this first</h3>
+      <h3 id="modalTitle">Explain it to me</h3>
       <button class="btn btn-secondary" id="closeModal">Close</button>
     </div>
     <div id="modalBody"></div>
@@ -293,7 +293,7 @@
       <div id="actionBar" style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
         <button class="btn btn-primary" id="submitAnswer">Check answer</button>
         <button class="btn btn-secondary hidden" id="nextLessonBottom">Continue →</button>
-        <button class="btn btn-secondary" id="showPrereq" style="margin-left:auto">Learn this first</button>
+        <button class="btn btn-secondary" id="showPrereq" style="margin-left:auto">💡 Explain it to me</button>
       </div>
     </main>
 
@@ -416,14 +416,14 @@
       objective:'Srbina needs the total revenue from all three leads. Type the formula that adds D2, D3, and D4 together.',
       why:'Totals are the most-asked question in any sales meeting. This is the formula you will write most.',
       kitMatch:'Your First Formula',
-      coach:'Not sure where to start? Open the “Learn this first” card below. It explains what = means and how SUM works.',
-      hint:'The formula you need is SUM(D2:D4). The colon means “from D2 through D4”.',
+      coach:'Not sure where to start? Tap “Explain it to me” below. It covers what = means and how SUM works.',
+      hint:'The formula you need is =SUM(D2:D4). The colon means “from D2 through D4”.',
       prereq:'formula',
       mode:'formula',
       placeholder:'Type your formula here',
       answerVariants:['=SUM(D2:D4)'],
       success:'✓ That is correct. You just wrote a real Excel formula. Notice the pattern: = then the function name then the range in parentheses.',
-      fail:'Not quite. The range should be D2:D4. Try: SUM(D2:D4)',
+      fail:'Not quite. The range should be D2:D4. Try: =SUM(D2:D4)',
       excel:34,sales:16,readiness:26,achievement:'formula'
     },
     {
@@ -434,13 +434,13 @@
       why:'Averages turn “how much” into “what’s typical” — the first step toward benchmarks and targets.',
       kitMatch:'What a Formula Actually Is',
       coach:'Same shape as the last formula. Swap SUM for AVERAGE and point it at the same cells.',
-      hint:'AVERAGE(D2:D4)',
+      hint:'=AVERAGE(D2:D4)',
       prereq:'average',
       mode:'formula',
       placeholder:'Type your formula here',
       answerVariants:['=AVERAGE(D2:D4)'],
       success:'✓ Nice. You reused the same formula pattern with a different function name. That is how Excel vocabulary grows.',
-      fail:'Almost. Try AVERAGE(D2:D4) — same structure as SUM(D2:D4) from the last lesson.',
+      fail:'Almost. Try =AVERAGE(D2:D4) — same structure as =SUM(D2:D4) from the last lesson.',
       excel:40,sales:20,readiness:32,achievement:null
     },
     {
@@ -451,13 +451,13 @@
       why:'Rules like this drive lead routing, alerts, and bonus calculations in real sales ops.',
       kitMatch:'Make Decisions with IF',
       coach:'IF has three parts separated by commas: the test, the value when true, the value when false.',
-      hint:'IF(D2>1000,"Priority","Later") — keep the quotes around the words.',
+      hint:'=IF(D2>1000,"Priority","Later") — keep the quotes around the words.',
       prereq:'iflogic',
       mode:'formula',
       placeholder:'Type your IF formula here',
       answerVariants:['=IF(D2>1000,"Priority","Later")'],
       success:'✓ Perfect. The sheet now decides for itself. IF is the gateway to every smart spreadsheet you will ever build.',
-      fail:'Check the three parts: IF(D2>1000,"Priority","Later") — test, value if true, value if false. Quotes go around the words.',
+      fail:'Check the three parts: =IF(D2>1000,"Priority","Later") — test, value if true, value if false. Quotes go around the words.',
       excel:48,sales:24,readiness:38,achievement:null
     },
     {
@@ -468,13 +468,13 @@
       why:'“How many match?” is half the questions stakeholders ask. COUNTIF answers it in one line.',
       kitMatch:'Count and Sum with Conditions',
       coach:'COUNTIF takes two things: the range to look in, then the value to count — in quotes.',
-      hint:'COUNTIF(E2:E4,"Hot")',
+      hint:'=COUNTIF(E2:E4,"Hot")',
       prereq:'countif',
       mode:'formula',
       placeholder:'Type your COUNTIF formula here',
       answerVariants:['=COUNTIF(E2:E4,"Hot")'],
       success:'✓ One hot lead found, instantly. COUNTIF and its cousin SUMIF are the workhorses of sales reporting.',
-      fail:'Two parts: the range E2:E4, then "Hot" in quotes. Try: COUNTIF(E2:E4,"Hot")',
+      fail:'Two parts: the range E2:E4, then "Hot" in quotes. Try: =COUNTIF(E2:E4,"Hot")',
       excel:54,sales:28,readiness:44,achievement:null
     },
     {
@@ -485,7 +485,7 @@
       why:'Joining data across sheets is the #1 Excel skill interviewers test. XLOOKUP is the modern way.',
       kitMatch:'Lookup Evolved: XLOOKUP',
       coach:'XLOOKUP takes three things: what to find, where to look, what to return.',
-      hint:'XLOOKUP("BluePeak",A2:A4,D2:D4)',
+      hint:'=XLOOKUP("BluePeak",A2:A4,D2:D4)',
       prereq:'xlookup',
       mode:'formula',
       placeholder:'Type your XLOOKUP formula here',
@@ -536,13 +536,13 @@
       why:'Dashboards that show #DIV/0! lose stakeholder trust instantly. Pros wrap risky math.',
       kitMatch:'Defensive Formulas: IFERROR',
       coach:'IFERROR takes two things: the risky calculation, then what to show if it fails.',
-      hint:'IFERROR(D2/C2,0)',
+      hint:'=IFERROR(D2/C2,0)',
       prereq:'iferror',
       mode:'formula',
       placeholder:'Type your IFERROR formula here',
       answerVariants:['=IFERROR(D2/C2,0)'],
       success:'✓ Armored. The math still works when data is good, and the sheet stays presentable when it is not.',
-      fail:'Two parts: the division D2/C2 first, then a comma, then the fallback 0. Try: IFERROR(D2/C2,0)',
+      fail:'Two parts: the division D2/C2 first, then a comma, then the fallback 0. Try: =IFERROR(D2/C2,0)',
       excel:80,sales:46,readiness:70,achievement:null
     },
     {
@@ -712,8 +712,8 @@
       const box=document.createElement('div'); box.className='formula-box';
       const label=document.createElement('label'); label.textContent=l.mode==='text'?'Your recommendation':'Your formula';
       const field=document.createElement('div'); field.className='formula-input';
-      const prefix=document.createElement('span'); prefix.textContent=l.mode==='text'?'✍':'=';
-      const input=document.createElement('input'); input.id='typedAnswer'; input.placeholder=l.placeholder; input.setAttribute('autocomplete','off');
+      const prefix=document.createElement('span'); prefix.textContent=l.mode==='text'?'✍':'fx';
+      const input=document.createElement('input'); input.id='typedAnswer'; input.placeholder=l.mode==='formula'?l.placeholder+' — start with =':l.placeholder; input.setAttribute('autocomplete','off');
       input.addEventListener('keydown',e=>{if(e.key==='Enter')el('submitAnswer').click();});
       field.append(prefix,input); box.append(label,field); answerArea.appendChild(box);
     }
@@ -735,9 +735,15 @@
     if(state.solved) return;
     if(l.mode==='buttons') correct=answerArea.dataset.answer===l.answer;
     else if(l.mode==='formula'){
+      const raw=(el('typedAnswer')?.value||'').trim();
+      if(raw.length>0 && !raw.startsWith('=')){
+        state.missedThisLesson=true; state.streak=0; updateStreakChip();
+        setFeedback(false,'Close — but every Excel formula starts with the = sign. Without it, Excel treats your typing as plain text. Add = at the front and check again.');
+        return;
+      }
       const norm=s=>s.replace(/\s+/g,'').replace(/^=/,'').replace(/[‘’]/g,"'").replace(/[“”]/g,'"').toLowerCase();
-      const v=norm(el('typedAnswer')?.value||'');
-      correct=v.length>0 && l.answerVariants.some(a=>norm(a)===v);
+      const v=norm(raw);
+      correct=raw.startsWith('=') && v.length>0 && l.answerVariants.some(a=>norm(a)===v);
     }
     else if(l.mode==='text') correct=l.validate((el('typedAnswer')?.value||'').trim());
     if(correct){
