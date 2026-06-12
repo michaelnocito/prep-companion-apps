@@ -1,4 +1,4 @@
-# Sales Sprint
+# Analyst Sprint
 
 **Learn data-analyst skills by playing — coach Srbina from sales rep to analyst, one small task at a time.**
 
@@ -8,8 +8,8 @@ A family of free, browser-based games for people starting out in data analytics.
 
 | Sprint | Story | Play |
 |---|---|---|
-| **Excel Sales Sprint** | Part 1 — Srbina has a spreadsheet, a list of leads, and a big conversation coming up | [Play →](https://michaelnocito.github.io/prep-companion-apps/excel/) |
-| **SQL Sales Sprint** | Part 2 — the lead data outgrew the spreadsheet and moved to a real database | [Play →](https://michaelnocito.github.io/prep-companion-apps/sql/) |
+| **Excel Analyst Sprint** | Part 1 — Srbina has a spreadsheet, a list of leads, and a big conversation coming up | [Play →](https://michaelnocito.github.io/prep-companion-apps/excel/) |
+| **SQL Analyst Sprint** | Part 2 — the lead data outgrew the spreadsheet and moved to a real database | [Play →](https://michaelnocito.github.io/prep-companion-apps/sql/) |
 | Python · Tableau · Stats | Coming next | — |
 
 ---
@@ -30,8 +30,8 @@ Every lesson says why it matters on the job.
 
 Each sprint mirrors a kit in the **[Analyst Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/)**, unit for unit, and every lesson links to its matching prep-kit lesson for going deeper:
 
-- Excel Sales Sprint ↔ [Excel Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/excel/)
-- SQL Sales Sprint ↔ [SQL Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/sql/)
+- Excel Analyst Sprint ↔ [Excel Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/excel/)
+- SQL Analyst Sprint ↔ [SQL Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/sql/)
 
 The sprints are the warm-up; the prep kit is the full course — Excel, SQL, Python, Tableau, Power BI, Stats, Chart Literacy, Forecasting, Interview prep, a week-1 job simulator, and a cross-subject final exam. All free, all in the browser.
 
@@ -42,8 +42,8 @@ The sprints are the warm-up; the prep kit is the full course — Excel, SQL, Pyt
 ```
 prep-companion-apps/
   index.html             ← hub page linking every sprint
-  excel/index.html       ← Excel Sales Sprint (self-contained, no build step)
-  sql/index.html         ← SQL Sales Sprint (self-contained, sql.js via CDN)
+  excel/index.html       ← Excel Analyst Sprint (self-contained, no build step)
+  sql/index.html         ← SQL Analyst Sprint (self-contained, sql.js via CDN)
   tools/check-syntax.js  ← dev check: node tools/check-syntax.js
   CHANGELOG.md           ← what shipped
   ROADMAP.md             ← what's next

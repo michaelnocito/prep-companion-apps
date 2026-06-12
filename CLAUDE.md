@@ -1,4 +1,4 @@
-# Dev guide — Sales Sprint
+# Dev guide — Analyst Sprint
 
 Free browser games teaching data-analyst skills, live at
 **https://michaelnocito.github.io/prep-companion-apps/** (GitHub Pages, static,

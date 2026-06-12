@@ -1,10 +1,18 @@
-# Changelog — Sales Sprint
+# Changelog — Analyst Sprint
 
-All notable changes to the Sales Sprint games. Versioning: PATCH for
+All notable changes to the Analyst Sprint games. Versioning: PATCH for
 bug/content-only fixes, MINOR for visible UX changes, MAJOR for
 restructures or breaking changes.
 
 ---
+
+## v1.1.0 — June 12, 2026
+
+**Series rebranded: Sales Sprint → Analyst Sprint** (Excel Analyst Sprint,
+SQL Analyst Sprint) — names now match what people actually search for.
+SEO pass alongside it: keyword-rich page titles ("Free Excel Practice Game
+for Data Analysts") and meta descriptions on both games and the hub.
+Srbina and the sales-data story are unchanged.
 
 ## v1.0.1 — June 12, 2026
 

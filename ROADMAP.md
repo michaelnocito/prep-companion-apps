@@ -1,4 +1,4 @@
-# Roadmap — Sales Sprint
+# Roadmap — Analyst Sprint
 
 ## Vision principles
 
@@ -28,7 +28,7 @@ Planned order (matching the prep-kit learning order):
 
 - 🔴 Blocker: —
 - 🟠 High: —
-- 🟡 Medium: Python Sales Sprint (Part 3 — continue Srbina's story;
+- 🟡 Medium: Python Analyst Sprint (Part 3 — continue Srbina's story;
   mirror the Python Prep Kit units; in-browser execution like the kit's
   Pyodide terminal, or graded snippets if Pyodide is too heavy for the
   one-screen layout)
@@ -36,8 +36,8 @@ Planned order (matching the prep-kit learning order):
 
 ## Parking lot
 
-- Tableau Sales Sprint (needs a chart-building interaction that fits
+- Tableau Analyst Sprint (needs a chart-building interaction that fits
   one-screen-one-task)
-- Stats Sales Sprint
+- Stats Analyst Sprint
 - Shared progress across sprints (e.g. "Part 1 complete" badge visible
   on the hub) — only if it can be done without an account
