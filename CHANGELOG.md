@@ -6,6 +6,16 @@ restructures or breaking changes.
 
 ---
 
+## v1.2.0 — June 12, 2026
+
+**Instruction box moved next to the answers** (both games). The gold
+"what do I do now" instruction used to sit at the top of the lesson,
+far from the answer buttons/input it referred to — Mike's playtest:
+"took me a minute to figure out what was being asked." It now renders
+directly above the answer area (after the data tables), so the ask and
+the action are always together. Stale "Read the task below…" wording
+updated to match the new order.
+
 ## v1.1.0 — June 12, 2026
 
 **Series rebranded: Sales Sprint → Analyst Sprint** (Excel Analyst Sprint,
