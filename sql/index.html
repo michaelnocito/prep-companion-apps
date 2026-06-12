@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL Sales Sprint</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{
+      --font-body:'General Sans',Inter,sans-serif;
+      --font-display:'General Sans',Inter,sans-serif;
+      --font-mono:ui-monospace,Consolas,'Cascadia Mono','Courier New',monospace;
+      --text-xs:clamp(.75rem,.7rem + .25vw,.875rem);
+      --text-sm:clamp(.875rem,.8rem + .35vw,1rem);
+      --text-base:clamp(1rem,.95rem + .25vw,1.125rem);
+      --text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);
+      --text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+      --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;
+      --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;--color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
+      --color-text:#28251d;--color-text-muted:#66645d;--color-text-faint:#9f9d96;--color-text-inverse:#f9f8f4;
+      --color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;
+      --color-success:#437a22;--color-success-highlight:#d4dfcc;--color-error:#a12c7b;--color-error-highlight:#e0ced7;
+      --color-gold:#d19900;--color-gold-highlight:#e9e0c6;--color-orange:#da7101;--color-orange-highlight:#e7d7c4;
+      --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;
+      --shadow-sm:0 1px 2px oklch(0.2 0.01 80 / 0.06);--shadow-md:0 4px 12px oklch(0.2 0.01 80 / 0.08);--shadow-lg:0 12px 32px oklch(0.2 0.01 80 / 0.12);
+      --transition:180ms cubic-bezier(.16,1,.3,1);
+    }
+    [data-theme="dark"]{
+      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;--color-surface-offset:#1d1c1a;--color-border:#393836;--color-divider:#262523;
+      --color-text:#e2dfd8;--color-text-muted:#aba8a2;--color-text-faint:#77746f;--color-text-inverse:#2b2a28;
+      --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-highlight:#313b3b;
+      --color-success:#6daa45;--color-success-highlight:#3a4435;--color-error:#d163a7;--color-error-highlight:#4c3d46;
+      --color-gold:#e8af34;--color-gold-highlight:#4d4332;--color-orange:#fdab43;--color-orange-highlight:#564b3e;
+      --shadow-sm:0 1px 2px oklch(0 0 0 / 0.2);--shadow-md:0 4px 12px oklch(0 0 0 / 0.3);--shadow-lg:0 12px 32px oklch(0 0 0 / 0.4);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    body{min-height:100vh;font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:var(--color-bg);color:var(--color-text)}
+    button,input,textarea{font:inherit;color:inherit}
+    button{cursor:pointer;border:none;background:none}
+    a{color:var(--color-primary)}
+    .app{max-width:860px;margin:0 auto;padding:var(--space-2) var(--space-3);display:grid;gap:var(--space-2)}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 12%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+    .brand{display:flex;align-items:center;gap:var(--space-3)}
+    .logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--color-primary-highlight),var(--color-surface-offset));display:grid;place-items:center;color:var(--color-primary)}
+    .logo svg{width:24px;height:24px}
+    .title{font-size:var(--text-lg);font-weight:700}
+    .subtitle{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .toolbar{display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center}
+    .chip,.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:36px;padding:.45rem .9rem;border-radius:999px;font-size:var(--text-sm);transition:all var(--transition)}
+    .chip{background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .btn-primary{background:var(--color-primary);color:var(--color-text-inverse)}
+    .btn-primary:hover{background:var(--color-primary-hover)}
+    .btn-primary:disabled{opacity:.55;cursor:wait}
+    .btn-secondary{background:var(--color-surface-offset);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    .grid{display:grid;grid-template-columns:1fr;gap:var(--space-2)}
+    .hero{display:none}
+    .panel{background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+    .hero{padding:var(--space-6);display:grid;gap:var(--space-4)}
+    .hero h1{font-size:var(--text-xl);line-height:1.1;max-width:20ch}
+    .hero p{max-width:62ch;color:var(--color-text-muted)}
+    .hero-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3)}
+    .mini-card{padding:var(--space-4);background:var(--color-surface-2);border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .mini-card strong{display:block;font-size:var(--text-sm)}
+    .mini-card span{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .path{padding:var(--space-2) var(--space-4);display:grid;gap:var(--space-2)}
+    .path h2{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-muted)}
+    .section-title{font-size:var(--text-base);font-weight:700}
+    .steps{display:flex;gap:var(--space-2);flex-wrap:wrap}
+    .step{display:grid;grid-template-columns:auto 1fr;gap:var(--space-2);padding:var(--space-2) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent);flex:1;min-width:130px}
+    .step-num{width:22px;height:22px;font-size:.7rem;border-radius:50%;display:grid;place-items:center;background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700}
+    .layout{display:grid;grid-template-columns:1fr;gap:var(--space-2)}
+    .lesson{padding:var(--space-3);display:grid;gap:var(--space-2)}
+    .lesson-top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3);flex-wrap:wrap}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .7rem;border-radius:999px;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.08em;background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700}
+    .what-now{padding:var(--space-2) var(--space-3);background:var(--color-gold-highlight);border-radius:var(--radius-md);border:1px solid color-mix(in oklab,var(--color-gold) 24%, transparent)}
+    .what-now strong{display:none}
+    .objective{padding:var(--space-2) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);display:grid;gap:var(--space-1);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    #objectiveTitle{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .coach{padding:var(--space-2) var(--space-3);background:var(--color-primary-highlight);border-radius:var(--radius-md);display:flex;gap:var(--space-2);align-items:baseline}
+    .coach strong{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;color:var(--color-primary)}
+    .coach p{color:var(--color-text)}
+    .quick-links{display:flex;gap:var(--space-2);flex-wrap:wrap}
+    .link-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:999px;background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);font-size:var(--text-sm)}
+    .db-tables{display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:flex-start}
+    .db-table{flex:1;min-width:240px}
+    .db-caption{font-size:var(--text-xs);font-weight:700;letter-spacing:.05em;color:var(--color-text-muted);font-family:var(--font-mono);padding:0 .1rem .2rem}
+    .sheet-wrap{overflow:auto;border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    table.sheet{min-width:100%;border-collapse:collapse;background:white;color:#222}
+    [data-theme="dark"] table.sheet{background:#151515;color:#f1f1f1}
+    .sheet th,.sheet td{border:1px solid #cfcfcf;padding:.15rem .35rem;text-align:left;min-width:54px;font-size:var(--text-sm);white-space:nowrap}
+    [data-theme="dark"] .sheet th,[data-theme="dark"] .sheet td{border-color:#444}
+    .sheet th{background:#eef2f4;font-size:.85rem;font-family:var(--font-mono)}
+    [data-theme="dark"] .sheet th{background:#262626}
+    .null-val{color:var(--color-text-faint);font-style:italic}
+    .formula-box{display:grid;gap:var(--space-1)}
+    .formula-box label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .formula-input{display:flex;gap:var(--space-2);align-items:center;padding:0 var(--space-3);min-height:44px;border-radius:var(--radius-lg);background:var(--color-surface-2);border:2px solid var(--color-border)}
+    .formula-input:focus-within{border-color:var(--color-primary)}
+    .formula-input span{font-weight:700;font-size:.85rem;color:var(--color-primary);font-family:var(--font-mono)}
+    .formula-input input{border:none;background:transparent;flex:1;outline:none;font-size:var(--text-base)}
+    .formula-input.multi{align-items:flex-start;padding-top:.5rem;padding-bottom:.3rem}
+    .formula-input textarea{border:none;background:transparent;flex:1;outline:none;font-size:var(--text-base);font-family:var(--font-mono);resize:vertical;min-height:2.6rem;line-height:1.45}
+    .result-box{display:grid;gap:var(--space-1)}
+    .result-box label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .result-wrap{max-height:240px;overflow:auto;border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    .answer-option{display:flex;align-items:center;gap:var(--space-3);width:100%;padding:var(--space-2) var(--space-4);border-radius:var(--radius-lg);background:var(--color-surface-2);border:2px solid var(--color-border);text-align:left;font-weight:500;font-size:var(--text-base);transition:all var(--transition)}
+    .answer-option:hover{border-color:var(--color-primary);background:var(--color-primary-highlight)}
+    .answer-option.selected{border-color:var(--color-primary);background:var(--color-primary-highlight);font-weight:700}
+    .answer-option.selected::before{content:'✓ ';color:var(--color-primary)}
+    .answer-section{display:grid;gap:var(--space-2)}
+    .answer-section-label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .hint{padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);background:transparent;border:none;border-left:3px solid var(--color-border);font-size:var(--text-sm);color:var(--color-text-muted)}
+    .hint strong{color:var(--color-text-muted);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em}
+    .feedback,.achievement,.break-box,.stats,.glossary-card{padding:var(--space-3);border-radius:var(--radius-lg);background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .feedback.success{background:var(--color-success-highlight);border-color:color-mix(in oklab,var(--color-success) 24%, transparent)}
+    .feedback.error{background:var(--color-error-highlight);border-color:color-mix(in oklab,var(--color-error) 24%, transparent)}
+    .sidebar{display:grid;gap:var(--space-2)}
+    .meter{display:grid;gap:var(--space-1)}
+    .meter span{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .bar{height:8px;background:var(--color-surface-offset);border-radius:999px;overflow:hidden}
+    .fill{height:100%;background:var(--color-primary);width:20%;transition:width .3s ease}
+    .ach-list,.checklist{display:grid;gap:var(--space-1)}
+    .ach{padding:.4rem .7rem;border-radius:var(--radius-md);background:var(--color-surface-offset);font-size:var(--text-xs)}
+    .ach.unlocked{background:var(--color-success-highlight);color:var(--color-text)}
+    .check{display:flex;gap:.65rem;align-items:flex-start;font-size:var(--text-sm)}
+    .check input{margin-top:.25rem}
+    .break-game{display:grid;gap:var(--space-3)}
+    .coffee-scene{position:relative;height:130px;border-radius:var(--radius-xl);background:linear-gradient(180deg,color-mix(in oklab,var(--color-primary-highlight) 55%, white),var(--color-surface-offset));overflow:hidden;border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    [data-theme="dark"] .coffee-scene{background:linear-gradient(180deg,#233235,#1c1b19)}
+    .counter{position:absolute;left:10%;right:10%;bottom:16%;height:58px;background:#a46b43;border-radius:18px 18px 8px 8px;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}
+    .cup{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:54px;border-radius:0 0 16px 16px;background:#fff7ef;border:2px solid #6b4b32;display:grid;place-items:center;font-size:1.3rem;user-select:none}
+    .cup::after{content:'';position:absolute;right:-18px;top:16px;width:22px;height:28px;border:4px solid #6b4b32;border-left:none;border-radius:0 16px 16px 0}
+    .cup::before{content:'';position:absolute;top:-18px;left:18px;width:50px;height:28px;background:radial-gradient(circle at 50% 90%,rgba(255,255,255,.15),rgba(255,255,255,0) 62%),radial-gradient(circle at 50% 50%,rgba(255,255,255,.75),rgba(255,255,255,0) 60%);opacity:.7;animation:steam 2.2s ease-in-out infinite}
+    .bean{position:absolute;width:18px;height:18px;border-radius:50% 45% 50% 45%;background:#7a4d2d;box-shadow:inset -2px -2px 0 rgba(0,0,0,.15)}
+    .explosion{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+    .particle{position:absolute;width:10px;height:10px;border-radius:50%;animation:blast .9s ease-out forwards}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(20,20,20,.45);display:none;align-items:center;justify-content:center;padding:var(--space-4);z-index:60}
+    .modal{max-width:720px;width:100%;background:var(--color-surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);padding:var(--space-5);display:grid;gap:var(--space-4)}
+    .modal h3{font-size:var(--text-lg)}
+    .glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3)}
+    .footer-note{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .hidden{display:none !important}
+    /* ── Lesson stepper ── */
+    .stepper{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+    .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.65rem;font-weight:700;background:var(--color-surface-offset);color:var(--color-text-faint);border:2px solid transparent}
+    .dot.done{background:var(--color-success-highlight);color:var(--color-success)}
+    .dot.current{border-color:var(--color-primary);color:var(--color-primary);background:var(--color-primary-highlight)}
+    /* ── Sticky action bar ── */
+    #actionBar{position:sticky;bottom:0;background:var(--color-surface);border-top:1px solid var(--color-divider);padding:var(--space-2) 0;z-index:5}
+    /* ── Why + kit match lines ── */
+    .why-line{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .kit-match{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .kit-match a{font-weight:600}
+    /* ── Footer ── */
+    .site-footer{padding:var(--space-4);text-align:center;display:grid;gap:var(--space-2);color:var(--color-text-muted);font-size:var(--text-sm)}
+    .footer-cta{font-size:var(--text-base);font-weight:600}
+    .footer-kits a{white-space:nowrap}
+    /* ── Overview collapsible ── */
+    details.collapser{border-radius:var(--radius-xl)}
+    details.collapser>summary{display:flex;align-items:center;justify-content:space-between;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-radius:var(--radius-xl);cursor:pointer;font-size:var(--text-sm);font-weight:600;list-style:none;user-select:none;transition:background var(--transition);gap:var(--space-3)}
+    details.collapser>summary::-webkit-details-marker{display:none}
+    details.collapser>summary:hover{background:var(--color-surface-offset)}
+    details.collapser[open]>summary{border-bottom-left-radius:0;border-bottom-right-radius:0}
+    .summary-left{display:flex;align-items:center;gap:var(--space-2)}
+    .summary-tag{font-weight:400;color:var(--color-text-muted);font-size:var(--text-xs)}
+    .summary-arrow{font-size:.7rem;color:var(--color-text-muted);transition:transform .2s;flex-shrink:0}
+    details.collapser[open] .summary-arrow{transform:rotate(90deg)}
+    details.collapser>.grid,details.collapser>.sidebar{border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-top:none;border-radius:0 0 var(--radius-xl) var(--radius-xl);padding:var(--space-2)}
+    @keyframes blast{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.15);opacity:0}}
+    @keyframes steam{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(-7px);opacity:.9}}
+    @media (max-width: 860px){.layout{grid-template-columns:1fr}.glossary-grid{grid-template-columns:1fr}.topbar{flex-wrap:wrap}.steps{display:grid;grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<div class="explosion" id="explosion"></div>
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div style="display:flex;justify-content:space-between;gap:1rem;align-items:center">
+      <h3 id="modalTitle">Explain it to me</h3>
+      <button class="btn btn-secondary" id="closeModal">Close</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-label="SQL Sales Sprint logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"></path><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"></path></svg>
+      </div>
+      <div>
+        <div class="title">SQL Sales Sprint</div>
+        <div class="subtitle">Help Srbina take her new analyst instincts from the spreadsheet to the database</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <a class="chip" href="../" style="text-decoration:none">← All sprints</a>
+      <div class="chip" id="progressChip">Lesson 1 of 14</div>
+      <div class="chip hidden" id="streakChip" title="First-try streak">🔥 0</div>
+      <button class="btn btn-secondary" id="openGlossary">Glossary</button>
+      <button class="btn btn-secondary" data-theme-toggle aria-label="Switch theme">Theme</button>
+    </div>
+  </header>
+
+  <details id="overviewDetails" class="collapser">
+  <summary>
+    <span class="summary-left">
+      <span>About this sprint</span>
+      <span class="summary-tag">How it works · What you will cover</span>
+    </span>
+    <span class="summary-arrow">▸</span>
+  </summary>
+  <section class="grid">
+    <div class="panel hero">
+      <span class="badge">The story so far</span>
+      <h1>Srbina is back. The data moved.</h1>
+      <p>Her first business recommendation impressed her manager — and the lead list has now outgrown the spreadsheet. It lives in a real company database, and SQL is how she reaches it. You are still her coach: one small task at a time, a quick explanation when a term is new, and a moment to try it herself. (New here? The story starts in the <a href="../excel/">Excel Sales Sprint</a>.)</p>
+      <div class="hero-cards">
+        <div class="mini-card"><strong>1. Read the task</strong><span>One clear instruction at a time.</span></div>
+        <div class="mini-card"><strong>2. Learn the concept</strong><span>Open a glossary card when a term is new.</span></div>
+        <div class="mini-card"><strong>3. Ask the database</strong><span>Type a real query — it actually runs.</span></div>
+      </div>
+      <div class="quick-links">
+        <button class="link-pill" data-glossary="select">What is a query?</button>
+        <button class="link-pill" data-glossary="database">What is a table?</button>
+        <button class="link-pill" data-glossary="nullval">What does NULL mean?</button>
+      </div>
+    </div>
+
+    <aside class="panel path">
+      <h2>What you will cover</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>Meet the database</strong><div class="subtitle">Tables, rows, keys.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>First queries</strong><div class="subtitle">SELECT and WHERE.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>Sort &amp; cap</strong><div class="subtitle">ORDER BY and LIMIT.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>Join tables</strong><div class="subtitle">INNER JOIN on a key.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>Group &amp; total</strong><div class="subtitle">COUNT, SUM, GROUP BY, HAVING.</div></div></div>
+        <div class="step"><div class="step-num">6</div><div><strong>Missing data</strong><div class="subtitle">LEFT JOIN, NULL, CASE.</div></div></div>
+        <div class="step"><div class="step-num">7</div><div><strong>Recommend</strong><div class="subtitle">Turn results into next steps.</div></div></div>
+      </div>
+      <p class="footer-note">Mirrors the units in the <a href="https://michaelnocito.github.io/analyst-prep-kit/sql/">SQL Prep Kit</a> — finish here, then go deeper there. Nothing here is meant to feel rushed.</p>
+    </aside>
+  </section>
+  </details>
+
+  <section class="layout">
+    <main class="panel lesson">
+      <div class="lesson-top">
+        <div>
+          <span class="badge" id="lessonBadge">Lesson 1 · Meet the database</span>
+          <h2 class="section-title" id="lessonTitle">What is a database table?</h2>
+        </div>
+        <button class="btn btn-primary" id="nextLessonTop">Next lesson</button>
+      </div>
+
+      <div class="stepper" id="stepper" aria-label="Lesson progress"></div>
+
+      <div class="what-now" id="whatNow">
+        <strong>What do I do now?</strong>
+        <span id="whatNowText">Read the task below, then click the best description of a database table.</span>
+      </div>
+
+      <div class="objective">
+        <strong id="objectiveTitle">The task</strong>
+        <p id="objectiveText">Srbina’s lead list got too big for the spreadsheet — it now lives in a company database. What is a database table most like?</p>
+        <p class="why-line" id="whyText"></p>
+        <p class="kit-match" id="kitMatchText"></p>
+        <div class="coach">
+          <strong>Coach tip</strong>
+          <p id="coachText">Look at the leads table below: columns across the top, one record per row. Recognize the pattern?</p>
+        </div>
+      </div>
+
+      <div class="db-tables" aria-label="The practice database">
+        <div class="db-table">
+          <div class="db-caption">leads</div>
+          <div class="sheet-wrap">
+            <table class="sheet">
+              <thead><tr><th>lead_id</th><th>lead_name</th><th>region</th><th>calls</th><th>revenue</th><th>status</th><th>rep_id</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Northwind</td><td>East</td><td>4</td><td>1200</td><td>Warm</td><td>1</td></tr>
+                <tr><td>2</td><td>BluePeak</td><td>West</td><td>6</td><td>850</td><td>Hot</td><td>2</td></tr>
+                <tr><td>3</td><td>Maple Desk</td><td>South</td><td>3</td><td>990</td><td>Cold</td><td>3</td></tr>
+                <tr><td>4</td><td>Iron Harbor</td><td>East</td><td>8</td><td>2100</td><td>Hot</td><td>1</td></tr>
+                <tr><td>5</td><td>Cobalt Labs</td><td>West</td><td>2</td><td>700</td><td>Cold</td><td>2</td></tr>
+                <tr><td>6</td><td>Sunfield</td><td>South</td><td>5</td><td>1750</td><td>Hot</td><td>3</td></tr>
+                <tr><td>7</td><td>Pinecrest</td><td>East</td><td>1</td><td>300</td><td>Warm</td><td>1</td></tr>
+                <tr><td>8</td><td>Quartz &amp; Co</td><td>West</td><td>7</td><td>1500</td><td>Warm</td><td>2</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="db-table" style="flex:0 1 auto">
+          <div class="db-caption">reps</div>
+          <div class="sheet-wrap">
+            <table class="sheet">
+              <thead><tr><th>rep_id</th><th>rep_name</th><th>region</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Srbina</td><td>East</td></tr>
+                <tr><td>2</td><td>Marco</td><td>West</td></tr>
+                <tr><td>3</td><td>Dana</td><td>South</td></tr>
+                <tr><td>4</td><td>Theo</td><td>North</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="answerArea"></div>
+
+      <div id="resultArea"></div>
+
+      <div class="hint" id="hintBox">
+        <strong>Gentle nudge</strong>
+        <p id="hintText">It is the same grid idea Srbina already knows — just with stricter rules.</p>
+      </div>
+
+      <div id="feedbackBox" class="feedback hidden"></div>
+
+      <div id="actionBar" style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-primary" id="submitAnswer">Check answer</button>
+        <button class="btn btn-secondary hidden" id="nextLessonBottom">Continue →</button>
+        <button class="btn btn-secondary" id="showPrereq" style="margin-left:auto">💡 Explain it to me</button>
+      </div>
+    </main>
+
+    <details id="extrasDetails" class="collapser">
+    <summary>
+      <span class="summary-left">
+        <span>☕ Progress &amp; breaks</span>
+        <span class="summary-tag">Srbina's meters · Achievements · Lunch break</span>
+      </span>
+      <span class="summary-arrow">▸</span>
+    </summary>
+    <aside class="sidebar">
+      <section class="panel stats">
+        <h3 class="section-title">Srbina's progress</h3>
+        <div class="meter"><span>SQL confidence</span><div class="bar"><div class="fill" id="skillFill"></div></div></div>
+        <div class="meter"><span>Business storytelling</span><div class="bar"><div class="fill" id="salesFill" style="background:var(--color-orange)"></div></div></div>
+        <div class="meter"><span>Overall readiness</span><div class="bar"><div class="fill" id="readinessFill" style="background:var(--color-gold)"></div></div></div>
+      </section>
+
+      <section class="panel achievement">
+        <h3 class="section-title">Achievements</h3>
+        <div class="ach-list" id="achievementList">
+          <div class="ach" data-ach="first">💡 First spark</div>
+          <div class="ach" data-ach="query">📝 Query writer</div>
+          <div class="ach" data-ach="story">📊 Business translator</div>
+          <div class="ach" data-ach="streak">🔥 Hot streak (3 first-try wins)</div>
+          <div class="ach" data-ach="break">☕ Lunch break champion</div>
+        </div>
+      </section>
+
+      <section class="panel break-box">
+        <h3 class="section-title">☕ Lunch break</h3>
+        <p style="color:var(--color-text-muted)">Step away from the database. Brew some coffees, reset your head, and come back when you are ready.</p>
+        <div class="break-game">
+          <div class="coffee-scene" id="coffeeScene" aria-label="Coffee shop mini-game">
+            <div class="counter"></div>
+            <button class="cup" id="brewButton" aria-label="Tap to brew coffee">☕</button>
+          </div>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" id="autoServe"> Hire a helper barista (auto-brews every 2 seconds)</label>
+          </div>
+          <div class="quick-links">
+            <div class="chip" id="beansChip">Coffees: 0</div>
+            <div class="chip" id="ordersChip">Served: 0</div>
+            <div class="chip" id="moodChip">Vibe: calm</div>
+          </div>
+          <p class="footer-note">Tap the cup to brew. Every 5 coffees served lifts the vibe.</p>
+        </div>
+      </section>
+    </aside>
+    </details>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-cta">Ready for the full course? <a href="https://michaelnocito.github.io/analyst-prep-kit/sql/">SQL Prep Kit — 20 free lessons →</a></div>
+    <div class="footer-kits">More free kits:
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Excel</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/python/">Python</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/tableau/">Tableau</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/powerbi/">Power BI</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/stats/">Stats</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/chart-literacy/">Chart Literacy</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/forecasting/">Forecasting</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/interview/">Interview</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/">All kits ↗</a>
+    </div>
+    <div class="footer-meta">Played the prequel? <a href="../excel/">Excel Sales Sprint ↗</a> · Built by <a href="https://michaelnocito.github.io">Michael Nocito</a> · <a href="https://github.com/michaelnocito/sales-sprint">GitHub ↗</a></div>
+  </footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
+<script>
+(() => {
+  const KIT_URL='https://michaelnocito.github.io/analyst-prep-kit/sql/';
+
+  /* ── The practice database ── */
+  const SQL_CDN='https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/';
+  const SCHEMA=`
+    CREATE TABLE reps (rep_id INTEGER PRIMARY KEY, rep_name TEXT, region TEXT);
+    INSERT INTO reps VALUES (1,'Srbina','East'),(2,'Marco','West'),(3,'Dana','South'),(4,'Theo','North');
+    CREATE TABLE leads (lead_id INTEGER PRIMARY KEY, lead_name TEXT, region TEXT, calls INTEGER, revenue INTEGER, status TEXT, rep_id INTEGER);
+    INSERT INTO leads VALUES
+      (1,'Northwind','East',4,1200,'Warm',1),
+      (2,'BluePeak','West',6,850,'Hot',2),
+      (3,'Maple Desk','South',3,990,'Cold',3),
+      (4,'Iron Harbor','East',8,2100,'Hot',1),
+      (5,'Cobalt Labs','West',2,700,'Cold',2),
+      (6,'Sunfield','South',5,1750,'Hot',3),
+      (7,'Pinecrest','East',1,300,'Warm',1),
+      (8,'Quartz & Co','West',7,1500,'Warm',2);`;
+  let sqlPromise=null;
+  function bootSQL(){
+    if(!sqlPromise) sqlPromise=initSqlJs({locateFile:f=>SQL_CDN+f});
+    return sqlPromise;
+  }
+  async function runQuery(sql){
+    let SQL;
+    try{ SQL=await bootSQL(); }
+    catch(e){ sqlPromise=null; const err=new Error('boot'); err.isBoot=true; throw err; }
+    const db=new SQL.Database();
+    try{
+      db.run(SCHEMA);
+      const res=db.exec(sql);
+      return res.length?{columns:res[0].columns,rows:res[0].values}:{columns:[],rows:[]};
+    } finally { db.close(); }
+  }
+
+  /* ── Result grading: compare what came back, not what was typed ── */
+  const normVal=v=>(v===null||v===undefined)?'␀NULL':String(v).trim().toLowerCase();
+  const rowSig=row=>row.map(normVal).sort().join('¦');
+  function resultsMatch(user,exp,ordered){
+    if(user.columns.length!==exp.columns.length)return false;
+    if(user.rows.length!==exp.rows.length)return false;
+    const u=user.rows.map(rowSig), e=exp.rows.map(rowSig);
+    if(ordered) return u.every((s,i)=>s===e[i]);
+    u.sort(); e.sort();
+    return u.every((s,i)=>s===e[i]);
+  }
+
+  const lessons = [
+    {
+      badge:'Lesson 1 · Meet the database',
+      title:'What is a database table?',
+      whatNow:'Read the task below, then click the best description of a database table.',
+      objective:'Srbina’s lead list got too big for the spreadsheet — it now lives in a company database, in a table called leads. What is a database table most like?',
+      why:'Analysts pull from databases every week. Knowing the shape of one is the first step.',
+      kitMatch:'What a Database Is',
+      coach:'Look at the leads table below: columns across the top, one record per row. Recognize the pattern?',
+      hint:'It is the same grid idea Srbina already knows — just with stricter rules.',
+      prereq:'database',
+      mode:'buttons',
+      options:['A grid of rows and columns, like a strict spreadsheet','A folder full of documents','A slideshow of charts'],
+      answer:'A grid of rows and columns, like a strict spreadsheet',
+      success:'✓ Exactly. A table is a grid: columns with fixed names, one record per row. Srbina already knows how to read this — she just needs a new way to ask it questions.',
+      fail:'Look at the leads table below — named columns across the top, one record per row. Which option describes that?',
+      skill:14,sales:8,readiness:10,achievement:'first'
+    },
+    {
+      badge:'Lesson 2 · Grain',
+      title:'What does one row mean?',
+      whatNow:'Click what a single row in the leads table represents.',
+      objective:'Before querying any table, ask the most important question: what does ONE row stand for? In the leads table, what does one row represent?',
+      why:'Misreading the grain is the #1 way analysts double-count revenue on real jobs.',
+      kitMatch:'The Grain of a Table',
+      coach:'Read one row left to right — Northwind, East, 4 calls, 1200 revenue, Warm. Those are all facts about a single what?',
+      hint:'Each row has exactly one lead_name.',
+      prereq:'grain',
+      mode:'buttons',
+      options:['One sales lead','One region','One phone call'],
+      answer:'One sales lead',
+      success:'✓ Right. One row = one lead. That is the table’s grain — and it means counting rows counts leads, not calls or regions.',
+      fail:'Regions repeat across many rows, and calls is just a number inside a column. What does the whole row describe?',
+      skill:20,sales:10,readiness:14,achievement:null
+    },
+    {
+      badge:'Lesson 3 · Keys',
+      title:'Find the connecting column',
+      whatNow:'Click the column that connects each lead to the rep who owns it.',
+      objective:'There are two tables now: leads and reps. Srbina’s manager asks which rep owns each lead. Which column appears in both tables and ties them together?',
+      why:'Real company data is split across many tables — keys are how you stitch it back together.',
+      kitMatch:'Keys & Why Tables Relate',
+      coach:'Scan the headers of both tables and find the column they share.',
+      hint:'It ends in _id and shows up in both tables.',
+      prereq:'keys',
+      mode:'buttons',
+      options:['rep_id','status','lead_name'],
+      answer:'rep_id',
+      success:'✓ rep_id is the key. In reps it identifies each rep; in leads it points at the owner. Matching keys across tables is exactly what a JOIN will do in a few lessons.',
+      fail:'status and lead_name only exist in the leads table. Which column do both tables share?',
+      skill:26,sales:12,readiness:18,achievement:null
+    },
+    {
+      badge:'Lesson 4 · First query',
+      title:'Write your first query',
+      whatNow:'Type a SQL query that returns just the lead_name and revenue columns from the leads table. Then press Check answer.',
+      objective:'Srbina’s manager wants a simple list: each lead and what it is worth. Ask the database for only the lead_name and revenue columns.',
+      why:'SELECT and FROM are the spine of every query you will ever write.',
+      kitMatch:'SELECT & FROM',
+      coach:'Not sure where to start? Tap “Explain it to me” below — it covers what SELECT and FROM each do.',
+      hint:'SELECT lead_name, revenue FROM leads',
+      prereq:'select',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:'SELECT lead_name, revenue FROM leads',
+      keywords:['SELECT','FROM'],
+      success:'✓ That is a real SQL query, and the database really ran it. Notice the shape: SELECT the columns you want, FROM the table they live in. Every query builds on this.',
+      fail:'Almost — name the two columns after SELECT, separated by a comma, then FROM leads. Try: SELECT lead_name, revenue FROM leads',
+      skill:34,sales:16,readiness:26,achievement:'query'
+    },
+    {
+      badge:'Lesson 5 · Filtering',
+      title:'Find the hot leads',
+      whatNow:'Type a query that returns lead_name and revenue for only the leads whose status is Hot.',
+      objective:'“Which leads are hot right now?” Same two columns as before — but only the rows where status is Hot.',
+      why:'Stakeholders almost never want every row. Filters turn tables into answers.',
+      kitMatch:'WHERE',
+      coach:"Add a WHERE clause after FROM leads. Text values need quotes: status = 'Hot'.",
+      hint:"SELECT lead_name, revenue FROM leads WHERE status = 'Hot'",
+      prereq:'where',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:"SELECT lead_name, revenue FROM leads WHERE status = 'Hot'",
+      keywords:['WHERE'],
+      success:'✓ Three hot leads: BluePeak, Iron Harbor, Sunfield. WHERE keeps only the rows that pass your test — it is the single most-used clause in SQL.',
+      fail:"Add WHERE status = 'Hot' after FROM leads — and keep the quotes around Hot, because it is text.",
+      skill:40,sales:20,readiness:32,achievement:null
+    },
+    {
+      badge:'Lesson 6 · Sorting',
+      title:'Top three by revenue',
+      whatNow:'Type a query that shows lead_name and revenue, sorted from biggest revenue to smallest, returning only the top 3 rows.',
+      objective:'Srbina gets ten minutes with her manager and wants to talk about the three biggest leads only. Sort by revenue, biggest first, and cap the result at 3 rows.',
+      why:'“Top N by X” might be the most common request an analyst gets.',
+      kitMatch:'ORDER BY & LIMIT',
+      coach:'ORDER BY revenue DESC sorts biggest-first; LIMIT 3 keeps just the first three rows.',
+      hint:'SELECT lead_name, revenue FROM leads ORDER BY revenue DESC LIMIT 3',
+      prereq:'orderby',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:'SELECT lead_name, revenue FROM leads ORDER BY revenue DESC LIMIT 3',
+      keywords:['ORDER BY','LIMIT'],
+      orderSensitive:true,
+      success:'✓ Iron Harbor (2100), Sunfield (1750), Quartz & Co (1500). DESC means descending — without it, SQL quietly sorts smallest-first.',
+      fail:'Check the pieces: ORDER BY revenue DESC for biggest-first, then LIMIT 3. Both go after FROM leads.',
+      skill:48,sales:24,readiness:38,achievement:null
+    },
+    {
+      badge:'Lesson 7 · Joining tables',
+      title:'Put names to leads',
+      whatNow:'Type a query that lists each lead_name with the rep_name who owns it, by joining leads to reps on rep_id.',
+      objective:'The rep names live in a different table than the leads. Join the two tables so each lead shows up next to its owner — return lead_name and rep_name.',
+      why:'Joining tables is the #1 SQL skill interviewers test. It is how scattered data becomes one answer.',
+      kitMatch:'INNER JOIN',
+      coach:'The shape is: FROM leads INNER JOIN reps ON leads.rep_id = reps.rep_id. The ON line says which key must match.',
+      hint:'SELECT lead_name, rep_name FROM leads INNER JOIN reps ON leads.rep_id = reps.rep_id',
+      prereq:'join',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:'SELECT lead_name, rep_name FROM leads INNER JOIN reps ON leads.rep_id = reps.rep_id',
+      keywords:['JOIN'],
+      success:'✓ Eight leads, each with its owner — Srbina holds Northwind, Iron Harbor, and Pinecrest. Matching keys across tables is exactly what JOIN … ON does.',
+      fail:'The shape is: FROM leads INNER JOIN reps ON leads.rep_id = reps.rep_id. Both tables have a rep_id, so each side of the ON needs its table name in front.',
+      skill:56,sales:30,readiness:46,achievement:null
+    },
+    {
+      badge:'Lesson 8 · Counting groups',
+      title:'How many leads per region?',
+      whatNow:'Type a query that counts how many leads are in each region — return the region and the count.',
+      objective:'“Are we spread evenly across regions?” Count the rows in leads, grouped by region.',
+      why:'GROUP BY turns thousands of rows into a small summary — it is the PivotTable of SQL.',
+      kitMatch:'COUNT, SUM & GROUP BY',
+      coach:'GROUP BY region collapses the table into one row per region; COUNT(*) counts the rows inside each group.',
+      hint:'SELECT region, COUNT(*) FROM leads GROUP BY region',
+      prereq:'groupby',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:'SELECT region, COUNT(*) FROM leads GROUP BY region',
+      keywords:['COUNT','GROUP BY'],
+      success:'✓ East 3, West 3, South 2. Remember the PivotTable lesson from the Excel sprint? GROUP BY is the same idea, written out loud.',
+      fail:'Two pieces: COUNT(*) in the SELECT line, and GROUP BY region at the end. Try: SELECT region, COUNT(*) FROM leads GROUP BY region',
+      skill:62,sales:34,readiness:52,achievement:null
+    },
+    {
+      badge:'Lesson 9 · Totals by group',
+      title:'Revenue per region',
+      whatNow:'Same shape as the last lesson — but this time return each region with its total revenue, not its row count.',
+      objective:'Now the money question: how much revenue sits in each region? Group by region and total the revenue column.',
+      why:'“Total X per Y” is the bread-and-butter question of sales reporting.',
+      kitMatch:'COUNT, SUM & GROUP BY',
+      coach:'Swap COUNT(*) for SUM(revenue). Everything else stays the same.',
+      hint:'SELECT region, SUM(revenue) FROM leads GROUP BY region',
+      prereq:'groupby',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:'SELECT region, SUM(revenue) FROM leads GROUP BY region',
+      keywords:['SUM','GROUP BY'],
+      success:'✓ East 3600, West 3050, South 2740. You reused the GROUP BY pattern with a different function — that is how SQL vocabulary grows.',
+      fail:'Same skeleton as the count query, but with SUM(revenue) in the SELECT line.',
+      skill:68,sales:40,readiness:58,achievement:null
+    },
+    {
+      badge:'Lesson 10 · Missing data',
+      title:'Who has no leads yet?',
+      whatNow:'Type a query that lists every rep with each of their leads — keeping reps even if they have no leads. Return rep_name and lead_name, starting FROM reps.',
+      objective:'A new rep, Theo, just joined. An INNER JOIN would silently drop him because nothing matches. Use a LEFT JOIN starting from reps so every rep appears — leads or not.',
+      why:'The rows that are missing are often the real story: customers who never ordered, reps with no pipeline.',
+      kitMatch:'LEFT JOIN & NULLs',
+      coach:'FROM reps LEFT JOIN leads ON reps.rep_id = leads.rep_id — the left table (reps) keeps all its rows.',
+      hint:'SELECT rep_name, lead_name FROM reps LEFT JOIN leads ON reps.rep_id = leads.rep_id',
+      prereq:'leftjoin',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:'SELECT rep_name, lead_name FROM reps LEFT JOIN leads ON reps.rep_id = leads.rep_id',
+      keywords:['LEFT JOIN'],
+      success:'✓ Nine rows — and there is Theo with NULL where a lead would be. NULL means “nothing here”, and a LEFT JOIN is how you make the missing visible.',
+      fail:'Start FROM reps (the table you want to keep whole), then LEFT JOIN leads ON reps.rep_id = leads.rep_id.',
+      skill:74,sales:46,readiness:64,achievement:null
+    },
+    {
+      badge:'Lesson 11 · Filtering groups',
+      title:'Which regions clear the bar?',
+      whatNow:'Type a query that shows each region and its total revenue — but only the regions whose total is over 3000.',
+      objective:'Srbina’s manager only wants regions doing real volume: total revenue above 3000. WHERE cannot see group totals — you need its after-grouping cousin.',
+      why:'Knowing that WHERE filters rows but HAVING filters groups is a classic interview checkpoint.',
+      kitMatch:'HAVING & Duplicates',
+      coach:'Build the revenue-per-region query from Lesson 9, then add HAVING SUM(revenue) > 3000 at the end.',
+      hint:'SELECT region, SUM(revenue) FROM leads GROUP BY region HAVING SUM(revenue) > 3000',
+      prereq:'having',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:'SELECT region, SUM(revenue) FROM leads GROUP BY region HAVING SUM(revenue) > 3000',
+      keywords:['HAVING'],
+      success:'✓ East (3600) and West (3050) clear the bar; South does not. WHERE filters rows before grouping, HAVING filters the groups after.',
+      fail:'Add HAVING SUM(revenue) > 3000 after GROUP BY region. WHERE cannot test a SUM — that is the whole reason HAVING exists.',
+      skill:80,sales:52,readiness:70,achievement:null
+    },
+    {
+      badge:'Lesson 12 · Conditional logic',
+      title:'Label leads with CASE',
+      whatNow:'Type a query that returns each lead_name plus a label: Priority when revenue is over 1000, otherwise Later.',
+      objective:'In the Excel sprint, Srbina wrote =IF(D2>1000,"Priority","Later"). CASE is SQL’s IF — write the query that labels every lead the same way.',
+      why:'CASE turns raw values into business categories — tiers, flags, segments — inside the query itself.',
+      kitMatch:'CASE & COALESCE',
+      coach:"The shape is: CASE WHEN revenue > 1000 THEN 'Priority' ELSE 'Later' END — and END is easy to forget.",
+      hint:"SELECT lead_name, CASE WHEN revenue > 1000 THEN 'Priority' ELSE 'Later' END FROM leads",
+      prereq:'casewhen',
+      mode:'sql',
+      placeholder:'Type your query here',
+      expected:"SELECT lead_name, CASE WHEN revenue > 1000 THEN 'Priority' ELSE 'Later' END FROM leads",
+      keywords:['CASE','WHEN'],
+      success:'✓ Four Priority leads, four Later. Same decision logic as Excel’s IF, new clothes: CASE WHEN test THEN value ELSE value END.',
+      fail:"Check the five keywords in order: CASE WHEN revenue > 1000 THEN 'Priority' ELSE 'Later' END — quotes around the words, no quotes around 1000.",
+      skill:86,sales:58,readiness:76,achievement:null
+    },
+    {
+      badge:'Lesson 13 · Checkpoint',
+      title:'Sprint review: from memory',
+      whatNow:'No peeking at earlier lessons. From memory, type a query that returns lead_name and calls for only the Warm leads.',
+      objective:'Quick retrieval check. Back in Lesson 5 you filtered for Hot leads. Same skill, new twist: find the Warm leads, showing lead_name and calls this time.',
+      why:'Pulling a skill from memory — not re-reading it — is what locks it in. That is retrieval practice.',
+      kitMatch:'Unit 1: Foundations (review)',
+      coach:'Same shape as the hot-leads query. Different columns, different status.',
+      hint:'Text values need quotes. calls is a column in leads.',
+      prereq:'where',
+      mode:'sql',
+      placeholder:'Type the query from memory',
+      expected:"SELECT lead_name, calls FROM leads WHERE status = 'Warm'",
+      keywords:['WHERE'],
+      success:'✓ Northwind, Pinecrest, Quartz & Co — written without looking back. That query is yours now.',
+      fail:"Same pattern as Lesson 5: SELECT the two columns, FROM leads, WHERE status = 'Warm'.",
+      skill:90,sales:62,readiness:82,achievement:null
+    },
+    {
+      badge:'Lesson 14 · Recommendation',
+      title:'Turn the result into a next step',
+      whatNow:'Write one short recommendation for Srbina. Mention the lead with the highest revenue and say what she should do next.',
+      objective:'Srbina ran the top-three query: Iron Harbor leads the board at 2100, and its status is already Hot. Numbers only matter when they change what someone does next — write the recommendation.',
+      why:'This is the step the full kit leaves to you — turning a query result into a decision.',
+      kitMatch:null,
+      coach:'Try this structure: name the lead, state the value, say what to do. Example: “Iron Harbor is the top lead at 2100, so I would focus there first.”',
+      hint:'Include the words Iron Harbor and something like priority, follow-up, or focus.',
+      prereq:'story',
+      mode:'text',
+      placeholder:'Write one short recommendation…',
+      validate:(text)=>/iron harbor/i.test(text) && /(priority|prioritize|follow|focus|first)/i.test(text),
+      success:'✓ That works. You asked a database a question and ended with an action — the full loop from question to data to decision. That is the analyst job in one sentence.',
+      fail:'Try again. Name the top lead (Iron Harbor) and say what Srbina should do next, like focus on it or follow up first.',
+      skill:92,sales:84,readiness:90,achievement:'story'
+    }
+  ];
+
+  const glossary = {
+    database:{title:'What a database is',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The idea</strong><p>A database is an organized collection of tables. Each table is a strict grid: columns with fixed names, and one record per row. The two tables on screen — leads and reps — are a tiny but real database.</p></div><div class="glossary-card"><strong>Vs a spreadsheet</strong><p>A spreadsheet lets you type anything anywhere. A database table enforces its columns, can hold millions of rows, and instead of scrolling, you ask it questions with queries.</p></div></div>`},
+    grain:{title:'The grain of a table',body:`<div class="glossary-grid"><div class="glossary-card"><strong>One row = one what?</strong><p>The grain is what a single row represents. In leads, one row is one sales lead. In a payments table, one row might be one payment — not one customer.</p></div><div class="glossary-card"><strong>Why it matters</strong><p>Every count and total assumes the grain. If one customer appears on five rows, counting rows counts payments, not customers. Ask the grain question before every query.</p></div></div>`},
+    keys:{title:'Keys — how tables relate',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Primary key</strong><p>A column that uniquely identifies each row. In reps, rep_id 1 means Srbina and nobody else.</p></div><div class="glossary-card"><strong>Foreign key</strong><p>The same column appearing in another table as a pointer. rep_id inside leads points at the rep who owns that lead. Matching the two up is exactly what a JOIN does.</p></div></div>`},
+    select:{title:'SELECT & FROM — query anatomy',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The shape</strong><p>SELECT names the columns you want. FROM names the table they live in. SELECT lead_name, revenue FROM leads means: from the leads table, give me those two columns.</p></div><div class="glossary-card"><strong>A query returns a table</strong><p>The answer to a query is always itself a small table — rows and columns. That result can be read, charted, or even fed into another query.</p></div><div class="glossary-card"><strong>Capital letters?</strong><p>SELECT and FROM are usually written in capitals by convention, but the database does not care — select lead_name from leads works the same.</p></div><div class="glossary-card"><strong>Every column</strong><p>SELECT * means “all columns”. Handy for exploring; on the job, naming the columns you need is the kinder habit.</p></div></div>`},
+    where:{title:'WHERE — filtering rows',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The test</strong><p>WHERE goes after FROM and keeps only the rows that pass a test. WHERE status = 'Hot' keeps hot leads; WHERE revenue > 1000 keeps the big ones.</p></div><div class="glossary-card"><strong>Quotes</strong><p>Text values need single quotes ('Hot'); numbers do not (1000). Mixing that up is the most common beginner error message.</p></div></div>`},
+    orderby:{title:'ORDER BY & LIMIT',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Sorting</strong><p>ORDER BY revenue sorts smallest-first (ascending is the default). Add DESC — ORDER BY revenue DESC — to sort biggest-first.</p></div><div class="glossary-card"><strong>Capping</strong><p>LIMIT 3 cuts the result to the first 3 rows after sorting. Together they answer every “top N” question: sort, then cap.</p></div></div>`},
+    join:{title:'INNER JOIN — matching tables',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Three parts</strong><p>FROM leads INNER JOIN reps ON leads.rep_id = reps.rep_id — the first table, the second table, and the ON rule saying which key must match.</p></div><div class="glossary-card"><strong>What survives</strong><p>An INNER JOIN keeps only the rows that match on both sides. A rep with no leads, or a lead with no rep, silently disappears — remember that for Lesson 10.</p></div></div>`},
+    groupby:{title:'GROUP BY — summarizing',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The collapse</strong><p>GROUP BY region folds the table into one row per region. Whatever you put in the SELECT line is then computed per group.</p></div><div class="glossary-card"><strong>The functions</strong><p>COUNT(*) counts rows in each group. SUM(revenue) totals a column. AVG, MIN, and MAX work the same way. This is the PivotTable of SQL.</p></div></div>`},
+    leftjoin:{title:'LEFT JOIN — keeping the unmatched',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The difference</strong><p>An INNER JOIN drops rows with no match. A LEFT JOIN keeps every row from the left table (the one named first), matched or not.</p></div><div class="glossary-card"><strong>NULL appears</strong><p>Where there is no match, the right table’s columns come back as NULL. Those NULL rows are often the answer itself: reps without leads, customers without orders.</p></div></div>`},
+    nullval:{title:'NULL — the unknown value',body:`<div class="glossary-grid"><div class="glossary-card"><strong>What it means</strong><p>NULL means “no value here”. It is not zero and not empty text — it is the database admitting it does not know.</p></div><div class="glossary-card"><strong>How to test for it</strong><p>Use IS NULL or IS NOT NULL — not = NULL, which never matches anything. WHERE lead_name IS NULL finds the reps with no leads.</p></div></div>`},
+    having:{title:'HAVING vs WHERE',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Order of operations</strong><p>WHERE filters individual rows first. Then GROUP BY collapses them into groups. Then HAVING filters the groups.</p></div><div class="glossary-card"><strong>The tell</strong><p>If your test involves an aggregate — SUM, COUNT, AVG — it belongs in HAVING. HAVING SUM(revenue) > 3000 keeps only the groups whose total clears the bar.</p></div></div>`},
+    casewhen:{title:'CASE — SQL’s IF',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The shape</strong><p>CASE WHEN test THEN value ELSE other_value END. It reads like a sentence: when revenue is over 1000, then 'Priority', else 'Later'. Do not forget the END.</p></div><div class="glossary-card"><strong>The Excel echo</strong><p>=IF(D2>1000,"Priority","Later") and CASE WHEN revenue > 1000 THEN 'Priority' ELSE 'Later' END are the same decision in two languages.</p></div></div>`},
+    story:{title:'Turning results into a recommendation',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The structure</strong><p>1. Name the number or lead. 2. Say what it means. 3. Recommend an action. Keep it to one or two sentences.</p></div><div class="glossary-card"><strong>Example</strong><p>“Iron Harbor is the top lead by revenue at 2100 and already Hot, so I would prioritize that account for follow-up this week.”</p></div></div>`}
+  };
+
+  const state = { lesson:0, skill:10, sales:8, readiness:8, beans:0, orders:0, helper:false, unlocked:new Set(), solved:false, completed:new Set(), streak:0, missedThisLesson:false };
+
+  const el = id => document.getElementById(id);
+  const lessonBadge=el('lessonBadge'),lessonTitle=el('lessonTitle'),whatNowText=el('whatNowText'),objectiveText=el('objectiveText'),coachText=el('coachText'),hintText=el('hintText'),answerArea=el('answerArea'),feedbackBox=el('feedbackBox'),resultArea=el('resultArea');
+  const progressChip=el('progressChip'),skillFill=el('skillFill'),salesFill=el('salesFill'),readinessFill=el('readinessFill');
+  const modalBackdrop=el('modalBackdrop'),modalTitle=el('modalTitle'),modalBody=el('modalBody');
+
+  function setThemeIcon(){
+    const t=document.documentElement.getAttribute('data-theme');
+    document.querySelector('[data-theme-toggle]').textContent=t==='dark'?'☀️ Light':'🌙 Dark';
+  }
+  let theme=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',theme);setThemeIcon();
+  document.querySelector('[data-theme-toggle]').addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',theme);setThemeIcon();});
+
+  function openGlossary(key){
+    const item=glossary[key]; if(!item) return;
+    modalTitle.textContent=item.title; modalBody.innerHTML=item.body;
+    modalBackdrop.style.display='flex'; modalBackdrop.setAttribute('aria-hidden','false');
+  }
+  function closeGlossary(){modalBackdrop.style.display='none';modalBackdrop.setAttribute('aria-hidden','true');}
+  el('closeModal').addEventListener('click',closeGlossary);
+  modalBackdrop.addEventListener('click',e=>{if(e.target===modalBackdrop)closeGlossary();});
+  el('openGlossary').addEventListener('click',()=>openGlossary('select'));
+  document.querySelectorAll('[data-glossary]').forEach(btn=>btn.addEventListener('click',()=>openGlossary(btn.dataset.glossary)));
+  el('showPrereq').addEventListener('click',()=>openGlossary(lessons[state.lesson].prereq));
+
+  function updateMeters(){
+    skillFill.style.width=state.skill+'%';
+    salesFill.style.width=state.sales+'%';
+    readinessFill.style.width=state.readiness+'%';
+  }
+
+  function unlockAchievement(key){
+    if(!key||state.unlocked.has(key))return;
+    state.unlocked.add(key);
+    const ach=document.querySelector(`[data-ach="${key}"]`);
+    if(ach)ach.classList.add('unlocked');
+  }
+
+  function explode(count=32){
+    const root=el('explosion'); root.innerHTML='';
+    const colors=['#01696f','#da7101','#d19900','#a12c7b','#437a22'];
+    for(let i=0;i<count;i++){
+      const p=document.createElement('span'); p.className='particle';
+      p.style.left='50%'; p.style.top='45%';
+      p.style.background=colors[i%colors.length];
+      p.style.setProperty('--dx',`${(Math.random()-.5)*500}px`);
+      p.style.setProperty('--dy',`${(Math.random()-.5)*360}px`);
+      root.appendChild(p);
+    }
+    setTimeout(()=>root.innerHTML='',1000);
+  }
+
+  function renderStepper(){
+    const root=el('stepper'); root.innerHTML='';
+    lessons.forEach((_,i)=>{
+      const d=document.createElement('div');
+      d.className='dot'+(state.completed.has(i)?' done':i===state.lesson?' current':'');
+      d.textContent=state.completed.has(i)?'✓':i+1;
+      d.title=lessons[i].title;
+      root.appendChild(d);
+    });
+  }
+
+  function renderResult(res){
+    resultArea.innerHTML='';
+    if(!res) return;
+    const box=document.createElement('div'); box.className='result-box';
+    const label=document.createElement('label'); label.textContent='What the database returned';
+    const wrap=document.createElement('div'); wrap.className='result-wrap';
+    if(!res.columns.length){
+      const p=document.createElement('p'); p.className='footer-note'; p.style.padding='.5rem .75rem';
+      p.textContent='The query ran, but returned no rows.';
+      wrap.appendChild(p);
+    } else {
+      const table=document.createElement('table'); table.className='sheet';
+      const thead=document.createElement('thead'); const hr=document.createElement('tr');
+      res.columns.forEach(c=>{const th=document.createElement('th'); th.textContent=c; hr.appendChild(th);});
+      thead.appendChild(hr); table.appendChild(thead);
+      const tbody=document.createElement('tbody');
+      res.rows.forEach(row=>{
+        const tr=document.createElement('tr');
+        row.forEach(v=>{
+          const td=document.createElement('td');
+          if(v===null||v===undefined){ td.textContent='NULL'; td.className='null-val'; }
+          else td.textContent=v;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody); wrap.appendChild(table);
+    }
+    box.append(label,wrap); resultArea.appendChild(box);
+  }
+
+  function renderLesson(){
+    state.solved=false; state.missedThisLesson=false;
+    const l=lessons[state.lesson];
+    lessonBadge.textContent=l.badge; lessonTitle.textContent=l.title;
+    whatNowText.textContent=l.whatNow; objectiveText.textContent=l.objective;
+    coachText.textContent=l.coach; hintText.textContent=l.hint;
+    el('whyText').textContent=l.why?'💼 Why it matters: '+l.why:'';
+    el('kitMatchText').innerHTML=l.kitMatch?`📚 Prep-kit match: <a href="${KIT_URL}" target="_blank" rel="noopener">${l.kitMatch}</a>`:'';
+    progressChip.textContent=`Lesson ${state.lesson+1} of ${lessons.length}`;
+    renderStepper();
+    feedbackBox.className='feedback hidden'; feedbackBox.textContent='';
+    el('nextLessonBottom').classList.add('hidden');
+    el('nextLessonTop').textContent=state.lesson===lessons.length-1?'Finish':'Next lesson →';
+    answerArea.innerHTML=''; resultArea.innerHTML='';
+
+    if(l.mode==='buttons'){
+      const wrap=document.createElement('div'); wrap.className='answer-section';
+      const lbl=document.createElement('div'); lbl.className='answer-section-label'; lbl.textContent='Select your answer:';
+      wrap.appendChild(lbl);
+      l.options.forEach(opt=>{
+        const b=document.createElement('button'); b.className='answer-option'; b.textContent=opt; b.dataset.choice=opt;
+        b.addEventListener('click',()=>{
+          document.querySelectorAll('[data-choice]').forEach(x=>x.classList.remove('selected'));
+          b.classList.add('selected'); answerArea.dataset.answer=opt;
+        });
+        wrap.appendChild(b);
+      });
+      answerArea.appendChild(wrap);
+    } else if(l.mode==='sql'){
+      const box=document.createElement('div'); box.className='formula-box';
+      const label=document.createElement('label'); label.textContent='Your query';
+      const field=document.createElement('div'); field.className='formula-input multi';
+      const prefix=document.createElement('span'); prefix.textContent='SQL'; prefix.style.marginTop='.55rem';
+      const input=document.createElement('textarea'); input.id='typedAnswer'; input.rows=2;
+      input.placeholder=l.placeholder+' — Enter checks it, Shift+Enter adds a line';
+      input.setAttribute('autocomplete','off'); input.setAttribute('spellcheck','false');
+      input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el('submitAnswer').click();}});
+      field.append(prefix,input); box.append(label,field); answerArea.appendChild(box);
+    } else {
+      const box=document.createElement('div'); box.className='formula-box';
+      const label=document.createElement('label'); label.textContent='Your recommendation';
+      const field=document.createElement('div'); field.className='formula-input';
+      const prefix=document.createElement('span'); prefix.textContent='✍';
+      const input=document.createElement('input'); input.id='typedAnswer'; input.placeholder=l.placeholder; input.setAttribute('autocomplete','off');
+      input.addEventListener('keydown',e=>{if(e.key==='Enter')el('submitAnswer').click();});
+      field.append(prefix,input); box.append(label,field); answerArea.appendChild(box);
+    }
+  }
+
+  function setFeedback(ok,msg){
+    feedbackBox.className=`feedback ${ok?'success':'error'}`;
+    feedbackBox.textContent=msg; feedbackBox.classList.remove('hidden');
+  }
+
+  function updateStreakChip(){
+    const chip=el('streakChip');
+    chip.textContent=`🔥 ${state.streak}`;
+    chip.classList.toggle('hidden',state.streak===0);
+  }
+
+  function markMiss(msg){
+    state.missedThisLesson=true; state.streak=0; updateStreakChip();
+    setFeedback(false,msg);
+  }
+
+  function markSolved(l){
+    state.skill=Math.max(state.skill,l.skill); state.sales=Math.max(state.sales,l.sales); state.readiness=Math.max(state.readiness,l.readiness);
+    state.completed.add(state.lesson); renderStepper();
+    if(!state.missedThisLesson){ state.streak+=1; if(state.streak>=3)unlockAchievement('streak'); }
+    updateStreakChip();
+    updateMeters(); unlockAchievement(l.achievement);
+    const hot=state.streak>=3 && !state.missedThisLesson;
+    setFeedback(true,(hot?`🔥 ${state.streak} first-try wins in a row! `:'')+l.success);
+    explode(hot?72:32); state.solved=true;
+    el('nextLessonBottom').classList.remove('hidden');
+  }
+
+  async function submitCurrent(){
+    const l=lessons[state.lesson];
+    if(state.solved) return;
+    if(l.mode==='buttons'){
+      if(answerArea.dataset.answer===l.answer) markSolved(l); else markMiss(l.fail);
+      return;
+    }
+    if(l.mode==='text'){
+      if(l.validate((el('typedAnswer')?.value||'').trim())) markSolved(l); else markMiss(l.fail);
+      return;
+    }
+    // mode === 'sql' — run the query for real and grade the result, not the text
+    const raw=(el('typedAnswer')?.value||'').trim();
+    if(!raw) return;
+    if(!/select/i.test(raw)||!/from/i.test(raw)){
+      markMiss('Close — a complete SQL statement names the columns you want (SELECT …) and the table they live in (FROM …). Add the missing piece and check again.');
+      return;
+    }
+    const btn=el('submitAnswer'); btn.disabled=true;
+    try{
+      let userRes;
+      try{ userRes=await runQuery(raw); }
+      catch(e){
+        renderResult(null);
+        if(e.isBoot){ setFeedback(false,'Could not load the practice database — this usually means a network hiccup. Check your connection and press Check answer again.'); }
+        else markMiss(`The database replied: “${e.message}”. Read it slowly — it usually names the exact word it tripped on. Adjust and check again.`);
+        return;
+      }
+      const expRes=await runQuery(l.expected);
+      renderResult(userRes);
+      const matched=resultsMatch(userRes,expRes,!!l.orderSensitive);
+      const flatQ=raw.toUpperCase().replace(/\s+/g,' ');
+      const missing=(l.keywords||[]).filter(k=>!flatQ.includes(k));
+      if(matched && missing.length){
+        markMiss(`Your result matches, but this lesson is about ${missing.join(' and ')} — write the query so the database does that work itself, then check again.`);
+      } else if(matched){
+        markSolved(l);
+      } else {
+        markMiss(l.fail);
+      }
+    } finally { btn.disabled=false; }
+  }
+
+  function nextLesson(){
+    if(state.lesson<lessons.length-1){ state.lesson+=1; renderLesson(); window.scrollTo({top:0,behavior:'smooth'}); }
+    else{
+      lessonBadge.textContent='All done'; lessonTitle.textContent='Srbina speaks SQL now.';
+      whatNowText.textContent='You have finished all 14 lessons. Open any glossary card to review, or replay the queries from memory.';
+      objectiveText.textContent='You covered what a table is, the grain of a row, keys, SELECT, WHERE, ORDER BY with LIMIT, INNER JOIN, GROUP BY with COUNT and SUM, LEFT JOIN with NULLs, HAVING, CASE, a memory checkpoint, and a written recommendation. That is the working core of analyst SQL.';
+      el('whyText').textContent=''; el('kitMatchText').innerHTML='';
+      coachText.textContent='Come back tomorrow and run the queries again. Spaced repetition is how this becomes second nature.';
+      hintText.textContent='Try the Lunch Break mini-game when you need a reset between sessions.';
+      answerArea.innerHTML='<div class="achievement"><strong>Sprint complete. 🎉</strong><p>Fourteen skills practiced against a real database, in the browser. Ready to go deeper? <a href="https://michaelnocito.github.io/analyst-prep-kit/sql/">Continue in the SQL Prep Kit — 20 free lessons →</a></p></div>';
+      resultArea.innerHTML='';
+      el('submitAnswer').classList.add('hidden'); el('showPrereq').classList.add('hidden'); el('nextLessonBottom').classList.add('hidden'); el('nextLessonTop').classList.add('hidden');
+      unlockAchievement('story'); state.skill=92; state.sales=84; state.readiness=90; updateMeters();
+      setFeedback(true,'✓ All 14 lessons complete. Well done.');
+    }
+  }
+
+  el('submitAnswer').addEventListener('click',submitCurrent);
+  el('nextLessonBottom').addEventListener('click',nextLesson);
+  el('nextLessonTop').addEventListener('click',()=>{
+    if(state.solved||state.lesson===lessons.length-1) nextLesson();
+    else setFeedback(false,'Complete the current task first before moving on.');
+  });
+
+  const beansChip=el('beansChip'),ordersChip=el('ordersChip'),moodChip=el('moodChip');
+  function updateBreakUI(){
+    beansChip.textContent=`Coffees: ${state.beans}`;
+    ordersChip.textContent=`Served: ${state.orders}`;
+    moodChip.textContent=`Vibe: ${state.orders>=15?'excellent':state.orders>=5?'lighter':'calm'}`;
+  }
+  function dropBean(){
+    state.beans+=1; if(state.beans%3===0){state.orders+=1;}
+    if(state.orders>=5)unlockAchievement('break');
+    updateBreakUI();
+    const scene=el('coffeeScene');
+    const dot=document.createElement('div'); dot.className='bean';
+    dot.style.left=`${20+Math.random()*60}%`; dot.style.top=`${18+Math.random()*45}%`;
+    scene.appendChild(dot); setTimeout(()=>dot.remove(),700);
+  }
+  el('brewButton').addEventListener('click',dropBean);
+  el('autoServe').addEventListener('change',e=>{state.helper=e.target.checked;});
+  setInterval(()=>{if(state.helper){state.beans+=1;if(state.beans%3===0)state.orders+=1;updateBreakUI();}},2000);
+
+  updateMeters(); updateBreakUI(); renderLesson();
+  bootSQL().catch(()=>{}); // warm up the database in the background
+})();
+</script>
+</body>
+</html>

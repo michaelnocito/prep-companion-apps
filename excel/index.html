@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel Sales Sprint</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{
+      --font-body:'General Sans',Inter,sans-serif;
+      --font-display:'General Sans',Inter,sans-serif;
+      --text-xs:clamp(.75rem,.7rem + .25vw,.875rem);
+      --text-sm:clamp(.875rem,.8rem + .35vw,1rem);
+      --text-base:clamp(1rem,.95rem + .25vw,1.125rem);
+      --text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);
+      --text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+      --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;
+      --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;--color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
+      --color-text:#28251d;--color-text-muted:#66645d;--color-text-faint:#9f9d96;--color-text-inverse:#f9f8f4;
+      --color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;
+      --color-success:#437a22;--color-success-highlight:#d4dfcc;--color-error:#a12c7b;--color-error-highlight:#e0ced7;
+      --color-gold:#d19900;--color-gold-highlight:#e9e0c6;--color-orange:#da7101;--color-orange-highlight:#e7d7c4;
+      --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;
+      --shadow-sm:0 1px 2px oklch(0.2 0.01 80 / 0.06);--shadow-md:0 4px 12px oklch(0.2 0.01 80 / 0.08);--shadow-lg:0 12px 32px oklch(0.2 0.01 80 / 0.12);
+      --transition:180ms cubic-bezier(.16,1,.3,1);
+    }
+    [data-theme="dark"]{
+      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;--color-surface-offset:#1d1c1a;--color-border:#393836;--color-divider:#262523;
+      --color-text:#e2dfd8;--color-text-muted:#aba8a2;--color-text-faint:#77746f;--color-text-inverse:#2b2a28;
+      --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-highlight:#313b3b;
+      --color-success:#6daa45;--color-success-highlight:#3a4435;--color-error:#d163a7;--color-error-highlight:#4c3d46;
+      --color-gold:#e8af34;--color-gold-highlight:#4d4332;--color-orange:#fdab43;--color-orange-highlight:#564b3e;
+      --shadow-sm:0 1px 2px oklch(0 0 0 / 0.2);--shadow-md:0 4px 12px oklch(0 0 0 / 0.3);--shadow-lg:0 12px 32px oklch(0 0 0 / 0.4);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    body{min-height:100vh;font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:var(--color-bg);color:var(--color-text)}
+    button,input{font:inherit;color:inherit}
+    button{cursor:pointer;border:none;background:none}
+    a{color:var(--color-primary)}
+    .app{max-width:860px;margin:0 auto;padding:var(--space-2) var(--space-3);display:grid;gap:var(--space-2)}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 12%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+    .brand{display:flex;align-items:center;gap:var(--space-3)}
+    .logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--color-primary-highlight),var(--color-surface-offset));display:grid;place-items:center;color:var(--color-primary)}
+    .logo svg{width:24px;height:24px}
+    .title{font-size:var(--text-lg);font-weight:700}
+    .subtitle{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .toolbar{display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center}
+    .chip,.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:36px;padding:.45rem .9rem;border-radius:999px;font-size:var(--text-sm);transition:all var(--transition)}
+    .chip{background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .btn-primary{background:var(--color-primary);color:var(--color-text-inverse)}
+    .btn-primary:hover{background:var(--color-primary-hover)}
+    .btn-secondary{background:var(--color-surface-offset);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    .grid{display:grid;grid-template-columns:1fr;gap:var(--space-2)}
+    .hero{display:none}
+    .panel{background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+    .hero{padding:var(--space-6);display:grid;gap:var(--space-4)}
+    .hero h1{font-size:var(--text-xl);line-height:1.1;max-width:20ch}
+    .hero p{max-width:62ch;color:var(--color-text-muted)}
+    .hero-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3)}
+    .mini-card{padding:var(--space-4);background:var(--color-surface-2);border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .mini-card strong{display:block;font-size:var(--text-sm)}
+    .mini-card span{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .path{padding:var(--space-2) var(--space-4);display:grid;gap:var(--space-2)}
+    .path h2{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-muted)}
+    .section-title{font-size:var(--text-base);font-weight:700}
+    .steps{display:flex;gap:var(--space-2);flex-wrap:wrap}
+    .step{display:grid;grid-template-columns:auto 1fr;gap:var(--space-2);padding:var(--space-2) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent);flex:1;min-width:130px}
+    .step-num{width:22px;height:22px;font-size:.7rem;border-radius:50%;display:grid;place-items:center;background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700}
+    .layout{display:grid;grid-template-columns:1fr;gap:var(--space-2)}
+    .lesson{padding:var(--space-3);display:grid;gap:var(--space-2)}
+    .lesson-top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3);flex-wrap:wrap}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .7rem;border-radius:999px;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.08em;background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700}
+    .what-now{padding:var(--space-2) var(--space-3);background:var(--color-gold-highlight);border-radius:var(--radius-md);border:1px solid color-mix(in oklab,var(--color-gold) 24%, transparent)}
+    .what-now strong{display:none}
+    .objective{padding:var(--space-2) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);display:grid;gap:var(--space-1);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    #objectiveTitle{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .coach{padding:var(--space-2) var(--space-3);background:var(--color-primary-highlight);border-radius:var(--radius-md);display:flex;gap:var(--space-2);align-items:baseline}
+    .coach strong{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;color:var(--color-primary)}
+    .coach p{color:var(--color-text)}
+    .quick-links{display:flex;gap:var(--space-2);flex-wrap:wrap}
+    .link-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:999px;background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);font-size:var(--text-sm)}
+    .sheet-wrap{overflow:auto;border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    table.sheet{min-width:100%;border-collapse:collapse;background:white;color:#222}
+    [data-theme="dark"] table.sheet{background:#151515;color:#f1f1f1}
+    .sheet th,.sheet td{border:1px solid #cfcfcf;padding:.15rem .3rem;text-align:left;min-width:80px;font-size:var(--text-sm)}
+    [data-theme="dark"] .sheet th,[data-theme="dark"] .sheet td{border-color:#444}
+    .sheet th{background:#eef2f4;font-size:.9rem}
+    [data-theme="dark"] .sheet th{background:#262626}
+    .sheet input{width:100%;border:none;background:transparent;padding:.2rem 0;outline:none}
+    .formula-box{display:grid;gap:var(--space-1)}
+    .formula-box label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .formula-input{display:flex;gap:var(--space-2);align-items:center;padding:0 var(--space-3);min-height:44px;border-radius:var(--radius-lg);background:var(--color-surface-2);border:2px solid var(--color-border)}
+    .formula-input:focus-within{border-color:var(--color-primary)}
+    .formula-input span{font-weight:700;font-size:1.1rem;color:var(--color-primary)}
+    .formula-input input{border:none;background:transparent;flex:1;outline:none;font-size:var(--text-base)}
+    .answer-option{display:flex;align-items:center;gap:var(--space-3);width:100%;padding:var(--space-2) var(--space-4);border-radius:var(--radius-lg);background:var(--color-surface-2);border:2px solid var(--color-border);text-align:left;font-weight:500;font-size:var(--text-base);transition:all var(--transition)}
+    .answer-option:hover{border-color:var(--color-primary);background:var(--color-primary-highlight)}
+    .answer-option.selected{border-color:var(--color-primary);background:var(--color-primary-highlight);font-weight:700}
+    .answer-option.selected::before{content:'✓ ';color:var(--color-primary)}
+    .answer-section{display:grid;gap:var(--space-2)}
+    .answer-section-label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .hint{padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);background:transparent;border:none;border-left:3px solid var(--color-border);font-size:var(--text-sm);color:var(--color-text-muted)}
+    .hint strong{color:var(--color-text-muted);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em}
+    .feedback,.achievement,.break-box,.stats,.glossary-card{padding:var(--space-3);border-radius:var(--radius-lg);background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .feedback.success{background:var(--color-success-highlight);border-color:color-mix(in oklab,var(--color-success) 24%, transparent)}
+    .feedback.error{background:var(--color-error-highlight);border-color:color-mix(in oklab,var(--color-error) 24%, transparent)}
+    .sidebar{display:grid;gap:var(--space-2)}
+    .meter{display:grid;gap:var(--space-1)}
+    .meter span{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .bar{height:8px;background:var(--color-surface-offset);border-radius:999px;overflow:hidden}
+    .fill{height:100%;background:var(--color-primary);width:20%;transition:width .3s ease}
+    .ach-list,.checklist{display:grid;gap:var(--space-1)}
+    .ach{padding:.4rem .7rem;border-radius:var(--radius-md);background:var(--color-surface-offset);font-size:var(--text-xs)}
+    .ach.unlocked{background:var(--color-success-highlight);color:var(--color-text)}
+    .check{display:flex;gap:.65rem;align-items:flex-start;font-size:var(--text-sm)}
+    .check input{margin-top:.25rem}
+    .break-game{display:grid;gap:var(--space-3)}
+    .coffee-scene{position:relative;height:130px;border-radius:var(--radius-xl);background:linear-gradient(180deg,color-mix(in oklab,var(--color-primary-highlight) 55%, white),var(--color-surface-offset));overflow:hidden;border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    [data-theme="dark"] .coffee-scene{background:linear-gradient(180deg,#233235,#1c1b19)}
+    .counter{position:absolute;left:10%;right:10%;bottom:16%;height:58px;background:#a46b43;border-radius:18px 18px 8px 8px;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}
+    .cup{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:54px;border-radius:0 0 16px 16px;background:#fff7ef;border:2px solid #6b4b32;display:grid;place-items:center;font-size:1.3rem;user-select:none}
+    .cup::after{content:'';position:absolute;right:-18px;top:16px;width:22px;height:28px;border:4px solid #6b4b32;border-left:none;border-radius:0 16px 16px 0}
+    .cup::before{content:'';position:absolute;top:-18px;left:18px;width:50px;height:28px;background:radial-gradient(circle at 50% 90%,rgba(255,255,255,.15),rgba(255,255,255,0) 62%),radial-gradient(circle at 50% 50%,rgba(255,255,255,.75),rgba(255,255,255,0) 60%);opacity:.7;animation:steam 2.2s ease-in-out infinite}
+    .bean{position:absolute;width:18px;height:18px;border-radius:50% 45% 50% 45%;background:#7a4d2d;box-shadow:inset -2px -2px 0 rgba(0,0,0,.15)}
+    .explosion{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+    .particle{position:absolute;width:10px;height:10px;border-radius:50%;animation:blast .9s ease-out forwards}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(20,20,20,.45);display:none;align-items:center;justify-content:center;padding:var(--space-4);z-index:60}
+    .modal{max-width:720px;width:100%;background:var(--color-surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);padding:var(--space-5);display:grid;gap:var(--space-4)}
+    .modal h3{font-size:var(--text-lg)}
+    .glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3)}
+    .footer-note{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .hidden{display:none !important}
+    /* ── Lesson stepper ── */
+    .stepper{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+    .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.65rem;font-weight:700;background:var(--color-surface-offset);color:var(--color-text-faint);border:2px solid transparent}
+    .dot.done{background:var(--color-success-highlight);color:var(--color-success)}
+    .dot.current{border-color:var(--color-primary);color:var(--color-primary);background:var(--color-primary-highlight)}
+    /* ── Sticky action bar ── */
+    #actionBar{position:sticky;bottom:0;background:var(--color-surface);border-top:1px solid var(--color-divider);padding:var(--space-2) 0;z-index:5}
+    /* ── Why + kit match lines ── */
+    .why-line{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .kit-match{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .kit-match a{font-weight:600}
+    /* ── Footer ── */
+    .site-footer{padding:var(--space-4);text-align:center;display:grid;gap:var(--space-2);color:var(--color-text-muted);font-size:var(--text-sm)}
+    .footer-cta{font-size:var(--text-base);font-weight:600}
+    .footer-kits a{white-space:nowrap}
+    /* ── Overview collapsible ── */
+    details.collapser{border-radius:var(--radius-xl)}
+    details.collapser>summary{display:flex;align-items:center;justify-content:space-between;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-radius:var(--radius-xl);cursor:pointer;font-size:var(--text-sm);font-weight:600;list-style:none;user-select:none;transition:background var(--transition);gap:var(--space-3)}
+    details.collapser>summary::-webkit-details-marker{display:none}
+    details.collapser>summary:hover{background:var(--color-surface-offset)}
+    details.collapser[open]>summary{border-bottom-left-radius:0;border-bottom-right-radius:0}
+    .summary-left{display:flex;align-items:center;gap:var(--space-2)}
+    .summary-tag{font-weight:400;color:var(--color-text-muted);font-size:var(--text-xs)}
+    .summary-arrow{font-size:.7rem;color:var(--color-text-muted);transition:transform .2s;flex-shrink:0}
+    details.collapser[open] .summary-arrow{transform:rotate(90deg)}
+    details.collapser>.grid,details.collapser>.sidebar{border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-top:none;border-radius:0 0 var(--radius-xl) var(--radius-xl);padding:var(--space-2)}
+    @keyframes blast{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.15);opacity:0}}
+    @keyframes steam{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(-7px);opacity:.9}}
+    @media (max-width: 860px){.layout{grid-template-columns:1fr}.glossary-grid{grid-template-columns:1fr}.topbar{flex-wrap:wrap}.steps{display:grid;grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<div class="explosion" id="explosion"></div>
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div style="display:flex;justify-content:space-between;gap:1rem;align-items:center">
+      <h3 id="modalTitle">Explain it to me</h3>
+      <button class="btn btn-secondary" id="closeModal">Close</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-label="Excel Sales Sprint logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M8 8h8M8 12h8M8 16h5"></path><path d="M15 3v18"></path></svg>
+      </div>
+      <div>
+        <div class="title">Excel Sales Sprint</div>
+        <div class="subtitle">Help Srbina turn spreadsheet basics into confident business instincts</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <a class="chip" href="../" style="text-decoration:none">← All sprints</a>
+      <div class="chip" id="progressChip">Lesson 1 of 14</div>
+      <div class="chip hidden" id="streakChip" title="First-try streak">🔥 0</div>
+      <button class="btn btn-secondary" id="openGlossary">Glossary</button>
+      <button class="btn btn-secondary" data-theme-toggle aria-label="Switch theme">Theme</button>
+    </div>
+  </header>
+
+  <details id="overviewDetails" class="collapser">
+  <summary>
+    <span class="summary-left">
+      <span>About this sprint</span>
+      <span class="summary-tag">How it works · What you will cover</span>
+    </span>
+    <span class="summary-arrow">▸</span>
+  </summary>
+  <section class="grid">
+    <div class="panel hero">
+      <span class="badge">Start here</span>
+      <h1>Srbina is practicing. You are her coach.</h1>
+      <p>She has a spreadsheet, a list of leads, and a big conversation coming up. Each section gives her one small task, a quick explanation if she needs it, and a moment to try it herself.</p>
+      <div class="hero-cards">
+        <div class="mini-card"><strong>1. Read the task</strong><span>One clear instruction at a time.</span></div>
+        <div class="mini-card"><strong>2. Learn the concept</strong><span>Open a glossary card when a term is new.</span></div>
+        <div class="mini-card"><strong>3. Try it yourself</strong><span>Type into the sheet and submit your answer.</span></div>
+      </div>
+      <div class="quick-links">
+        <button class="link-pill" data-glossary="formula">What is a formula?</button>
+        <button class="link-pill" data-glossary="equals">Why does = matter?</button>
+        <button class="link-pill" data-glossary="cell">What is a cell reference?</button>
+      </div>
+    </div>
+
+    <aside class="panel path">
+      <h2>What you will cover</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>Read the sheet</strong><div class="subtitle">Columns, cells, text vs numbers.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>Core formulas</strong><div class="subtitle">SUM and AVERAGE.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>Logic &amp; lookups</strong><div class="subtitle">IF, COUNTIF, XLOOKUP.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>PivotTables</strong><div class="subtitle">Summarize thousands of rows.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>Clean data</strong><div class="subtitle">Spot problems, fix with TRIM and IFERROR.</div></div></div>
+        <div class="step"><div class="step-num">6</div><div><strong>Charts</strong><div class="subtitle">Pick the right picture.</div></div></div>
+        <div class="step"><div class="step-num">7</div><div><strong>Recommend</strong><div class="subtitle">Turn numbers into next steps.</div></div></div>
+      </div>
+      <p class="footer-note">Mirrors the units in the <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Excel Prep Kit</a> — finish here, then go deeper there. Nothing here is meant to feel rushed.</p>
+    </aside>
+  </section>
+  </details>
+
+  <section class="layout">
+    <main class="panel lesson">
+      <div class="lesson-top">
+        <div>
+          <span class="badge" id="lessonBadge">Lesson 1 · Spreadsheet reading</span>
+          <h2 class="section-title" id="lessonTitle">Find the column that matters</h2>
+        </div>
+        <button class="btn btn-primary" id="nextLessonTop">Next lesson</button>
+      </div>
+
+      <div class="stepper" id="stepper" aria-label="Lesson progress"></div>
+
+      <div class="what-now" id="whatNow">
+        <strong>What do I do now?</strong>
+        <span id="whatNowText">Read the task below, then click the correct column name.</span>
+      </div>
+
+      <div class="objective">
+        <strong id="objectiveTitle">The task</strong>
+        <p id="objectiveText">Srbina is studying a mini lead sheet. Which column tells her how much money each lead is worth?</p>
+        <p class="why-line" id="whyText"></p>
+        <p class="kit-match" id="kitMatchText"></p>
+        <div class="coach">
+          <strong>Coach tip</strong>
+          <p id="coachText">Start with the business question. If the question is about money, look for the money column.</p>
+        </div>
+      </div>
+
+      <div class="sheet-wrap">
+        <table class="sheet" aria-label="Practice spreadsheet">
+          <thead><tr><th>Lead</th><th>Region</th><th>Calls</th><th>Revenue</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Northwind</td><td>East</td><td><input value="4" data-cell="C2"></td><td><input value="1200" data-cell="D2"></td><td>Warm</td></tr>
+            <tr><td>BluePeak</td><td>West</td><td><input value="6" data-cell="C3"></td><td><input value="850" data-cell="D3"></td><td>Hot</td></tr>
+            <tr><td>Maple Desk</td><td>South</td><td><input value="3" data-cell="C4"></td><td><input value="990" data-cell="D4"></td><td>Cold</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="answerArea"></div>
+
+      <div class="hint" id="hintBox">
+        <strong>Gentle nudge</strong>
+        <p id="hintText">This question is about value, not effort.</p>
+      </div>
+
+      <div id="feedbackBox" class="feedback hidden"></div>
+
+      <div id="actionBar" style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-primary" id="submitAnswer">Check answer</button>
+        <button class="btn btn-secondary hidden" id="nextLessonBottom">Continue →</button>
+        <button class="btn btn-secondary" id="showPrereq" style="margin-left:auto">💡 Explain it to me</button>
+      </div>
+    </main>
+
+    <details id="extrasDetails" class="collapser">
+    <summary>
+      <span class="summary-left">
+        <span>☕ Progress &amp; breaks</span>
+        <span class="summary-tag">Srbina's meters · Achievements · Lunch break</span>
+      </span>
+      <span class="summary-arrow">▸</span>
+    </summary>
+    <aside class="sidebar">
+      <section class="panel stats">
+        <h3 class="section-title">Srbina's progress</h3>
+        <div class="meter"><span>Excel confidence</span><div class="bar"><div class="fill" id="excelFill"></div></div></div>
+        <div class="meter"><span>Business storytelling</span><div class="bar"><div class="fill" id="salesFill" style="background:var(--color-orange)"></div></div></div>
+        <div class="meter"><span>Overall readiness</span><div class="bar"><div class="fill" id="readinessFill" style="background:var(--color-gold)"></div></div></div>
+      </section>
+
+      <section class="panel achievement">
+        <h3 class="section-title">Achievements</h3>
+        <div class="ach-list" id="achievementList">
+          <div class="ach" data-ach="first">💡 First spark</div>
+          <div class="ach" data-ach="formula">📝 Formula friend</div>
+          <div class="ach" data-ach="story">📊 Business translator</div>
+          <div class="ach" data-ach="streak">🔥 Hot streak (3 first-try wins)</div>
+          <div class="ach" data-ach="break">☕ Lunch break champion</div>
+        </div>
+      </section>
+
+      <section class="panel break-box">
+        <h3 class="section-title">☕ Lunch break</h3>
+        <p style="color:var(--color-text-muted)">Step away from the spreadsheet. Brew some coffees, reset your head, and come back when you are ready.</p>
+        <div class="break-game">
+          <div class="coffee-scene" id="coffeeScene" aria-label="Coffee shop mini-game">
+            <div class="counter"></div>
+            <button class="cup" id="brewButton" aria-label="Tap to brew coffee">☕</button>
+          </div>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" id="autoServe"> Hire a helper barista (auto-brews every 2 seconds)</label>
+          </div>
+          <div class="quick-links">
+            <div class="chip" id="beansChip">Coffees: 0</div>
+            <div class="chip" id="ordersChip">Served: 0</div>
+            <div class="chip" id="moodChip">Vibe: calm</div>
+          </div>
+          <p class="footer-note">Tap the cup to brew. Every 5 coffees served lifts the vibe.</p>
+        </div>
+      </section>
+    </aside>
+    </details>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-cta">Ready for the full course? <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Excel Prep Kit — 28 free lessons →</a></div>
+    <div class="footer-kits">More free kits:
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/sql/">SQL</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/python/">Python</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/tableau/">Tableau</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/powerbi/">Power BI</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/stats/">Stats</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/chart-literacy/">Chart Literacy</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/forecasting/">Forecasting</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/interview/">Interview</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/">All kits ↗</a>
+    </div>
+    <div class="footer-meta">Continue the story: <a href="../sql/">SQL Sales Sprint ↗</a> · Built by <a href="https://michaelnocito.github.io">Michael Nocito</a> · <a href="https://github.com/michaelnocito/sales-sprint">GitHub ↗</a></div>
+  </footer>
+</div>
+<script>
+(() => {
+  const KIT_URL='https://michaelnocito.github.io/analyst-prep-kit/excel/';
+  const lessons = [
+    {
+      badge:'Lesson 1 · Reading the sheet',
+      title:'Find the column that matters',
+      whatNow:'Click the column name that tells Srbina which leads are worth the most money.',
+      objective:'Srbina is studying a mini lead sheet. Which column tells her how much money each lead is worth?',
+      why:'Analysts rarely build sheets from scratch — most days start with reading someone else’s.',
+      kitMatch:'How a Spreadsheet Is Built (the Grid)',
+      coach:'Start with the business question. If the question is about money, look for the money column.',
+      hint:'This is about value, not effort or activity.',
+      prereq:'revenue',
+      mode:'buttons',
+      options:['Calls','Revenue','Region'],
+      answer:'Revenue',
+      success:'✓ Exactly. Revenue is the value column. Strong analysts match the business question to the right field before touching any formulas.',
+      fail:'Not quite. Calls measure effort, but Revenue measures money. Try again.',
+      excel:14,sales:8,readiness:10,achievement:'first'
+    },
+    {
+      badge:'Lesson 2 · Cell addresses',
+      title:'Name the cell',
+      whatNow:'Click the cell address where BluePeak’s revenue lives.',
+      objective:'Every cell has an address: column letter plus row number. In this sheet, Lead is column A, Region is B, Calls is C, Revenue is D, Status is E — and the header row is row 1. Which address holds BluePeak’s revenue (850)?',
+      why:'Formulas point at addresses, not values. Reading addresses fast is the skill under every other skill.',
+      kitMatch:'Cell References & the A1 Grid',
+      coach:'Find the column first (Revenue = D), then count down to BluePeak’s row.',
+      hint:'BluePeak sits on row 3. Revenue is column D.',
+      prereq:'cell',
+      mode:'buttons',
+      options:['B3','D2','D3'],
+      answer:'D3',
+      success:'✓ D3 it is — column D, row 3. You can now point at any value in any sheet.',
+      fail:'Not quite. Revenue is column D, and BluePeak is the second data row, which is row 3 (the headers take row 1).',
+      excel:20,sales:10,readiness:14,achievement:null
+    },
+    {
+      badge:'Lesson 3 · Text vs number',
+      title:'What can Excel do math on?',
+      whatNow:'Srbina pasted three values into a sheet. Click the one Excel can actually calculate with.',
+      objective:'Excel quietly stores every entry as either a number or text — and it only does math on numbers. Which of these three entries is a real number to Excel?',
+      why:'Half of all broken spreadsheets trace back to numbers that are secretly stored as text.',
+      kitMatch:'Text vs Number (& Dates)',
+      coach:'If it reads like words, Excel stores it as text — even when it describes a quantity.',
+      hint:'Excel cannot add words or error labels.',
+      prereq:'textnum',
+      mode:'buttons',
+      options:['1200','twelve hundred','N/A'],
+      answer:'1200',
+      success:'✓ Right. Digits stored as a number can be summed, averaged, and charted. “twelve hundred” and “N/A” are just text to Excel.',
+      fail:'Look again — which entry is pure digits? That is the only one Excel will calculate with.',
+      excel:26,sales:12,readiness:18,achievement:null
+    },
+    {
+      badge:'Lesson 4 · First formula',
+      title:'Write your first total',
+      whatNow:'Type the Excel formula that adds up all three Revenue values in cells D2 through D4. Then press Check answer.',
+      objective:'Srbina needs the total revenue from all three leads. Type the formula that adds D2, D3, and D4 together.',
+      why:'Totals are the most-asked question in any sales meeting. This is the formula you will write most.',
+      kitMatch:'Your First Formula',
+      coach:'Not sure where to start? Tap “Explain it to me” below. It covers what = means and how SUM works.',
+      hint:'The formula you need is =SUM(D2:D4). The colon means “from D2 through D4”.',
+      prereq:'formula',
+      mode:'formula',
+      placeholder:'Type your formula here',
+      answerVariants:['=SUM(D2:D4)'],
+      success:'✓ That is correct. You just wrote a real Excel formula. Notice the pattern: = then the function name then the range in parentheses.',
+      fail:'Not quite. The range should be D2:D4. Try: =SUM(D2:D4)',
+      excel:34,sales:16,readiness:26,achievement:'formula'
+    },
+    {
+      badge:'Lesson 5 · Average',
+      title:'Find the average revenue',
+      whatNow:'Type the formula for the average of D2 through D4. It follows the exact same pattern as SUM.',
+      objective:'Now Srbina wants to know the typical deal size. Type the formula that averages the three Revenue values.',
+      why:'Averages turn “how much” into “what’s typical” — the first step toward benchmarks and targets.',
+      kitMatch:'What a Formula Actually Is',
+      coach:'Same shape as the last formula. Swap SUM for AVERAGE and point it at the same cells.',
+      hint:'=AVERAGE(D2:D4)',
+      prereq:'average',
+      mode:'formula',
+      placeholder:'Type your formula here',
+      answerVariants:['=AVERAGE(D2:D4)'],
+      success:'✓ Nice. You reused the same formula pattern with a different function name. That is how Excel vocabulary grows.',
+      fail:'Almost. Try =AVERAGE(D2:D4) — same structure as =SUM(D2:D4) from the last lesson.',
+      excel:40,sales:20,readiness:32,achievement:null
+    },
+    {
+      badge:'Lesson 6 · Logic',
+      title:'Make a decision with IF',
+      whatNow:'Type a formula that checks Northwind’s revenue (D2): if it is greater than 1000, show "Priority", otherwise show "Later".',
+      objective:'Srbina wants the sheet to flag big leads automatically. Write an IF formula on cell D2: greater than 1000 means "Priority", anything else means "Later".',
+      why:'Rules like this drive lead routing, alerts, and bonus calculations in real sales ops.',
+      kitMatch:'Make Decisions with IF',
+      coach:'IF has three parts separated by commas: the test, the value when true, the value when false.',
+      hint:'=IF(D2>1000,"Priority","Later") — keep the quotes around the words.',
+      prereq:'iflogic',
+      mode:'formula',
+      placeholder:'Type your IF formula here',
+      answerVariants:['=IF(D2>1000,"Priority","Later")'],
+      success:'✓ Perfect. The sheet now decides for itself. IF is the gateway to every smart spreadsheet you will ever build.',
+      fail:'Check the three parts: =IF(D2>1000,"Priority","Later") — test, value if true, value if false. Quotes go around the words.',
+      excel:48,sales:24,readiness:38,achievement:null
+    },
+    {
+      badge:'Lesson 7 · Conditional counting',
+      title:'Count the hot leads',
+      whatNow:'Type the formula that counts how many leads have a Hot status. Status lives in cells E2 through E4.',
+      objective:'Srbina’s manager asks: “How many hot leads do we have?” Count the cells in E2:E4 that say Hot.',
+      why:'“How many match?” is half the questions stakeholders ask. COUNTIF answers it in one line.',
+      kitMatch:'Count and Sum with Conditions',
+      coach:'COUNTIF takes two things: the range to look in, then the value to count — in quotes.',
+      hint:'=COUNTIF(E2:E4,"Hot")',
+      prereq:'countif',
+      mode:'formula',
+      placeholder:'Type your COUNTIF formula here',
+      answerVariants:['=COUNTIF(E2:E4,"Hot")'],
+      success:'✓ One hot lead found, instantly. COUNTIF and its cousin SUMIF are the workhorses of sales reporting.',
+      fail:'Two parts: the range E2:E4, then "Hot" in quotes. Try: =COUNTIF(E2:E4,"Hot")',
+      excel:54,sales:28,readiness:44,achievement:null
+    },
+    {
+      badge:'Lesson 8 · Lookups',
+      title:'Fetch a value with XLOOKUP',
+      whatNow:'Use XLOOKUP to fetch BluePeak’s revenue: look up "BluePeak" in A2:A4 and return the matching value from D2:D4.',
+      objective:'Srbina needs to pull one lead’s revenue out of the table by name. Write the XLOOKUP that finds "BluePeak" in the Lead column (A2:A4) and returns its Revenue (D2:D4).',
+      why:'Joining data across sheets is the #1 Excel skill interviewers test. XLOOKUP is the modern way.',
+      kitMatch:'Lookup Evolved: XLOOKUP',
+      coach:'XLOOKUP takes three things: what to find, where to look, what to return.',
+      hint:'=XLOOKUP("BluePeak",A2:A4,D2:D4)',
+      prereq:'xlookup',
+      mode:'formula',
+      placeholder:'Type your XLOOKUP formula here',
+      answerVariants:['=XLOOKUP("BluePeak",A2:A4,D2:D4)'],
+      success:'✓ 850 retrieved by name. Once you can look values up, you can connect any two tables in a workbook.',
+      fail:'Three parts in order: "BluePeak" in quotes, the lookup range A2:A4, the return range D2:D4.',
+      excel:62,sales:32,readiness:52,achievement:null
+    },
+    {
+      badge:'Lesson 9 · PivotTables',
+      title:'Pick the right summary tool',
+      whatNow:'The real lead sheet has 5,000 rows. Click the tool that gives Srbina total revenue per region in under a minute.',
+      objective:'Three leads fit on one screen — five thousand do not. Srbina needs total revenue per region, fast, without writing a formula per region. What is the right tool?',
+      why:'Pivots are the fastest summary tool in Excel, and interviewers ask for them by name.',
+      kitMatch:'What Is a PivotTable?',
+      coach:'When the question is “total X per Y” over many rows, that is the textbook pivot moment.',
+      hint:'Sorting still leaves you adding by hand. Copying makes five sheets to maintain.',
+      prereq:'pivot',
+      mode:'buttons',
+      options:['Sort and add by hand','A PivotTable','Copy each region to its own sheet'],
+      answer:'A PivotTable',
+      success:'✓ Exactly. Drag Region to Rows, Revenue to Values — done in seconds, and it updates when the data changes.',
+      fail:'Think about maintenance: which option still works when row 5,001 arrives tomorrow?',
+      excel:68,sales:38,readiness:58,achievement:null
+    },
+    {
+      badge:'Lesson 10 · Data cleaning',
+      title:'Spot and fix dirty data',
+      whatNow:'A lookup for "BluePeak" keeps failing because the cell actually contains " BluePeak " with stray spaces. Click the function that fixes it.',
+      objective:'Invisible spaces are the most common reason lookups fail. Which function strips the extra spaces off " BluePeak " so it matches cleanly?',
+      why:'Analysts spend more time cleaning data than analyzing it. TRIM is the first tool out of the bag.',
+      kitMatch:'Spot and Fix Dirty Data',
+      coach:'You want a text-cleaning function, not a math one.',
+      hint:'The name describes trimming the edges off something.',
+      prereq:'clean',
+      mode:'buttons',
+      options:['TRIM','ROUND','MAX'],
+      answer:'TRIM',
+      success:'✓ TRIM(" BluePeak ") returns "BluePeak" — spaces gone, lookup fixed. Quiet function, massive time-saver.',
+      fail:'ROUND works on numbers and MAX finds the biggest value. You need the one that cleans text edges.',
+      excel:74,sales:42,readiness:64,achievement:null
+    },
+    {
+      badge:'Lesson 11 · Defensive formulas',
+      title:'Guard against errors with IFERROR',
+      whatNow:'Revenue per call is D2/C2 — but a zero in Calls would show an ugly error. Type the formula that shows 0 instead of an error.',
+      objective:'Srbina is adding a revenue-per-call column. If Calls is ever 0, plain division shows #DIV/0! and the sheet looks broken. Wrap the division so errors display as 0.',
+      why:'Dashboards that show #DIV/0! lose stakeholder trust instantly. Pros wrap risky math.',
+      kitMatch:'Defensive Formulas: IFERROR',
+      coach:'IFERROR takes two things: the risky calculation, then what to show if it fails.',
+      hint:'=IFERROR(D2/C2,0)',
+      prereq:'iferror',
+      mode:'formula',
+      placeholder:'Type your IFERROR formula here',
+      answerVariants:['=IFERROR(D2/C2,0)'],
+      success:'✓ Armored. The math still works when data is good, and the sheet stays presentable when it is not.',
+      fail:'Two parts: the division D2/C2 first, then a comma, then the fallback 0. Try: =IFERROR(D2/C2,0)',
+      excel:80,sales:46,readiness:70,achievement:null
+    },
+    {
+      badge:'Lesson 12 · Charts',
+      title:'Pick the right chart',
+      whatNow:'Srbina wants to compare total revenue across the three regions at a glance. Click the chart that fits.',
+      objective:'The numbers are ready — now they need to be seen. For comparing a value across a few categories (East vs West vs South), which chart does the job?',
+      why:'Choosing the right chart is the difference between a glance and a meeting.',
+      kitMatch:'Your First Chart',
+      coach:'Comparing amounts across categories is the home turf of one chart in particular.',
+      hint:'Pies get hard past a few slices; scatters are for two numeric variables.',
+      prereq:'chart',
+      mode:'buttons',
+      options:['Bar chart','Pie chart with 12 slices','Scatter plot'],
+      answer:'Bar chart',
+      success:'✓ Bars it is. Lengths are the easiest thing for human eyes to compare — that is why bar charts win for category comparisons.',
+      fail:'Think about what eyes compare easily. Twelve pie slices blur together; scatter plots need two numeric axes.',
+      excel:84,sales:54,readiness:76,achievement:null
+    },
+    {
+      badge:'Lesson 13 · Checkpoint',
+      title:'Sprint review: from memory',
+      whatNow:'No peeking at earlier lessons. Type the formula that totals the Calls column, cells C2 through C4.',
+      objective:'Quick retrieval check. Back in Lesson 4 you totaled Revenue. Same skill, new target: total the Calls column from memory.',
+      why:'Pulling a skill from memory — not re-reading it — is what locks it in. That is retrieval practice.',
+      kitMatch:'Unit 1: Formulas (review)',
+      coach:'Same pattern as your first total. Different column, same shape.',
+      hint:'Calls live in column C, rows 2 through 4.',
+      prereq:'formula',
+      mode:'formula',
+      placeholder:'Type the total formula from memory',
+      answerVariants:['=SUM(C2:C4)'],
+      success:'✓ 13 calls total — and you wrote it without looking back. That formula is yours now.',
+      fail:'Same shape as the Revenue total, but pointed at column C: the range is C2:C4.',
+      excel:88,sales:58,readiness:82,achievement:null
+    },
+    {
+      badge:'Lesson 14 · Recommendation',
+      title:'Turn the number into a next step',
+      whatNow:'Write one short recommendation for Srbina. Mention the lead with the highest revenue and say what she should do next.',
+      objective:'Srbina has the numbers. Now she needs to say something useful about them. Write a short recommendation that names the top lead and suggests an action.',
+      why:'This is the step the full kit leaves to you — numbers only matter when they change what someone does next.',
+      kitMatch:null,
+      coach:'Try this structure: name the lead, state the value, say what to do. Example: “Northwind is the top lead at 1200, so I would focus there first.”',
+      hint:'Include the word Northwind and something like priority, follow-up, or focus.',
+      prereq:'story',
+      mode:'text',
+      placeholder:'Write one short recommendation…',
+      validate:(text)=>/northwind/i.test(text) && /(priority|prioritize|follow|focus|first)/i.test(text),
+      success:'✓ That works. You connected a metric to an action, which is the habit that separates analysts who just calculate from analysts who communicate.',
+      fail:'Try again. Name the top lead (Northwind) and say what Srbina should do next, like focus on it or follow up first.',
+      excel:92,sales:84,readiness:90,achievement:'story'
+    }
+  ];
+
+  const glossary = {
+    revenue:{title:'Revenue — what it means',body:`<div class="glossary-grid"><div class="glossary-card"><strong>What it means</strong><p>Revenue is the money a lead or customer is worth. When choosing business priorities, this column usually matters more than activity counts like calls or emails.</p></div><div class="glossary-card"><strong>In a spreadsheet</strong><p>Look for a column labeled Revenue, Value, Deal Size, or Amount. That is the one you connect to a business question about money.</p></div></div>`},
+    formula:{title:'Excel formula basics',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Rule 1 — start with =</strong><p>Every Excel formula begins with an equals sign. Without it, Excel treats what you type as plain text and will not calculate anything.</p></div><div class="glossary-card"><strong>Rule 2 — function name</strong><p>After = comes the function name like SUM or AVERAGE. Think of it as the instruction you are giving Excel.</p></div><div class="glossary-card"><strong>Rule 3 — the range</strong><p>Inside the parentheses you put the cells you want to work with. D2:D4 means every cell from D2 down to D4. The colon means “through.”</p></div><div class="glossary-card"><strong>Full example</strong><p>=SUM(D2:D4) means: add up everything from cell D2 through cell D4.</p></div></div>`},
+    equals:{title:'Why formulas start with =',body:`<div class="glossary-card"><p>The equals sign tells Excel you want it to calculate something. If you type SUM(D2:D4) without the = at the front, Excel will just display those words as text instead of doing the math. Always start with =.</p></div>`},
+    cell:{title:'Cell references explained',body:`<div class="glossary-card"><p>Every cell in a spreadsheet has an address. D2 means column D, row 2. A range like D2:D4 means the group of cells from D2 down through D4. When you write a formula, you point it at these addresses instead of typing the actual numbers, so the formula updates automatically if the data changes.</p></div>`},
+    average:{title:'The AVERAGE formula',body:`<div class="glossary-grid"><div class="glossary-card"><strong>What it does</strong><p>=AVERAGE(D2:D4) adds the three values and divides by three. It gives you the typical deal size.</p></div><div class="glossary-card"><strong>Why it is useful</strong><p>Once you have an average, you can say whether any lead is above or below the typical value. That is a simple but meaningful business insight.</p></div></div>`},
+    textnum:{title:'Text vs number',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Two silent types</strong><p>Every cell is stored as either a number or text. Numbers can be summed, averaged, and charted. Text just sits there — even when it describes a quantity, like “twelve hundred”.</p></div><div class="glossary-card"><strong>How to spot text</strong><p>By default Excel right-aligns numbers and left-aligns text. A “number” hugging the left edge of its cell is usually text in disguise — and it will silently drop out of your SUM.</p></div></div>`},
+    iflogic:{title:'The IF function',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Three parts</strong><p>IF(test, value_if_true, value_if_false). First the question, then what to show when the answer is yes, then what to show when it is no.</p></div><div class="glossary-card"><strong>Example</strong><p>IF(D2&gt;1000,"Priority","Later") asks: is D2 bigger than 1000? If yes, the cell shows Priority. If no, Later. Words need quotes; numbers do not.</p></div></div>`},
+    countif:{title:'COUNTIF — counting with a condition',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Two parts</strong><p>COUNTIF(range, criteria). First where to look, then what to count. COUNTIF(E2:E4,"Hot") counts the cells in E2:E4 that say Hot.</p></div><div class="glossary-card"><strong>The family</strong><p>SUMIF adds instead of counts. AVERAGEIF averages. Same idea: only the rows that match the condition take part.</p></div></div>`},
+    xlookup:{title:'XLOOKUP — fetch by name',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Three parts</strong><p>XLOOKUP(what, where_to_look, what_to_return). XLOOKUP("BluePeak",A2:A4,D2:D4) finds BluePeak in the Lead column and returns the value on the same row from the Revenue column.</p></div><div class="glossary-card"><strong>Why it matters</strong><p>Lookups connect tables. Price lists, employee rosters, region mappings — any time two sheets share a column, a lookup joins them.</p></div></div>`},
+    pivot:{title:'What is a PivotTable?',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The idea</strong><p>A PivotTable summarizes thousands of rows into a small table — totals, counts, or averages, grouped by any column — without writing a single formula.</p></div><div class="glossary-card"><strong>When to reach for it</strong><p>Any question shaped like “total X per Y” (revenue per region, orders per month) over more rows than you can eyeball. Insert → PivotTable, drag two fields, done.</p></div></div>`},
+    clean:{title:'Dirty data and TRIM',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The usual suspects</strong><p>Stray spaces, inconsistent capitals, numbers stored as text, blank rows. Invisible problems that quietly break lookups and totals.</p></div><div class="glossary-card"><strong>TRIM</strong><p>TRIM(" BluePeak ") returns "BluePeak" — it strips spaces from both ends (and doubles in the middle). First fix to try when a lookup mysteriously fails.</p></div></div>`},
+    iferror:{title:'IFERROR — defensive formulas',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Two parts</strong><p>IFERROR(risky_calculation, fallback). If the calculation works, you get its result. If it errors, you get the fallback instead of #DIV/0! or #N/A.</p></div><div class="glossary-card"><strong>Example</strong><p>IFERROR(D2/C2,0) shows revenue per call normally, but shows 0 instead of an error when Calls is zero. Keeps dashboards presentable.</p></div></div>`},
+    chart:{title:'Picking the right chart',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The shortcuts</strong><p>Comparing categories → bar chart. Trend over time → line chart. Part of a whole (few slices) → pie. Two numeric variables → scatter.</p></div><div class="glossary-card"><strong>The test</strong><p>A good chart answers its question in one glance. If the reader has to study it, try a different type — usually a bar.</p></div></div>`},
+    story:{title:'Turning numbers into a recommendation',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The structure</strong><p>1. Name the number or lead. 2. Say what it means. 3. Recommend an action. Keep it to one or two sentences.</p></div><div class="glossary-card"><strong>Example</strong><p>“Northwind is the top lead by revenue at 1200, so I would prioritize that account for follow-up this week.”</p></div></div>`}
+  };
+
+  const state = { lesson:0, excel:10, sales:8, readiness:8, beans:0, orders:0, helper:false, unlocked:new Set(), solved:false, completed:new Set(), streak:0, missedThisLesson:false };
+
+  const el = id => document.getElementById(id);
+  const lessonBadge=el('lessonBadge'),lessonTitle=el('lessonTitle'),whatNowText=el('whatNowText'),objectiveText=el('objectiveText'),coachText=el('coachText'),hintText=el('hintText'),answerArea=el('answerArea'),feedbackBox=el('feedbackBox');
+  const progressChip=el('progressChip'),excelFill=el('excelFill'),salesFill=el('salesFill'),readinessFill=el('readinessFill');
+  const modalBackdrop=el('modalBackdrop'),modalTitle=el('modalTitle'),modalBody=el('modalBody');
+
+  function setThemeIcon(){
+    const t=document.documentElement.getAttribute('data-theme');
+    document.querySelector('[data-theme-toggle]').textContent=t==='dark'?'☀️ Light':'🌙 Dark';
+  }
+  let theme=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',theme);setThemeIcon();
+  document.querySelector('[data-theme-toggle]').addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',theme);setThemeIcon();});
+
+  function openGlossary(key){
+    const item=glossary[key]; if(!item) return;
+    modalTitle.textContent=item.title; modalBody.innerHTML=item.body;
+    modalBackdrop.style.display='flex'; modalBackdrop.setAttribute('aria-hidden','false');
+  }
+  function closeGlossary(){modalBackdrop.style.display='none';modalBackdrop.setAttribute('aria-hidden','true');}
+  el('closeModal').addEventListener('click',closeGlossary);
+  modalBackdrop.addEventListener('click',e=>{if(e.target===modalBackdrop)closeGlossary();});
+  el('openGlossary').addEventListener('click',()=>openGlossary('formula'));
+  document.querySelectorAll('[data-glossary]').forEach(btn=>btn.addEventListener('click',()=>openGlossary(btn.dataset.glossary)));
+  el('showPrereq').addEventListener('click',()=>openGlossary(lessons[state.lesson].prereq));
+
+  function updateMeters(){
+    excelFill.style.width=state.excel+'%';
+    salesFill.style.width=state.sales+'%';
+    readinessFill.style.width=state.readiness+'%';
+  }
+
+  function unlockAchievement(key){
+    if(!key||state.unlocked.has(key))return;
+    state.unlocked.add(key);
+    const ach=document.querySelector(`[data-ach="${key}"]`);
+    if(ach)ach.classList.add('unlocked');
+  }
+
+  function explode(count=32){
+    const root=el('explosion'); root.innerHTML='';
+    const colors=['#01696f','#da7101','#d19900','#a12c7b','#437a22'];
+    for(let i=0;i<count;i++){
+      const p=document.createElement('span'); p.className='particle';
+      p.style.left='50%'; p.style.top='45%';
+      p.style.background=colors[i%colors.length];
+      p.style.setProperty('--dx',`${(Math.random()-.5)*500}px`);
+      p.style.setProperty('--dy',`${(Math.random()-.5)*360}px`);
+      root.appendChild(p);
+    }
+    setTimeout(()=>root.innerHTML='',1000);
+  }
+
+  function renderStepper(){
+    const root=el('stepper'); root.innerHTML='';
+    lessons.forEach((_,i)=>{
+      const d=document.createElement('div');
+      d.className='dot'+(state.completed.has(i)?' done':i===state.lesson?' current':'');
+      d.textContent=state.completed.has(i)?'✓':i+1;
+      d.title=lessons[i].title;
+      root.appendChild(d);
+    });
+  }
+
+  function renderLesson(){
+    state.solved=false; state.missedThisLesson=false;
+    const l=lessons[state.lesson];
+    lessonBadge.textContent=l.badge; lessonTitle.textContent=l.title;
+    whatNowText.textContent=l.whatNow; objectiveText.textContent=l.objective;
+    coachText.textContent=l.coach; hintText.textContent=l.hint;
+    el('whyText').textContent=l.why?'💼 Why it matters: '+l.why:'';
+    el('kitMatchText').innerHTML=l.kitMatch?`📚 Prep-kit match: <a href="${KIT_URL}" target="_blank" rel="noopener">${l.kitMatch}</a>`:'';
+    progressChip.textContent=`Lesson ${state.lesson+1} of ${lessons.length}`;
+    renderStepper();
+    feedbackBox.className='feedback hidden'; feedbackBox.textContent='';
+    el('nextLessonBottom').classList.add('hidden');
+    el('nextLessonTop').textContent=state.lesson===lessons.length-1?'Finish':'Next lesson →';
+    answerArea.innerHTML='';
+
+    if(l.mode==='buttons'){
+      const wrap=document.createElement('div'); wrap.className='answer-section';
+      const lbl=document.createElement('div'); lbl.className='answer-section-label'; lbl.textContent='Select your answer:';
+      wrap.appendChild(lbl);
+      l.options.forEach(opt=>{
+        const b=document.createElement('button'); b.className='answer-option'; b.textContent=opt; b.dataset.choice=opt;
+        b.addEventListener('click',()=>{
+          document.querySelectorAll('[data-choice]').forEach(x=>x.classList.remove('selected'));
+          b.classList.add('selected'); answerArea.dataset.answer=opt;
+        });
+        wrap.appendChild(b);
+      });
+      answerArea.appendChild(wrap);
+    } else {
+      const box=document.createElement('div'); box.className='formula-box';
+      const label=document.createElement('label'); label.textContent=l.mode==='text'?'Your recommendation':'Your formula';
+      const field=document.createElement('div'); field.className='formula-input';
+      const prefix=document.createElement('span'); prefix.textContent=l.mode==='text'?'✍':'fx';
+      const input=document.createElement('input'); input.id='typedAnswer'; input.placeholder=l.mode==='formula'?l.placeholder+' — start with =':l.placeholder; input.setAttribute('autocomplete','off');
+      input.addEventListener('keydown',e=>{if(e.key==='Enter')el('submitAnswer').click();});
+      field.append(prefix,input); box.append(label,field); answerArea.appendChild(box);
+    }
+  }
+
+  function setFeedback(ok,msg){
+    feedbackBox.className=`feedback ${ok?'success':'error'}`;
+    feedbackBox.textContent=msg; feedbackBox.classList.remove('hidden');
+  }
+
+  function updateStreakChip(){
+    const chip=el('streakChip');
+    chip.textContent=`🔥 ${state.streak}`;
+    chip.classList.toggle('hidden',state.streak===0);
+  }
+
+  function submitCurrent(){
+    const l=lessons[state.lesson]; let correct=false;
+    if(state.solved) return;
+    if(l.mode==='buttons') correct=answerArea.dataset.answer===l.answer;
+    else if(l.mode==='formula'){
+      const raw=(el('typedAnswer')?.value||'').trim();
+      if(raw.length>0 && !raw.startsWith('=')){
+        state.missedThisLesson=true; state.streak=0; updateStreakChip();
+        setFeedback(false,'Close — but every Excel formula starts with the = sign. Without it, Excel treats your typing as plain text. Add = at the front and check again.');
+        return;
+      }
+      const norm=s=>s.replace(/\s+/g,'').replace(/^=/,'').replace(/[‘’]/g,"'").replace(/[“”]/g,'"').toLowerCase();
+      const v=norm(raw);
+      correct=raw.startsWith('=') && v.length>0 && l.answerVariants.some(a=>norm(a)===v);
+    }
+    else if(l.mode==='text') correct=l.validate((el('typedAnswer')?.value||'').trim());
+    if(correct){
+      state.excel=Math.max(state.excel,l.excel); state.sales=Math.max(state.sales,l.sales); state.readiness=Math.max(state.readiness,l.readiness);
+      state.completed.add(state.lesson); renderStepper();
+      if(!state.missedThisLesson){ state.streak+=1; if(state.streak>=3)unlockAchievement('streak'); }
+      updateStreakChip();
+      updateMeters(); unlockAchievement(l.achievement);
+      const hot=state.streak>=3 && !state.missedThisLesson;
+      setFeedback(true,(hot?`🔥 ${state.streak} first-try wins in a row! `:'')+l.success);
+      explode(hot?72:32); state.solved=true;
+      el('nextLessonBottom').classList.remove('hidden');
+    } else {
+      state.missedThisLesson=true; state.streak=0; updateStreakChip();
+      setFeedback(false,l.fail);
+    }
+  }
+
+  function nextLesson(){
+    if(state.lesson<lessons.length-1){ state.lesson+=1; renderLesson(); window.scrollTo({top:0,behavior:'smooth'}); }
+    else{
+      lessonBadge.textContent='All done'; lessonTitle.textContent='Srbina is ready.';
+      whatNowText.textContent='You have finished all 14 lessons. Open any glossary card to review, or replay the tasks from memory.';
+      objectiveText.textContent='You covered reading a sheet, cell addresses, text vs numbers, SUM, AVERAGE, IF, COUNTIF, XLOOKUP, PivotTables, TRIM, IFERROR, chart choice, a memory checkpoint, and a written recommendation. That is the working core of analyst Excel.';
+      el('whyText').textContent=''; el('kitMatchText').innerHTML='';
+      coachText.textContent='Come back tomorrow and run the lessons again. Spaced repetition is how this becomes second nature.';
+      hintText.textContent='Try the Lunch Break mini-game when you need a reset between sessions.';
+      answerArea.innerHTML='<div class="achievement"><strong>Sprint complete. 🎉</strong><p>Fourteen skills practiced across all seven units of the full course. Ready to go deeper? <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Continue in the Excel Prep Kit — 28 free lessons →</a></p><p>Or keep coaching Srbina: the lead data just moved to a real database. <a href="../sql/">Continue the story in the SQL Sales Sprint →</a></p></div>';
+      el('submitAnswer').classList.add('hidden'); el('showPrereq').classList.add('hidden'); el('nextLessonBottom').classList.add('hidden'); el('nextLessonTop').classList.add('hidden');
+      unlockAchievement('story'); state.excel=92; state.sales=84; state.readiness=90; updateMeters();
+      setFeedback(true,'✓ All four lessons complete. Well done.');
+    }
+  }
+
+  el('submitAnswer').addEventListener('click',submitCurrent);
+  el('nextLessonBottom').addEventListener('click',nextLesson);
+  el('nextLessonTop').addEventListener('click',()=>{
+    if(state.solved||state.lesson===lessons.length-1) nextLesson();
+    else setFeedback(false,'Complete the current task first before moving on.');
+  });
+
+  const beansChip=el('beansChip'),ordersChip=el('ordersChip'),moodChip=el('moodChip');
+  function updateBreakUI(){
+    beansChip.textContent=`Coffees: ${state.beans}`;
+    ordersChip.textContent=`Served: ${state.orders}`;
+    moodChip.textContent=`Vibe: ${state.orders>=15?'excellent':state.orders>=5?'lighter':'calm'}`;
+  }
+  function dropBean(){
+    state.beans+=1; if(state.beans%3===0){state.orders+=1;}
+    if(state.orders>=5)unlockAchievement('break');
+    updateBreakUI();
+    const scene=el('coffeeScene');
+    const dot=document.createElement('div'); dot.className='bean';
+    dot.style.left=`${20+Math.random()*60}%`; dot.style.top=`${18+Math.random()*45}%`;
+    scene.appendChild(dot); setTimeout(()=>dot.remove(),700);
+  }
+  el('brewButton').addEventListener('click',dropBean);
+  el('autoServe').addEventListener('change',e=>{state.helper=e.target.checked;});
+  setInterval(()=>{if(state.helper){state.beans+=1;if(state.beans%3===0)state.orders+=1;updateBreakUI();}},2000);
+
+  updateMeters(); updateBreakUI(); renderLesson();
+})();
+</script>
+</body>
+</html>

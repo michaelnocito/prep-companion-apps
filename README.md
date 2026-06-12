@@ -1,41 +1,55 @@
-# Excel Sales Sprint
+# Sales Sprint
 
-**Help Srbina go from "I know a little Excel" to interview-ready confidence — one spreadsheet task at a time.**
+**Learn data-analyst skills by playing — coach Srbina from sales rep to analyst, one small task at a time.**
 
-A free, browser-based game where you play through 14 bite-size Excel tasks designed for people starting out in data analytics. No install. No account. Just open it and play.
+A family of free, browser-based games for people starting out in data analytics. Each sprint is 14 bite-size lessons in one skill, with a story that carries from game to game. No install. No account. Just open it and play.
 
-→ **[Play it live](https://michaelnocito.github.io/excel-sales-sprint/)**
+→ **[Play live](https://michaelnocito.github.io/sales-sprint/)**
 
----
-
-## What it teaches
-
-14 lessons matched unit-for-unit to the [Excel Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/excel/):
-
-- Reading a sheet: the right column, cell addresses, text vs numbers
-- Typing real formulas — `=SUM`, `=AVERAGE`, `=IF`, `=COUNTIF`, `=XLOOKUP`, `=IFERROR`
-- When to reach for a PivotTable, how to clean dirty data with `TRIM`
-- Picking the right chart
-- A from-memory checkpoint, then turning the numbers into a clear business recommendation
-
-Every lesson says why it matters on the job and links to the matching prep-kit lesson for going deeper.
+| Sprint | Story | Play |
+|---|---|---|
+| **Excel Sales Sprint** | Part 1 — Srbina has a spreadsheet, a list of leads, and a big conversation coming up | [Play →](https://michaelnocito.github.io/sales-sprint/excel/) |
+| **SQL Sales Sprint** | Part 2 — the lead data outgrew the spreadsheet and moved to a real database | [Play →](https://michaelnocito.github.io/sales-sprint/sql/) |
+| Python · Tableau · Stats | Coming next | — |
 
 ---
 
 ## How it works
 
-- Open the link above in any browser
-- Read the one task on screen, use the mini spreadsheet
-- Type a formula (starting with `=`, like the real thing) or click an answer
+- Open a sprint in any browser
+- Read the one task on screen — one screen, one task, zero clutter
+- Type a real formula or a real SQL query (queries actually run, against an in-browser SQLite database powered by [sql.js](https://sql.js.org/))
 - Get instant feedback, earn achievements, build a 🔥 first-try streak
-- **Focus mode** hides everything but the lesson — one screen, one task
 - Stuck? Tap **💡 Explain it to me** for a plain-language breakdown
+
+Every lesson says why it matters on the job.
 
 ---
 
 ## Part of the Analyst Prep Kit family
 
-This sprint is the warm-up; the **[Analyst Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/)** is the full course — Excel, SQL, Python, Tableau, Power BI, Stats, Chart Literacy, Forecasting, Interview prep, a week-1 job simulator, and a cross-subject final exam. All free, all in the browser.
+Each sprint mirrors a kit in the **[Analyst Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/)**, unit for unit, and every lesson links to its matching prep-kit lesson for going deeper:
+
+- Excel Sales Sprint ↔ [Excel Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/excel/)
+- SQL Sales Sprint ↔ [SQL Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/sql/)
+
+The sprints are the warm-up; the prep kit is the full course — Excel, SQL, Python, Tableau, Power BI, Stats, Chart Literacy, Forecasting, Interview prep, a week-1 job simulator, and a cross-subject final exam. All free, all in the browser.
+
+---
+
+## Repo layout
+
+```
+sales-sprint/
+  index.html             ← hub page linking every sprint
+  excel/index.html       ← Excel Sales Sprint (self-contained, no build step)
+  sql/index.html         ← SQL Sales Sprint (self-contained, sql.js via CDN)
+  tools/check-syntax.js  ← dev check: node tools/check-syntax.js
+  CHANGELOG.md           ← what shipped
+  ROADMAP.md             ← what's next
+```
+
+Each game is a single self-contained `index.html` — CSS, JS, and content inline. Adding a new sprint means adding one new folder.
 
 ---
 
@@ -45,8 +59,8 @@ This is a beta. It works, it's playable, and it's already teaching things — bu
 
 If you play it and something feels off, too hard, too easy, unclear, or missing — **open an issue or drop a comment.** I'm building this in the open and I'd love to develop it alongside people who are actually learning.
 
-**Want to contribute?** PRs are open. Ideas are welcome. If you're learning Excel yourself, you're exactly the right person to help improve this.
+**Want to contribute?** PRs are open. Ideas are welcome. If you're learning these tools yourself, you're exactly the right person to help improve this.
 
 ---
 
-**→ [excel-sales-sprint](https://github.com/michaelnocito/excel-sales-sprint)** &nbsp;·&nbsp; HTML · JavaScript
+**→ [sales-sprint](https://github.com/michaelnocito/sales-sprint)** &nbsp;·&nbsp; HTML · JavaScript · sql.js
