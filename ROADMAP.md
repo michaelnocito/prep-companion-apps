@@ -32,13 +32,10 @@ Planned order (matching the prep-kit learning order):
 
 - 🔴 Blocker: —
 - 🟠 High:
-  - **A. Real spreadsheet coordinates on the practice sheet (Excel
-    sprint).** The lesson asks for `=SUM(D2:D4)` but the table shows no
-    column letters (A–E) or row numbers (1–4) — the player can't see
-    what "D2" points at without decoding it in their head. Add a
-    spreadsheet-style header row/column (grey, like real Excel). Highest
-    friction fix in the batch; small, contained. Check the SQL sprint's
-    tables too (lower stakes — queries use column names, not grid refs).
+  - ✅ **A. Real spreadsheet coordinates on the practice sheet — SHIPPED
+    v1.3.0 (June 13, 2026), awaiting Mike's playtest.** Column letters
+    A–E + row numbers 1–4 in grey Excel chrome. SQL sprint deliberately
+    unchanged (queries use column names, not grid refs).
   - **B. Prep-kit match links should deep-link to the LESSON, not the
     kit root (both sprints).** Needs (1) `#lesson-<id>` hash routing on
     load in analyst-prep-kit excel + sql kits (mirror the existing
@@ -60,15 +57,13 @@ Planned order (matching the prep-kit learning order):
     to the next part. This is the analyst workflow made visible
     (question → evidence → recommendation) and the strongest
     story/retention feature in the batch — but it's net-new design, so
-    it follows the two quick fixes. NOTE: Mike's feedback names the
-    funnel order excel → sql → tableau → power bi, which differs from
-    the roadmap's "Python next" — decide before building the wrap-up's
-    forward link for SQL.
+    it follows the two quick fixes. Sprint order CONFIRMED by Mike
+    (June 13, 2026): Excel → SQL → **Python (Part 3)** → Tableau → …
+    so the SQL sprint's wrap-up funnels forward to Python.
   - Python Analyst Sprint (Part 3 — continue Srbina's story; mirror the
     Python Prep Kit units; in-browser execution like the kit's Pyodide
     terminal, or graded snippets if Pyodide is too heavy for the
-    one-screen layout) — **sequence vs. Tableau/Power BI pending the
-    order decision above.**
+    one-screen layout)
 - 🟢 Low:
   - **D. Per-lesson dynamic visuals sweep (both sprints).** Today every
     lesson shows the same static table(s); Mike: "nice, but a bit

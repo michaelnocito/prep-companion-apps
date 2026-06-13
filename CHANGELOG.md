@@ -6,6 +6,17 @@ restructures or breaking changes.
 
 ---
 
+## v1.3.0 — June 13, 2026
+
+**Real spreadsheet coordinates on the Excel sprint's practice sheet**
+(roadmap item A, from Mike's June 13 playtest batch). The sheet now has
+the grey Excel-style chrome: column letters A–E across the top and row
+numbers 1–4 down the side, so `=SUM(D2:D4)` visibly points at the
+Revenue cells. Headers are row 1, Northwind is row 2 — matching the
+`data-cell` refs the lessons already used. SQL sprint tables left as-is
+on purpose: SQL queries reference column NAMES, not grid coordinates,
+and A1-style chrome would teach the wrong mental model there.
+
 ## v1.2.0 — June 12, 2026
 
 **Instruction box moved next to the answers** (both games). The gold

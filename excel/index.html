@@ -89,6 +89,10 @@
     [data-theme="dark"] .sheet th,[data-theme="dark"] .sheet td{border-color:#444}
     .sheet th{background:#eef2f4;font-size:.9rem}
     [data-theme="dark"] .sheet th{background:#262626}
+    .sheet .grid-coords th,.sheet .rownum{background:#dde2e8;color:#5a6068;text-align:center;font-weight:600;font-size:.72rem;min-width:30px;width:30px;padding:.12rem .25rem}
+    [data-theme="dark"] .sheet .grid-coords th,[data-theme="dark"] .sheet .rownum{background:#1e1e1e;color:#8a8f96}
+    .sheet .grid-coords th{min-width:80px;width:auto}
+    .sheet .grid-coords th.rownum{min-width:30px;width:30px}
     .sheet input{width:100%;border:none;background:transparent;padding:.2rem 0;outline:none}
     .formula-box{display:grid;gap:var(--space-1)}
     .formula-box label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
@@ -261,11 +265,14 @@
 
       <div class="sheet-wrap">
         <table class="sheet" aria-label="Practice spreadsheet">
-          <thead><tr><th>Lead</th><th>Region</th><th>Calls</th><th>Revenue</th><th>Status</th></tr></thead>
+          <thead>
+            <tr class="grid-coords"><th class="rownum"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+            <tr><th class="rownum">1</th><th>Lead</th><th>Region</th><th>Calls</th><th>Revenue</th><th>Status</th></tr>
+          </thead>
           <tbody>
-            <tr><td>Northwind</td><td>East</td><td><input value="4" data-cell="C2"></td><td><input value="1200" data-cell="D2"></td><td>Warm</td></tr>
-            <tr><td>BluePeak</td><td>West</td><td><input value="6" data-cell="C3"></td><td><input value="850" data-cell="D3"></td><td>Hot</td></tr>
-            <tr><td>Maple Desk</td><td>South</td><td><input value="3" data-cell="C4"></td><td><input value="990" data-cell="D4"></td><td>Cold</td></tr>
+            <tr><th class="rownum">2</th><td>Northwind</td><td>East</td><td><input value="4" data-cell="C2"></td><td><input value="1200" data-cell="D2"></td><td>Warm</td></tr>
+            <tr><th class="rownum">3</th><td>BluePeak</td><td>West</td><td><input value="6" data-cell="C3"></td><td><input value="850" data-cell="D3"></td><td>Hot</td></tr>
+            <tr><th class="rownum">4</th><td>Maple Desk</td><td>South</td><td><input value="3" data-cell="C4"></td><td><input value="990" data-cell="D4"></td><td>Cold</td></tr>
           </tbody>
         </table>
       </div>
