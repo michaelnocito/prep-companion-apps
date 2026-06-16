@@ -10,7 +10,8 @@ A family of free, browser-based games for people starting out in data analytics.
 |---|---|---|
 | **Excel Analyst Sprint** | Part 1 — Srbina has a spreadsheet, a list of leads, and a big conversation coming up | [Play →](https://michaelnocito.github.io/prep-companion-apps/excel/) |
 | **SQL Analyst Sprint** | Part 2 — the lead data outgrew the spreadsheet and moved to a real database | [Play →](https://michaelnocito.github.io/prep-companion-apps/sql/) |
-| Python · Tableau · Stats | Coming next | — |
+| **Tableau Analyst Sprint** | Part 3 — the numbers are right, but the room can't read a result grid; make the data seen | [Play →](https://michaelnocito.github.io/prep-companion-apps/tableau/) |
+| Python · Stats | Coming next | — |
 
 ---
 
@@ -18,7 +19,7 @@ A family of free, browser-based games for people starting out in data analytics.
 
 - Open a sprint in any browser
 - Read the one task on screen — one screen, one task, zero clutter
-- Type a real formula or a real SQL query (queries actually run, against an in-browser SQLite database powered by [sql.js](https://sql.js.org/))
+- Type a real formula, run a real SQL query (queries actually run, against an in-browser SQLite database powered by [sql.js](https://sql.js.org/)), or drag fields onto Tableau-style shelves to build a real chart
 - Get instant feedback, earn achievements, build a 🔥 first-try streak
 - Stuck? Tap **💡 Explain it to me** for a plain-language breakdown
 
@@ -32,6 +33,7 @@ Each sprint mirrors a kit in the **[Analyst Prep Kit](https://michaelnocito.gith
 
 - Excel Analyst Sprint ↔ [Excel Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/excel/)
 - SQL Analyst Sprint ↔ [SQL Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/sql/)
+- Tableau Analyst Sprint ↔ [Tableau Prep Kit](https://michaelnocito.github.io/analyst-prep-kit/tableau/)
 
 The sprints are the warm-up; the prep kit is the full course — Excel, SQL, Python, Tableau, Power BI, Stats, Chart Literacy, Forecasting, Interview prep, a week-1 job simulator, and a cross-subject final exam. All free, all in the browser.
 
@@ -44,6 +46,7 @@ prep-companion-apps/
   index.html             ← hub page linking every sprint
   excel/index.html       ← Excel Analyst Sprint (self-contained, no build step)
   sql/index.html         ← SQL Analyst Sprint (self-contained, sql.js via CDN)
+  tableau/index.html     ← Tableau Analyst Sprint (self-contained, drag-to-shelf viz builder)
   tools/check-syntax.js  ← dev check: node tools/check-syntax.js
   CHANGELOG.md           ← what shipped
   ROADMAP.md             ← what's next
@@ -63,4 +66,4 @@ If you play it and something feels off, too hard, too easy, unclear, or missing 
 
 ---
 
-**→ [prep-companion-apps](https://github.com/michaelnocito/prep-companion-apps)** &nbsp;·&nbsp; HTML · JavaScript · sql.js
+**→ [prep-companion-apps](https://github.com/michaelnocito/prep-companion-apps)** &nbsp;·&nbsp; HTML · JavaScript · sql.js · SVG

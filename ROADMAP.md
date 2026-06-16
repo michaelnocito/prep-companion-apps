@@ -18,11 +18,18 @@ Planned order (matching the prep-kit learning order):
 
 | Sprint | Status |
 |---|---|
-| Excel | ✅ Live — `excel/` |
-| SQL | ✅ Live — `sql/` |
-| Python | Planned next |
-| Tableau | Planned |
+| Excel (Part 1) | ✅ Live — `excel/` |
+| SQL (Part 2) | ✅ Live — `sql/` |
+| Tableau (Part 3) | ✅ Live — `tableau/` |
+| Python (Part 4) | Planned next |
 | Stats | Planned |
+
+> **Sprint order updated (June 16, 2026):** Tableau shipped as **Part 3**,
+> ahead of the previously-planned Python, at Mike's direction — the
+> SQL→Tableau bridge (query → visualize) is the tightest narrative beat,
+> and the SQL sprint now funnels forward to Tableau. Python becomes
+> **Part 4** (the story's next chapter: automate and scale what Srbina
+> now does by hand).
 
 ## Active items
 
@@ -57,9 +64,10 @@ Planned order (matching the prep-kit learning order):
     to the next part. This is the analyst workflow made visible
     (question → evidence → recommendation) and the strongest
     story/retention feature in the batch — but it's net-new design, so
-    it follows the two quick fixes. Sprint order CONFIRMED by Mike
-    (June 13, 2026): Excel → SQL → **Python (Part 3)** → Tableau → …
-    so the SQL sprint's wrap-up funnels forward to Python.
+    it follows the two quick fixes. Ship order (updated June 16, 2026):
+    Excel → SQL → **Tableau (Part 3, live)** → Python (Part 4) → … so
+    the SQL sprint's wrap-up funnels forward to Tableau, and Tableau's
+    funnels forward to Python.
   - Python Analyst Sprint (Part 3 — continue Srbina's story; mirror the
     Python Prep Kit units; in-browser execution like the kit's Pyodide
     terminal, or graded snippets if Pyodide is too heavy for the
@@ -78,8 +86,6 @@ Planned order (matching the prep-kit learning order):
 
 ## Parking lot
 
-- Tableau Analyst Sprint (needs a chart-building interaction that fits
-  one-screen-one-task)
 - Stats Analyst Sprint
 - Shared progress across sprints (e.g. "Part 1 complete" badge visible
   on the hub) — only if it can be done without an account

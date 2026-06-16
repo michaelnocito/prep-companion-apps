@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau Analyst Sprint — Free Tableau Practice Game for Data Analysts</title>
+  <meta name="description" content="Free Tableau practice game for aspiring data analysts. 14 bite-size lessons — drag fields onto shelves to build real bar charts, line charts, filters and calculated fields, then turn the view into a recommendation. No install, no account." />
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{
+      --font-body:'General Sans',Inter,sans-serif;
+      --font-display:'General Sans',Inter,sans-serif;
+      --font-mono:ui-monospace,Consolas,'Cascadia Mono','Courier New',monospace;
+      --text-xs:clamp(.75rem,.7rem + .25vw,.875rem);
+      --text-sm:clamp(.875rem,.8rem + .35vw,1rem);
+      --text-base:clamp(1rem,.95rem + .25vw,1.125rem);
+      --text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);
+      --text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+      --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;
+      --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;--color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
+      --color-text:#28251d;--color-text-muted:#66645d;--color-text-faint:#9f9d96;--color-text-inverse:#f9f8f4;
+      --color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;
+      --color-success:#437a22;--color-success-highlight:#d4dfcc;--color-error:#a12c7b;--color-error-highlight:#e0ced7;
+      --color-gold:#d19900;--color-gold-highlight:#e9e0c6;--color-orange:#da7101;--color-orange-highlight:#e7d7c4;
+      --color-dim:#2f6df0;--color-dim-soft:#dbe6fb;--color-meas:#1a7f5a;--color-meas-soft:#d3e8df;
+      --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;
+      --shadow-sm:0 1px 2px oklch(0.2 0.01 80 / 0.06);--shadow-md:0 4px 12px oklch(0.2 0.01 80 / 0.08);--shadow-lg:0 12px 32px oklch(0.2 0.01 80 / 0.12);
+      --transition:180ms cubic-bezier(.16,1,.3,1);
+    }
+    [data-theme="dark"]{
+      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;--color-surface-offset:#1d1c1a;--color-border:#393836;--color-divider:#262523;
+      --color-text:#e2dfd8;--color-text-muted:#aba8a2;--color-text-faint:#77746f;--color-text-inverse:#2b2a28;
+      --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-highlight:#313b3b;
+      --color-success:#6daa45;--color-success-highlight:#3a4435;--color-error:#d163a7;--color-error-highlight:#4c3d46;
+      --color-gold:#e8af34;--color-gold-highlight:#4d4332;--color-orange:#fdab43;--color-orange-highlight:#564b3e;
+      --color-dim:#7bb3f0;--color-dim-soft:#26344a;--color-meas:#6dbf8b;--color-meas-soft:#243a31;
+      --shadow-sm:0 1px 2px oklch(0 0 0 / 0.2);--shadow-md:0 4px 12px oklch(0 0 0 / 0.3);--shadow-lg:0 12px 32px oklch(0 0 0 / 0.4);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    body{min-height:100vh;font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:var(--color-bg);color:var(--color-text)}
+    button,input,textarea,select{font:inherit;color:inherit}
+    button{cursor:pointer;border:none;background:none}
+    a{color:var(--color-primary)}
+    .app{max-width:860px;margin:0 auto;padding:var(--space-2) var(--space-3);display:grid;gap:var(--space-2)}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 12%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+    .brand{display:flex;align-items:center;gap:var(--space-3)}
+    .logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--color-primary-highlight),var(--color-surface-offset));display:grid;place-items:center;color:var(--color-primary)}
+    .logo svg{width:24px;height:24px}
+    .title{font-size:var(--text-lg);font-weight:700}
+    .subtitle{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .toolbar{display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center}
+    .chip,.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:36px;padding:.45rem .9rem;border-radius:999px;font-size:var(--text-sm);transition:all var(--transition)}
+    .chip{background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .btn-primary{background:var(--color-primary);color:var(--color-text-inverse)}
+    .btn-primary:hover{background:var(--color-primary-hover)}
+    .btn-primary:disabled{opacity:.55;cursor:wait}
+    .btn-secondary{background:var(--color-surface-offset);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    .grid{display:grid;grid-template-columns:1fr;gap:var(--space-2)}
+    .panel{background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
+    .hero{padding:var(--space-6);display:grid;gap:var(--space-4)}
+    .hero h1{font-size:var(--text-xl);line-height:1.1;max-width:20ch}
+    .hero p{max-width:62ch;color:var(--color-text-muted)}
+    .hero-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3)}
+    .mini-card{padding:var(--space-4);background:var(--color-surface-2);border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .mini-card strong{display:block;font-size:var(--text-sm)}
+    .mini-card span{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .path{padding:var(--space-2) var(--space-4);display:grid;gap:var(--space-2)}
+    .path h2{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-muted)}
+    .section-title{font-size:var(--text-base);font-weight:700}
+    .steps{display:flex;gap:var(--space-2);flex-wrap:wrap}
+    .step{display:grid;grid-template-columns:auto 1fr;gap:var(--space-2);padding:var(--space-2) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent);flex:1;min-width:130px}
+    .step-num{width:22px;height:22px;font-size:.7rem;border-radius:50%;display:grid;place-items:center;background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700}
+    .layout{display:grid;grid-template-columns:1fr;gap:var(--space-2)}
+    .lesson{padding:var(--space-3);display:grid;gap:var(--space-2)}
+    .lesson-top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3);flex-wrap:wrap}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .7rem;border-radius:999px;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.08em;background:var(--color-primary-highlight);color:var(--color-primary);font-weight:700}
+    .what-now{padding:var(--space-2) var(--space-3);background:var(--color-gold-highlight);border-radius:var(--radius-md);border:1px solid color-mix(in oklab,var(--color-gold) 24%, transparent)}
+    .what-now strong{display:none}
+    .objective{padding:var(--space-2) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);display:grid;gap:var(--space-1);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    #objectiveTitle{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .coach{padding:var(--space-2) var(--space-3);background:var(--color-primary-highlight);border-radius:var(--radius-md);display:flex;gap:var(--space-2);align-items:baseline}
+    .coach strong{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;color:var(--color-primary)}
+    .coach p{color:var(--color-text)}
+    .quick-links{display:flex;gap:var(--space-2);flex-wrap:wrap}
+    .link-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .9rem;border-radius:999px;background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);font-size:var(--text-sm)}
+    /* ── Data preview table ── */
+    .db-tables{display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:flex-start}
+    .db-table{flex:1;min-width:240px}
+    .db-caption{font-size:var(--text-xs);font-weight:700;letter-spacing:.05em;color:var(--color-text-muted);font-family:var(--font-mono);padding:0 .1rem .2rem}
+    .sheet-wrap{overflow:auto;border-radius:var(--radius-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    table.sheet{min-width:100%;border-collapse:collapse;background:white;color:#222}
+    [data-theme="dark"] table.sheet{background:#151515;color:#f1f1f1}
+    .sheet th,.sheet td{border:1px solid #cfcfcf;padding:.15rem .4rem;text-align:left;min-width:54px;font-size:var(--text-sm);white-space:nowrap}
+    [data-theme="dark"] .sheet th,[data-theme="dark"] .sheet td{border-color:#444}
+    .sheet th{background:#eef2f4;font-size:.8rem;font-family:var(--font-mono)}
+    [data-theme="dark"] .sheet th{background:#262626}
+    .sheet th.dim{color:var(--color-dim)}
+    .sheet th.meas{color:var(--color-meas)}
+    /* ── Tableau viz workspace ── */
+    .viz-workspace{display:grid;grid-template-columns:170px 1fr;gap:var(--space-2);align-items:start}
+    .data-pane{background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);border-radius:var(--radius-lg);padding:var(--space-2);display:grid;gap:var(--space-2);align-self:stretch}
+    .pane-head{font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-muted)}
+    .pane-group{display:grid;gap:.3rem}
+    .pane-group .pane-label{font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+    .pane-group.dims .pane-label{color:var(--color-dim)}
+    .pane-group.meas .pane-label{color:var(--color-meas)}
+    .pill{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .6rem;border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:600;border:1.5px solid transparent;text-align:left;width:100%;justify-content:flex-start;transition:all var(--transition)}
+    .pill::before{content:'';width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+    .pill.dim{background:var(--color-dim-soft);color:var(--color-dim)}
+    .pill.dim::before{background:var(--color-dim)}
+    .pill.meas{background:var(--color-meas-soft);color:var(--color-meas)}
+    .pill.meas::before{background:var(--color-meas)}
+    .pill.picked{border-color:var(--color-gold);box-shadow:0 0 0 2px var(--color-gold-highlight)}
+    .pill.in-use{opacity:.45}
+    .builder{display:grid;gap:var(--space-2)}
+    .shelf-row{display:grid;grid-template-columns:74px 1fr;gap:var(--space-2);align-items:center}
+    .shelf-name{font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-muted);text-align:right}
+    .shelf{min-height:38px;border:1.5px dashed color-mix(in oklab,var(--color-text) 22%, transparent);border-radius:var(--radius-md);background:var(--color-surface);padding:.25rem .4rem;display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;transition:all var(--transition)}
+    .shelf.armed{border-color:var(--color-gold);background:var(--color-gold-highlight)}
+    .shelf .placeholder{font-size:var(--text-sm);color:var(--color-text-faint)}
+    .placed{display:inline-flex;align-items:center;gap:.35rem;padding:.25rem .55rem;border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:600}
+    .placed::before{content:'';width:8px;height:8px;border-radius:50%}
+    .placed.dim{background:var(--color-dim-soft);color:var(--color-dim)}
+    .placed.dim::before{background:var(--color-dim)}
+    .placed.meas{background:var(--color-meas-soft);color:var(--color-meas)}
+    .placed.meas::before{background:var(--color-meas)}
+    .placed .x{font-size:.7rem;opacity:.7}
+    .marks-card{border:1px solid color-mix(in oklab,var(--color-text) 12%, transparent);border-radius:var(--radius-md);background:var(--color-surface);padding:.4rem .5rem;display:grid;gap:.4rem}
+    .marks-head{font-size:var(--text-xs);font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-muted)}
+    .marks-row{display:grid;grid-template-columns:54px 1fr;gap:.4rem;align-items:center}
+    .marks-row label{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .marks-row select{padding:.25rem .4rem;border-radius:var(--radius-sm);border:1px solid var(--color-border);background:var(--color-surface-2)}
+    .shelf.color-shelf{min-height:32px}
+    .filter-values{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.25rem}
+    .fval{padding:.2rem .55rem;border-radius:var(--radius-full);font-size:var(--text-xs);background:var(--color-surface-2);border:1px solid var(--color-border)}
+    .fval.on{background:var(--color-primary);color:var(--color-text-inverse);border-color:var(--color-primary)}
+    .viz-canvas{margin-top:.4rem;border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);border-radius:var(--radius-lg);background:var(--color-surface);padding:.5rem;min-height:160px;display:flex;align-items:center;justify-content:center}
+    .viz-canvas svg{width:100%;height:auto;display:block}
+    .viz-empty{font-size:var(--text-sm);color:var(--color-text-faint);text-align:center;padding:var(--space-4)}
+    .viz-tools{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+    .tool-btn{padding:.3rem .7rem;border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600;background:var(--color-surface);border:1px solid var(--color-border)}
+    .tool-btn.on{background:var(--color-primary);color:var(--color-text-inverse);border-color:var(--color-primary)}
+    /* ── answers (concept + calc + text) ── */
+    .answer-option{display:flex;align-items:center;gap:var(--space-3);width:100%;padding:var(--space-2) var(--space-4);border-radius:var(--radius-lg);background:var(--color-surface-2);border:2px solid var(--color-border);text-align:left;font-weight:500;font-size:var(--text-base);transition:all var(--transition)}
+    .answer-option:hover{border-color:var(--color-primary);background:var(--color-primary-highlight)}
+    .answer-option.selected{border-color:var(--color-primary);background:var(--color-primary-highlight);font-weight:700}
+    .answer-option.selected::before{content:'✓ ';color:var(--color-primary)}
+    .answer-section{display:grid;gap:var(--space-2)}
+    .answer-section-label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .formula-box{display:grid;gap:var(--space-1)}
+    .formula-box label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
+    .formula-input{display:flex;gap:var(--space-2);align-items:center;padding:0 var(--space-3);min-height:44px;border-radius:var(--radius-lg);background:var(--color-surface-2);border:2px solid var(--color-border)}
+    .formula-input:focus-within{border-color:var(--color-primary)}
+    .formula-input span{font-weight:700;font-size:.85rem;color:var(--color-primary);font-family:var(--font-mono)}
+    .formula-input input{border:none;background:transparent;flex:1;outline:none;font-size:var(--text-base)}
+    .formula-input.multi{align-items:flex-start;padding-top:.5rem;padding-bottom:.3rem}
+    .formula-input textarea{border:none;background:transparent;flex:1;outline:none;font-size:var(--text-base);font-family:var(--font-mono);resize:vertical;min-height:2.6rem;line-height:1.45}
+    .hint{padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);background:transparent;border:none;border-left:3px solid var(--color-border);font-size:var(--text-sm);color:var(--color-text-muted)}
+    .hint strong{color:var(--color-text-muted);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em}
+    .feedback,.achievement,.break-box,.stats,.glossary-card{padding:var(--space-3);border-radius:var(--radius-lg);background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
+    .feedback.success{background:var(--color-success-highlight);border-color:color-mix(in oklab,var(--color-success) 24%, transparent)}
+    .feedback.error{background:var(--color-error-highlight);border-color:color-mix(in oklab,var(--color-error) 24%, transparent)}
+    .sidebar{display:grid;gap:var(--space-2)}
+    .meter{display:grid;gap:var(--space-1)}
+    .meter span{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .bar{height:8px;background:var(--color-surface-offset);border-radius:999px;overflow:hidden}
+    .fill{height:100%;background:var(--color-primary);width:20%;transition:width .3s ease}
+    .ach-list,.checklist{display:grid;gap:var(--space-1)}
+    .ach{padding:.4rem .7rem;border-radius:var(--radius-md);background:var(--color-surface-offset);font-size:var(--text-xs)}
+    .ach.unlocked{background:var(--color-success-highlight);color:var(--color-text)}
+    .check{display:flex;gap:.65rem;align-items:flex-start;font-size:var(--text-sm)}
+    .check input{margin-top:.25rem}
+    .break-game{display:grid;gap:var(--space-3)}
+    .coffee-scene{position:relative;height:130px;border-radius:var(--radius-xl);background:linear-gradient(180deg,color-mix(in oklab,var(--color-primary-highlight) 55%, white),var(--color-surface-offset));overflow:hidden;border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
+    [data-theme="dark"] .coffee-scene{background:linear-gradient(180deg,#233235,#1c1b19)}
+    .counter{position:absolute;left:10%;right:10%;bottom:16%;height:58px;background:#a46b43;border-radius:18px 18px 8px 8px;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}
+    .cup{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:54px;border-radius:0 0 16px 16px;background:#fff7ef;border:2px solid #6b4b32;display:grid;place-items:center;font-size:1.3rem;user-select:none}
+    .cup::after{content:'';position:absolute;right:-18px;top:16px;width:22px;height:28px;border:4px solid #6b4b32;border-left:none;border-radius:0 16px 16px 0}
+    .cup::before{content:'';position:absolute;top:-18px;left:18px;width:50px;height:28px;background:radial-gradient(circle at 50% 90%,rgba(255,255,255,.15),rgba(255,255,255,0) 62%),radial-gradient(circle at 50% 50%,rgba(255,255,255,.75),rgba(255,255,255,0) 60%);opacity:.7;animation:steam 2.2s ease-in-out infinite}
+    .bean{position:absolute;width:18px;height:18px;border-radius:50% 45% 50% 45%;background:#7a4d2d;box-shadow:inset -2px -2px 0 rgba(0,0,0,.15)}
+    .explosion{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+    .particle{position:absolute;width:10px;height:10px;border-radius:50%;animation:blast .9s ease-out forwards}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(20,20,20,.45);display:none;align-items:center;justify-content:center;padding:var(--space-4);z-index:60}
+    .modal{max-width:720px;width:100%;background:var(--color-surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);padding:var(--space-5);display:grid;gap:var(--space-4)}
+    .modal h3{font-size:var(--text-lg)}
+    .glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3)}
+    .footer-note{font-size:var(--text-sm);color:var(--color-text-muted)}
+    .hidden{display:none !important}
+    .stepper{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+    .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.65rem;font-weight:700;background:var(--color-surface-offset);color:var(--color-text-faint);border:2px solid transparent}
+    .dot.done{background:var(--color-success-highlight);color:var(--color-success)}
+    .dot.current{border-color:var(--color-primary);color:var(--color-primary);background:var(--color-primary-highlight)}
+    #actionBar{position:sticky;bottom:0;background:var(--color-surface);border-top:1px solid var(--color-divider);padding:var(--space-2) 0;z-index:5}
+    .why-line{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .kit-match{font-size:var(--text-xs);color:var(--color-text-muted)}
+    .kit-match a{font-weight:600}
+    .site-footer{padding:var(--space-4);text-align:center;display:grid;gap:var(--space-2);color:var(--color-text-muted);font-size:var(--text-sm)}
+    .footer-cta{font-size:var(--text-base);font-weight:600}
+    .footer-kits a{white-space:nowrap}
+    details.collapser{border-radius:var(--radius-xl)}
+    details.collapser>summary{display:flex;align-items:center;justify-content:space-between;padding:var(--space-2) var(--space-4);background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-radius:var(--radius-xl);cursor:pointer;font-size:var(--text-sm);font-weight:600;list-style:none;user-select:none;transition:background var(--transition);gap:var(--space-3)}
+    details.collapser>summary::-webkit-details-marker{display:none}
+    details.collapser>summary:hover{background:var(--color-surface-offset)}
+    details.collapser[open]>summary{border-bottom-left-radius:0;border-bottom-right-radius:0}
+    .summary-left{display:flex;align-items:center;gap:var(--space-2)}
+    .summary-tag{font-weight:400;color:var(--color-text-muted);font-size:var(--text-xs)}
+    .summary-arrow{font-size:.7rem;color:var(--color-text-muted);transition:transform .2s;flex-shrink:0}
+    details.collapser[open] .summary-arrow{transform:rotate(90deg)}
+    details.collapser>.grid,details.collapser>.sidebar{border:1px solid color-mix(in oklab,var(--color-text) 10%,transparent);border-top:none;border-radius:0 0 var(--radius-xl) var(--radius-xl);padding:var(--space-2)}
+    @keyframes blast{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.15);opacity:0}}
+    @keyframes steam{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(-7px);opacity:.9}}
+    @media (max-width: 720px){.viz-workspace{grid-template-columns:1fr}.data-pane{grid-template-columns:1fr 1fr;display:grid}.hero-cards{grid-template-columns:1fr}}
+    @media (max-width: 860px){.glossary-grid{grid-template-columns:1fr}.topbar{flex-wrap:wrap}.steps{display:grid;grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<div class="explosion" id="explosion"></div>
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div style="display:flex;justify-content:space-between;gap:1rem;align-items:center">
+      <h3 id="modalTitle">Explain it to me</h3>
+      <button class="btn btn-secondary" id="closeModal">Close</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-label="Tableau Analyst Sprint logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16"></path><rect x="5" y="11" width="3" height="7"></rect><rect x="10.5" y="6" width="3" height="12"></rect><rect x="16" y="9" width="3" height="9"></rect></svg>
+      </div>
+      <div>
+        <div class="title">Tableau Analyst Sprint</div>
+        <div class="subtitle">Help Srbina turn her numbers into a picture the room can read</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <a class="chip" href="../" style="text-decoration:none">← All sprints</a>
+      <div class="chip" id="progressChip">Lesson 1 of 14</div>
+      <div class="chip hidden" id="streakChip" title="First-try streak">🔥 0</div>
+      <button class="btn btn-secondary" id="openGlossary">Glossary</button>
+      <button class="btn btn-secondary" data-theme-toggle aria-label="Switch theme">Theme</button>
+    </div>
+  </header>
+
+  <details id="overviewDetails" class="collapser">
+  <summary>
+    <span class="summary-left">
+      <span>About this sprint</span>
+      <span class="summary-tag">How it works · What you will cover</span>
+    </span>
+    <span class="summary-arrow">▸</span>
+  </summary>
+  <section class="grid">
+    <div class="panel hero">
+      <span class="badge">The story so far</span>
+      <h1>Srbina has the numbers. Now she has to show them.</h1>
+      <p>She can pull any answer she wants from the database now — but in the big meeting, a grid of query results made the room's eyes glaze over. Her manager said it plainly: "I believe you, I just can't <em>see</em> it." That is what Tableau is for. You are still her coach: one small task at a time, a quick explanation when a term is new, and a moment to build it herself. (New here? The story starts in the <a href="../excel/">Excel Analyst Sprint</a>, then the <a href="../sql/">SQL Analyst Sprint</a>.)</p>
+      <div class="hero-cards">
+        <div class="mini-card"><strong>1. Read the task</strong><span>One clear instruction at a time.</span></div>
+        <div class="mini-card"><strong>2. Learn the concept</strong><span>Open a glossary card when a term is new.</span></div>
+        <div class="mini-card"><strong>3. Build the view</strong><span>Drop fields on shelves — the chart draws itself.</span></div>
+      </div>
+      <div class="quick-links">
+        <button class="link-pill" data-glossary="fieldtypes">Blue vs green fields?</button>
+        <button class="link-pill" data-glossary="aggregate">What is aggregation?</button>
+        <button class="link-pill" data-glossary="barchart">How do I build a chart?</button>
+      </div>
+    </div>
+
+    <aside class="panel path">
+      <h2>What you will cover</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>How Tableau sees data</strong><div class="subtitle">Fields, blue &amp; green.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>Aggregation</strong><div class="subtitle">SUM rolls rows up.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>First charts</strong><div class="subtitle">Bars &amp; lines on shelves.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>Sort &amp; filter</strong><div class="subtitle">Focus the view.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>Marks &amp; calcs</strong><div class="subtitle">Color, and IF in Tableau.</div></div></div>
+        <div class="step"><div class="step-num">6</div><div><strong>Chart choice</strong><div class="subtitle">The right picture.</div></div></div>
+        <div class="step"><div class="step-num">7</div><div><strong>Tell the story</strong><div class="subtitle">View to recommendation.</div></div></div>
+      </div>
+      <p class="footer-note">Mirrors the units in the <a href="https://michaelnocito.github.io/analyst-prep-kit/tableau/">Tableau Prep Kit</a> — finish here, then go deeper there. Nothing here is meant to feel rushed.</p>
+    </aside>
+  </section>
+  </details>
+
+  <section class="layout">
+    <main class="panel lesson">
+      <div class="lesson-top">
+        <div>
+          <span class="badge" id="lessonBadge">Lesson 1 · How Tableau sees data</span>
+          <h2 class="section-title" id="lessonTitle">What does Tableau do with a table of data?</h2>
+        </div>
+        <button class="btn btn-primary" id="nextLessonTop">Next lesson</button>
+      </div>
+
+      <div class="stepper" id="stepper" aria-label="Lesson progress"></div>
+
+      <div class="objective">
+        <strong id="objectiveTitle">The task</strong>
+        <p id="objectiveText"></p>
+        <p class="why-line" id="whyText"></p>
+        <p class="kit-match" id="kitMatchText"></p>
+        <div class="coach">
+          <strong>Coach tip</strong>
+          <p id="coachText"></p>
+        </div>
+      </div>
+
+      <div id="dataStage" class="db-tables" aria-label="The lead data"></div>
+      <div id="vizStage" class="viz-workspace hidden" aria-label="The Tableau workspace"></div>
+
+      <div class="what-now" id="whatNow">
+        <strong>What do I do now?</strong>
+        <span id="whatNowText"></span>
+      </div>
+
+      <div id="answerArea"></div>
+
+      <div class="hint" id="hintBox">
+        <strong>Gentle nudge</strong>
+        <p id="hintText"></p>
+      </div>
+
+      <div id="feedbackBox" class="feedback hidden"></div>
+
+      <div id="actionBar" style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-primary" id="submitAnswer">Check answer</button>
+        <button class="btn btn-secondary hidden" id="nextLessonBottom">Continue →</button>
+        <button class="btn btn-secondary" id="showPrereq" style="margin-left:auto">💡 Explain it to me</button>
+      </div>
+    </main>
+
+    <details id="extrasDetails" class="collapser">
+    <summary>
+      <span class="summary-left">
+        <span>☕ Progress &amp; breaks</span>
+        <span class="summary-tag">Srbina's meters · Achievements · Lunch break</span>
+      </span>
+      <span class="summary-arrow">▸</span>
+    </summary>
+    <aside class="sidebar">
+      <section class="panel stats">
+        <h3 class="section-title">Srbina's progress</h3>
+        <div class="meter"><span>Tableau confidence</span><div class="bar"><div class="fill" id="skillFill"></div></div></div>
+        <div class="meter"><span>Business storytelling</span><div class="bar"><div class="fill" id="salesFill" style="background:var(--color-orange)"></div></div></div>
+        <div class="meter"><span>Overall readiness</span><div class="bar"><div class="fill" id="readinessFill" style="background:var(--color-gold)"></div></div></div>
+      </section>
+
+      <section class="panel achievement">
+        <h3 class="section-title">Achievements</h3>
+        <div class="ach-list" id="achievementList">
+          <div class="ach" data-ach="first">💡 First spark</div>
+          <div class="ach" data-ach="viz">📊 First viz</div>
+          <div class="ach" data-ach="story">🎯 Business translator</div>
+          <div class="ach" data-ach="streak">🔥 Hot streak (3 first-try wins)</div>
+          <div class="ach" data-ach="break">☕ Lunch break champion</div>
+        </div>
+      </section>
+
+      <section class="panel break-box">
+        <h3 class="section-title">☕ Lunch break</h3>
+        <p style="color:var(--color-text-muted)">Step away from the canvas. Brew some coffees, reset your head, and come back when you are ready.</p>
+        <div class="break-game">
+          <div class="coffee-scene" id="coffeeScene" aria-label="Coffee shop mini-game">
+            <div class="counter"></div>
+            <button class="cup" id="brewButton" aria-label="Tap to brew coffee">☕</button>
+          </div>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" id="autoServe"> Hire a helper barista (auto-brews every 2 seconds)</label>
+          </div>
+          <div class="quick-links">
+            <div class="chip" id="beansChip">Coffees: 0</div>
+            <div class="chip" id="ordersChip">Served: 0</div>
+            <div class="chip" id="moodChip">Vibe: calm</div>
+          </div>
+          <p class="footer-note">Tap the cup to brew. Every 5 coffees served lifts the vibe.</p>
+        </div>
+      </section>
+    </aside>
+    </details>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-cta">Ready for the full course? <a href="https://michaelnocito.github.io/analyst-prep-kit/tableau/">Tableau Prep Kit — 28 free lessons →</a></div>
+    <div class="footer-kits">More free kits:
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Excel</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/sql/">SQL</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/python/">Python</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/powerbi/">Power BI</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/stats/">Stats</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/chart-literacy/">Chart Literacy</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/forecasting/">Forecasting</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/interview/">Interview</a> ·
+      <a href="https://michaelnocito.github.io/analyst-prep-kit/">All kits ↗</a>
+    </div>
+    <div class="footer-meta">Played the earlier parts? <a href="../excel/">Excel ↗</a> · <a href="../sql/">SQL Analyst Sprint ↗</a> · Built by <a href="https://michaelnocito.github.io">Michael Nocito</a> · <a href="https://github.com/michaelnocito/prep-companion-apps">GitHub ↗</a></div>
+  </footer>
+</div>
+<script>
+(() => {
+  const KIT_URL='https://michaelnocito.github.io/analyst-prep-kit/tableau/';
+
+  /* ── The lead data (same leads Srbina queried in the SQL sprint, now with rep + close month) ── */
+  const DATA=[
+    {lead:'Northwind',region:'East',status:'Warm',rep:'Srbina',month:'Feb',calls:4,revenue:1200},
+    {lead:'BluePeak',region:'West',status:'Hot',rep:'Marco',month:'Mar',calls:6,revenue:850},
+    {lead:'Maple Desk',region:'South',status:'Cold',rep:'Dana',month:'Mar',calls:3,revenue:990},
+    {lead:'Iron Harbor',region:'East',status:'Hot',rep:'Srbina',month:'Apr',calls:8,revenue:2100},
+    {lead:'Cobalt Labs',region:'West',status:'Cold',rep:'Marco',month:'Jan',calls:2,revenue:700},
+    {lead:'Sunfield',region:'South',status:'Hot',rep:'Dana',month:'May',calls:5,revenue:1750},
+    {lead:'Pinecrest',region:'East',status:'Warm',rep:'Srbina',month:'Jun',calls:1,revenue:300},
+    {lead:'Quartz & Co',region:'West',status:'Warm',rep:'Marco',month:'Apr',calls:7,revenue:1500}
+  ];
+  const DIMS={lead:'Lead Name',region:'Region',status:'Status',rep:'Rep',month:'Month'};
+  const MEAS={revenue:'Revenue',calls:'Calls',cnt:'Number of Records'};
+  const LABEL=id=>DIMS[id]||MEAS[id]||id;
+  const isDim=id=>id in DIMS, isMeas=id=>id in MEAS;
+  const MONTH_ORDER=['Jan','Feb','Mar','Apr','May','Jun'];
+  const PALETTE=['#01696f','#da7101','#d19900','#a12c7b','#437a22','#2f6df0'];
+
+  /* ── Aggregation engine: turn the shelf state into plottable points ── */
+  function aggregate(sh){
+    const gf=sh.cols[0], mf=sh.rows[0];
+    if(!gf||!mf) return null;
+    if(!isDim(gf)||!isMeas(mf)) return {error:true};
+    let rows=DATA.slice();
+    sh.filters.forEach(f=>{ if(f.value!=null) rows=rows.filter(r=>String(r[f.field])===String(f.value)); });
+    const groups={}, order=[];
+    rows.forEach(r=>{ const k=r[gf]; if(!(k in groups)){groups[k]=[];order.push(k);} groups[k].push(r); });
+    let cats=order;
+    if(gf==='month') cats=MONTH_ORDER.filter(m=>order.includes(m));
+    let pts=cats.map(k=>{
+      const rs=groups[k];
+      const v=mf==='cnt'?rs.length:rs.reduce((a,r)=>a+r[mf],0);
+      const cv=sh.color?rs[0][sh.color]:null;
+      return {k,v,cv};
+    });
+    if(sh.sortDesc) pts=pts.slice().sort((a,b)=>b.v-a.v);
+    return {points:pts,gf,mf};
+  }
+
+  function drawViz(){
+    const canvas=document.getElementById('vizCanvas'); if(!canvas) return;
+    const sh=state.shelf, agg=aggregate(sh);
+    if(!agg||agg.error||!agg.points.length){
+      canvas.innerHTML='<div class="viz-empty">Click a blue field then the <strong>Columns</strong> shelf, and a green field then the <strong>Rows</strong> shelf, to build a chart.</div>';
+      return;
+    }
+    const {points,mf,gf}=agg;
+    const isLine=(sh.mark==='line');
+    const isCircle=(sh.mark==='circle');
+    const W=540,H=250,padL=46,padB=44,padT=14,padR=14;
+    const plotW=W-padL-padR, plotH=H-padT-padB;
+    const maxRaw=Math.max(...points.map(p=>p.v),1);
+    const step=Math.pow(10,Math.floor(Math.log10(maxRaw)));
+    const niceMax=Math.ceil(maxRaw/step)*step;
+    const n=points.length, slot=plotW/n;
+    const yOf=v=>padT+plotH-(v/niceMax)*plotH;
+    const xMid=i=>padL+slot*i+slot/2;
+    const colorKeys=[...new Set(points.map(p=>p.cv).filter(v=>v!=null))];
+    const colorFor=p=>{ if(p.cv==null) return PALETTE[0]; return PALETTE[colorKeys.indexOf(p.cv)%PALETTE.length]; };
+    let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${mf} by ${gf}">`;
+    // axes
+    svg+=`<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+plotH}" stroke="var(--color-border)"/>`;
+    svg+=`<line x1="${padL}" y1="${padT+plotH}" x2="${padL+plotW}" y2="${padT+plotH}" stroke="var(--color-border)"/>`;
+    // y ticks
+    for(let t=0;t<=2;t++){ const val=niceMax*t/2, y=yOf(val);
+      svg+=`<line x1="${padL-4}" y1="${y}" x2="${padL}" y2="${y}" stroke="var(--color-text-faint)"/>`;
+      svg+=`<text x="${padL-7}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--color-text-muted)">${val>=1000?(val/1000)+'k':val}</text>`;
+    }
+    const aggName=mf==='cnt'?'CNT':'SUM';
+    const measName=mf==='cnt'?'Number of Records':MEAS[mf];
+    svg+=`<text x="${padL-30}" y="${padT-2}" font-size="10" fill="var(--color-meas)" font-weight="700">${aggName}(${measName})</text>`;
+    if(isLine||isCircle){
+      const pathPts=points.map((p,i)=>`${xMid(i)},${yOf(p.v)}`).join(' ');
+      if(isLine) svg+=`<polyline points="${pathPts}" fill="none" stroke="${PALETTE[0]}" stroke-width="2.5" stroke-linejoin="round"/>`;
+      points.forEach((p,i)=>{ svg+=`<circle cx="${xMid(i)}" cy="${yOf(p.v)}" r="4.5" fill="${colorFor(p)}"/>`; });
+    } else {
+      const bw=Math.min(slot*0.62,64);
+      points.forEach((p,i)=>{ const x=xMid(i)-bw/2, y=yOf(p.v);
+        svg+=`<rect x="${x}" y="${y}" width="${bw}" height="${padT+plotH-y}" rx="3" fill="${colorFor(p)}"/>`;
+        svg+=`<text x="${xMid(i)}" y="${y-4}" text-anchor="middle" font-size="9.5" fill="var(--color-text-muted)">${p.v>=1000?(p.v/1000).toFixed(p.v%1000?1:0)+'k':p.v}</text>`;
+      });
+    }
+    points.forEach((p,i)=>{ svg+=`<text x="${xMid(i)}" y="${padT+plotH+15}" text-anchor="middle" font-size="10" fill="var(--color-text)">${String(p.k).length>9?String(p.k).slice(0,8)+'…':p.k}</text>`; });
+    svg+=`<text x="${padL+plotW/2}" y="${H-3}" text-anchor="middle" font-size="10" fill="var(--color-dim)" font-weight="700">${DIMS[gf]||gf}</text>`;
+    if(colorKeys.length){ const lx=padL+6; let ly=padT+8;
+      colorKeys.forEach((k,i)=>{ svg+=`<rect x="${lx}" y="${ly-8}" width="9" height="9" rx="2" fill="${PALETTE[i%PALETTE.length]}"/><text x="${lx+13}" y="${ly}" font-size="9.5" fill="var(--color-text-muted)">${k}</text>`; ly+=14; });
+    }
+    svg+='</svg>';
+    canvas.innerHTML=svg;
+  }
+
+  const lessons = [
+    {
+      badge:'Lesson 1 · How Tableau sees data',
+      title:'What does Tableau do with a table of data?',
+      whatNow:'Click the best description of what Tableau is for.',
+      objective:'Srbina can query the database now — but in the meeting, a grid of query results lost the room. Tableau takes that same table of rows and columns and turns it into a picture you build. What is Tableau most for?',
+      why:'The job is not just getting the number — it is making a stakeholder see it. That is the analyst’s last mile.',
+      kitMatch:'How Tableau Sees Your Data',
+      coach:'Tableau reads the same leads table you queried in SQL — but instead of returning rows, it draws them as bars, lines, and dots you arrange.',
+      hint:'It is not for storing data (that is the database) or editing cells (that is the spreadsheet).',
+      prereq:'seeData',mode:'buttons',stage:'data',
+      options:['A tool that draws your data as charts you build by dragging fields','A database that stores your tables','A spreadsheet where you edit cells one at a time'],
+      answer:'A tool that draws your data as charts you build by dragging fields',
+      success:'✓ Exactly. Tableau connects to a table and lets you build the picture — drag a field, get a chart. The data still lives in the database; Tableau is how the room finally sees it.',
+      fail:'Storing rows is the database’s job; editing single cells is the spreadsheet’s. What does Tableau add on top?',
+      skill:14,sales:10,readiness:10,achievement:'first'
+    },
+    {
+      badge:'Lesson 2 · Fields: blue & green',
+      title:'Dimensions vs. measures',
+      whatNow:'Click the option that correctly describes a measure (the green fields).',
+      objective:'The first thing Tableau does is split every column into two kinds and color them. Blue fields are dimensions — categories that slice the data. Green fields are measures — numbers you can add up. Look at the colored headers below. Which describes a measure?',
+      why:'Blue-vs-green is the grammar of Tableau. Put the wrong color on the wrong shelf and the chart says the wrong thing.',
+      kitMatch:'Dimensions vs. Measures',
+      coach:'In the table below, Region and Status are blue (dimensions). Revenue and Calls are green (measures). What makes the green ones green?',
+      hint:'You can SUM the green fields. You cannot meaningfully add up the word “East”.',
+      prereq:'fieldtypes',mode:'buttons',stage:'data',
+      options:['A number you can total or average, like Revenue','A category that slices the data, like Region','The title across the top of the chart'],
+      answer:'A number you can total or average, like Revenue',
+      success:'✓ Right. Measures (green) are the numbers — Revenue, Calls — the stuff you aggregate. Dimensions (blue) are the categories you break those numbers out by. Every chart is some measure, sliced by some dimension.',
+      fail:'A category like Region is a dimension (blue). A measure is the number you can roll up. Which option is that?',
+      skill:22,sales:14,readiness:16,achievement:null
+    },
+    {
+      badge:'Lesson 3 · Aggregation',
+      title:'What “aggregate” means',
+      whatNow:'Click what Tableau does when you drop Revenue into a view broken out by Region.',
+      objective:'Here is the move that surprises everyone: drop Revenue into a view split by Region and Tableau does not show eight separate numbers — it shows SUM(Revenue), one total per region. That rolling-up is called aggregation. What is it?',
+      why:'Almost every Tableau number is aggregated. Forgetting that is how analysts mis-read a chart as raw rows.',
+      kitMatch:'What "Aggregate" Means',
+      coach:'East has three leads worth 1200, 2100, and 300. Aggregated by region, that becomes one bar: 3600.',
+      hint:'It is the same idea as a PivotTable total, or SQL’s SUM … GROUP BY.',
+      prereq:'aggregate',mode:'buttons',stage:'data',
+      options:['Rolls many rows up into one number per category','Sorts the rows from largest to smallest','Deletes the duplicate rows'],
+      answer:'Rolls many rows up into one number per category',
+      success:'✓ Yes. SUM(Revenue) by Region collapses eight rows into three totals — East 3600, West 3050, South 2740. Same numbers you got from GROUP BY in SQL; Tableau just does it the moment you build the view.',
+      fail:'Sorting reorders rows; it does not combine them. Aggregation rolls rows up. Which option says that?',
+      skill:30,sales:18,readiness:22,achievement:null
+    },
+    {
+      badge:'Lesson 4 · Your first bar chart',
+      title:'Build revenue by region',
+      whatNow:'Put Region on the Columns shelf and Revenue on the Rows shelf to draw a bar chart. Then press Check answer.',
+      objective:'Srbina’s manager asks the question that lost the room: “How does revenue split across regions?” Build the answer as a bar chart — the category on Columns, the number on Rows.',
+      why:'Category on Columns, measure on Rows is the single most common chart you will ever build.',
+      kitMatch:'Your First Bar Chart',
+      coach:'Click the blue Region pill, then click the Columns shelf. Click the green Revenue pill, then click the Rows shelf. Tableau draws bars automatically.',
+      hint:'Region (blue) → Columns. Revenue (green) → Rows.',
+      prereq:'barchart',mode:'viz',stage:'viz',
+      expected:{cols:['region'],rows:['revenue']},
+      success:'✓ There it is — East 3600, West 3050, South 2740, as bars. That is the chart that would have saved the meeting. Category on Columns, measure on Rows: you will build this shape forever.',
+      fail:'A bar chart needs the blue category on Columns and the green number on Rows. Check which pill is on which shelf.',
+      skill:40,sales:24,readiness:30,achievement:'viz'
+    },
+    {
+      badge:'Lesson 5 · Line charts & time',
+      title:'Show the trend over time',
+      whatNow:'Put Month on Columns and Revenue on Rows, then change the Marks type to Line.',
+      objective:'“Is the pipeline growing or stalling?” A trend over time wants a line, not bars. Build Revenue by Month, then switch the mark type to Line.',
+      why:'Bars compare categories; lines show change over time. Picking the right one is half of charting well.',
+      kitMatch:'Line Charts & Time',
+      coach:'Same moves as the bar chart — Month → Columns, Revenue → Rows — then open the Marks “Type” dropdown and choose Line.',
+      hint:'Build the view first, then set Marks type to Line. Month is already in calendar order.',
+      prereq:'linechart',mode:'viz',stage:'viz',
+      expected:{cols:['month'],rows:['revenue'],mark:'line'},
+      success:'✓ The line climbs to a April peak (3600) then falls off. A line connects time into a story bars cannot tell — the eye follows the slope, not the heights.',
+      fail:'Two parts: Month on Columns and Revenue on Rows, AND the Marks type set to Line. Set both, then check again.',
+      skill:48,sales:30,readiness:38,achievement:null
+    },
+    {
+      badge:'Lesson 6 · Sorting the view',
+      title:'Biggest region first',
+      whatNow:'Build Revenue by Region, then click “Sort ↓” so the bars run from biggest to smallest.',
+      objective:'When Srbina presents, she wants the leading region to read first. Build revenue by region again, then sort the bars descending.',
+      why:'A sorted bar chart answers “who’s on top?” in a half-second. Unsorted, the eye has to hunt.',
+      kitMatch:'Sorting Your View',
+      coach:'Put Region on Columns and Revenue on Rows, then press the Sort ↓ button under the chart.',
+      hint:'Sorting is the same idea as ORDER BY … DESC in the SQL sprint — biggest first.',
+      prereq:'sorting',mode:'viz',stage:'viz',
+      expected:{cols:['region'],rows:['revenue'],sortDesc:true},
+      success:'✓ East, West, South — already in descending order. A sorted bar chart does the ranking for the audience so they don’t have to.',
+      fail:'Get the revenue-by-region bars first, then click Sort ↓ to order them biggest-first.',
+      skill:55,sales:36,readiness:45,achievement:null
+    },
+    {
+      badge:'Lesson 7 · Filtering the view',
+      title:'Only the hot leads',
+      whatNow:'Build Revenue by Region, then drag Status onto the Filters shelf and keep only Hot.',
+      objective:'“What does our hot pipeline look like by region?” Same chart, but filtered to just the Hot leads. Put Status on the Filters shelf and keep Hot.',
+      why:'Stakeholders rarely want every row. A filter turns “all leads” into “the leads we’re talking about.”',
+      kitMatch:'Filtering Your Data',
+      coach:'Build the region/revenue bars, then click Status and click the Filters shelf. A value picker appears — choose Hot.',
+      hint:'Filtering here is the same job WHERE did in SQL — keep only the rows that pass the test.',
+      prereq:'filtering',mode:'viz',stage:'viz',
+      expected:{cols:['region'],rows:['revenue'],filter:{field:'status',value:'Hot'}},
+      success:'✓ Now the bars show only the Hot leads — South jumps because Sunfield (1750) is hot, East rides on Iron Harbor (2100). Same view, a sharper question.',
+      fail:'Two parts: the revenue-by-region bars, AND Status on the Filters shelf set to Hot. Set both, then check.',
+      skill:62,sales:42,readiness:52,achievement:null
+    },
+    {
+      badge:'Lesson 8 · Marks: color',
+      title:'Color the leads by status',
+      whatNow:'Put Lead Name on Columns and Revenue on Rows, then drag Status onto Color in the Marks card.',
+      objective:'Srbina wants one chart that shows every lead’s value AND how warm it is. Build revenue by lead, then drop Status on Color so each bar is tinted by its status.',
+      why:'Color adds a second dimension to a chart without adding a second chart — value and status in one glance.',
+      kitMatch:'Color, Size & Labels',
+      coach:'Lead Name → Columns, Revenue → Rows. Then click Status and click the Color target inside the Marks card.',
+      hint:'Lead Name (blue) → Columns, Revenue (green) → Rows, Status (blue) → Color.',
+      prereq:'marks',mode:'viz',stage:'viz',
+      expected:{cols:['lead'],rows:['revenue'],color:'status'},
+      success:'✓ Eight bars, color-coded by status — the tall Hot ones (Iron Harbor, Sunfield) pop instantly. The Marks card is where a plain chart becomes a readable one.',
+      fail:'Three pieces: Lead Name on Columns, Revenue on Rows, and Status dropped on Color in the Marks card.',
+      skill:68,sales:48,readiness:58,achievement:null
+    },
+    {
+      badge:'Lesson 9 · Calculated fields',
+      title:'The IF, one more time',
+      whatNow:'Type a Tableau calculated field that labels a lead “Priority” when Revenue is over 1000, otherwise “Later”.',
+      objective:'You wrote =IF(D2>1000,"Priority","Later") in Excel and CASE WHEN in SQL. In Tableau the same logic is a calculated field. Write it: IF [Revenue] > 1000 THEN "Priority" ELSE "Later" END.',
+      why:'Calculated fields are where Tableau stops just showing data and starts encoding business rules — tiers, flags, targets.',
+      kitMatch:'Calculated Fields',
+      coach:'The shape is: IF [Revenue] > 1000 THEN "Priority" ELSE "Later" END. Square brackets around the field, double quotes around the labels, and don’t forget END.',
+      hint:'IF [Revenue] > 1000 THEN "Priority" ELSE "Later" END',
+      prereq:'calc',mode:'calc',stage:'data',
+      placeholder:'Write the calculated field…',
+      validate:(t)=>{const s=t.toLowerCase().replace(/\s+/g,' ');return /\bif\b/.test(s)&&/\bthen\b/.test(s)&&/\belse\b/.test(s)&&/\bend\b/.test(s)&&/1000/.test(s)&&/revenue/.test(s)&&/priority/.test(s);},
+      success:'✓ Four Priority leads, four Later — the same decision you wrote in Excel and SQL, now a reusable field you can drop on any shelf. IF … THEN … ELSE … END: the analyst’s sentence in three languages.',
+      fail:'Check the keywords in order: IF [Revenue] > 1000 THEN "Priority" ELSE "Later" END — brackets on the field, quotes on the labels, and END to close it.',
+      skill:74,sales:54,readiness:64,achievement:null
+    },
+    {
+      badge:'Lesson 10 · Aggregation, again',
+      title:'How many leads per region?',
+      whatNow:'Put Region on Columns and Number of Records on Rows to count the leads in each region.',
+      objective:'“Are we spread evenly?” That is a count, not a total. Build Region on Columns and the Number of Records measure on Rows.',
+      why:'Counting rows per category is the bar-chart version of SQL’s COUNT(*) … GROUP BY — a daily analyst question.',
+      kitMatch:'Aggregation in Tableau',
+      coach:'Region → Columns. Then use the green “Number of Records” pill on Rows — that is Tableau’s built-in row count.',
+      hint:'Number of Records counts the rows in each group, the way COUNT(*) did in SQL.',
+      prereq:'grouping',mode:'viz',stage:'viz',
+      expected:{cols:['region'],rows:['cnt']},
+      success:'✓ East 3, West 3, South 2 — the same counts you got from GROUP BY in the SQL sprint. Swapping SUM(Revenue) for a count is just a different green field on Rows.',
+      fail:'Region goes on Columns; the green Number of Records field goes on Rows. That counts leads per region.',
+      skill:80,sales:58,readiness:70,achievement:null
+    },
+    {
+      badge:'Lesson 11 · Chart choice',
+      title:'Pick the right picture',
+      whatNow:'Click the best chart for comparing total revenue across three regions.',
+      objective:'Srbina has the regional totals and ten seconds to make them land. Which chart compares a value across a few categories most clearly?',
+      why:'The wrong chart buries the point. Matching chart to question is the skill that separates a dashboard from a mess.',
+      kitMatch:'Chart Choice',
+      coach:'Three regions, one number each, the question is “which is biggest?” What reads fastest for comparing categories?',
+      hint:'Bars are unbeaten for comparing a value across a handful of categories.',
+      prereq:'chartchoice',mode:'buttons',stage:'data',
+      options:['A bar chart — lengths are easy to compare side by side','A pie chart — three slices to eyeball','A scatter plot — one dot per region'],
+      answer:'A bar chart — lengths are easy to compare side by side',
+      success:'✓ Bars win. The eye compares lengths far better than pie-slice angles, and a scatter plot needs two measures — here there is only one. Right question, right chart.',
+      fail:'Pie slices are hard to compare and a scatter needs two measures. What compares one value across categories best?',
+      skill:85,sales:64,readiness:76,achievement:null
+    },
+    {
+      badge:'Lesson 12 · Telling the story',
+      title:'From sheets to a dashboard',
+      whatNow:'Click how Srbina turns three separate charts into one screen for the meeting.',
+      objective:'Srbina now has three sheets: revenue by region, the monthly trend, and the leads colored by status. How does she present them together, on one screen, in Tableau?',
+      why:'A dashboard is the deliverable. One sheet answers a question; a dashboard tells the story around it.',
+      kitMatch:'Telling a Story',
+      coach:'In Tableau, individual charts are “sheets.” Combining several onto one canvas has a specific name.',
+      hint:'It is the thing you build by dragging finished sheets onto one canvas.',
+      prereq:'dashboard',mode:'buttons',stage:'data',
+      options:['Combine the sheets onto a dashboard','Paste each chart into the spreadsheet','Re-run all three as SQL queries'],
+      answer:'Combine the sheets onto a dashboard',
+      success:'✓ A dashboard. Drag the finished sheets onto one canvas and the room sees the whole story at once — region, trend, and status side by side. That is the artifact Srbina presents.',
+      fail:'You don’t paste charts into a spreadsheet or re-query them. In Tableau, the one-screen story is built on a what?',
+      skill:88,sales:72,readiness:82,achievement:null
+    },
+    {
+      badge:'Lesson 13 · Checkpoint',
+      title:'Sprint review: from memory',
+      whatNow:'No peeking at earlier lessons. From memory, build a bar chart of Revenue by Region.',
+      objective:'Quick retrieval check. Back in Lesson 4 you built revenue by region. Do it again from memory — Region on Columns, Revenue on Rows — without looking back.',
+      why:'Pulling a build from memory — not re-reading the steps — is what locks it in. That is retrieval practice.',
+      kitMatch:'Unit 1: Fundamentals (review)',
+      coach:'You know this one. Region (blue) on Columns, Revenue (green) on Rows.',
+      hint:'Blue category → Columns. Green number → Rows.',
+      prereq:'barchart',mode:'viz',stage:'viz',
+      expected:{cols:['region'],rows:['revenue']},
+      success:'✓ Built from memory — East 3600, West 3050, South 2740. That chart is yours now; you can draw it without the prompts.',
+      fail:'Same as Lesson 4: Region on Columns, Revenue on Rows. Build it from memory.',
+      skill:90,sales:78,readiness:86,achievement:null
+    },
+    {
+      badge:'Lesson 14 · Recommendation',
+      title:'Turn the dashboard into a next step',
+      whatNow:'Write one short recommendation for Srbina. Name the lead with the highest revenue and say what she should do next.',
+      objective:'Srbina’s dashboard is built: the region bars, the climbing trend, and the status colors all point the same way — Iron Harbor leads the board at 2100 and is already Hot. A chart only matters when it changes what someone does next. Write the recommendation.',
+      why:'This is the last mile the full kit leaves to you — turning a finished view into a decision.',
+      kitMatch:null,
+      coach:'Try this structure: name the lead, state the value, say what to do. Example: “Iron Harbor is the top lead at 2100, so I’d focus there first.”',
+      hint:'Include the words Iron Harbor and something like priority, follow-up, or focus.',
+      prereq:'story',mode:'text',stage:'none',
+      placeholder:'Write one short recommendation…',
+      validate:(text)=>/iron harbor/i.test(text) && /(priority|prioritize|follow|focus|first)/i.test(text),
+      success:'✓ That works. You connected a database, built the view, and ended with an action — question to data to picture to decision. That is the whole analyst loop, and Srbina can run it now.',
+      fail:'Try again. Name the top lead (Iron Harbor) and say what Srbina should do next — focus on it, follow up first, make it the priority.',
+      skill:92,sales:88,readiness:92,achievement:'story'
+    }
+  ];
+
+  const glossary = {
+    seeData:{title:'How Tableau sees your data',body:`<div class="glossary-grid"><div class="glossary-card"><strong>It connects, it doesn’t store</strong><p>Tableau points at a table that already exists — a spreadsheet, a database, a CSV — and reads its rows and columns. The data still lives where it lived; Tableau is a window onto it.</p></div><div class="glossary-card"><strong>You build the picture</strong><p>Instead of returning rows like a query, Tableau draws them. You drag fields onto shelves and it renders a chart instantly — change a shelf, the chart changes. That is the whole loop.</p></div></div>`},
+    fieldtypes:{title:'Dimensions (blue) vs. measures (green)',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Dimensions — blue</strong><p>Categories that slice the data: Region, Status, Lead Name, Month. They answer “by what?” You can’t add them up, but you can group by them.</p></div><div class="glossary-card"><strong>Measures — green</strong><p>Numbers you aggregate: Revenue, Calls, a row count. They answer “how much?” Drop one in a view and Tableau totals it.</p></div><div class="glossary-card"><strong>The shape of every chart</strong><p>Almost every viz is one measure (green) broken out by one dimension (blue): revenue BY region, calls BY rep. Blue slices, green fills.</p></div><div class="glossary-card"><strong>Why the colors matter</strong><p>Tableau decides what to draw partly from the colors on each shelf. Two dimensions make a table; a dimension and a measure make a chart.</p></div></div>`},
+    aggregate:{title:'What “aggregate” means',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Rows roll up</strong><p>Drop Revenue into a view split by Region and Tableau shows SUM(Revenue) — one total per region, not the raw rows. That rolling-up is aggregation.</p></div><div class="glossary-card"><strong>The Excel & SQL echo</strong><p>It is the PivotTable total from the Excel sprint and SUM(revenue) … GROUP BY region from the SQL sprint, done the instant you build the view. SUM, AVG, MIN, MAX, COUNT all work this way.</p></div></div>`},
+    barchart:{title:'Building a bar chart',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The two shelves</strong><p>Columns runs left-to-right; Rows runs bottom-to-top. Put a dimension on Columns and a measure on Rows and Tableau draws one bar per category, as tall as the measure.</p></div><div class="glossary-card"><strong>How to place a field</strong><p>Click a field pill to pick it up, then click the shelf to drop it. Click a placed pill’s ✕ to remove it. The chart redraws every time.</p></div><div class="glossary-card"><strong>Why bars</strong><p>The eye compares lengths from a shared baseline better than almost anything. Bars are the default for comparing a number across categories.</p></div></div>`},
+    linechart:{title:'Line charts & time',body:`<div class="glossary-grid"><div class="glossary-card"><strong>When to use a line</strong><p>Lines are for change over time. A continuous date or month on Columns and a measure on Rows, with the mark set to Line, shows the trend the slope tells the story, not the heights.</p></div><div class="glossary-card"><strong>The Marks type</strong><p>The Marks card has a “Type” dropdown — Automatic, Bar, Line, Circle. Switching it changes how the same fields are drawn. Set it to Line for a trend.</p></div></div>`},
+    sorting:{title:'Sorting your view',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Rank for the reader</strong><p>Sorting a bar chart descending puts the biggest category first, so “who’s on top?” reads in a half-second. Unsorted, the audience has to scan and compare.</p></div><div class="glossary-card"><strong>The SQL echo</strong><p>It is the same job as ORDER BY … DESC — order by the measure, biggest first. In Tableau it is one click on the sort control.</p></div></div>`},
+    filtering:{title:'Filtering your data',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The Filters shelf</strong><p>Drag a field onto the Filters shelf and pick which values to keep. The whole view recomputes on just those rows — totals, bars, everything.</p></div><div class="glossary-card"><strong>The WHERE echo</strong><p>A filter is Tableau’s WHERE clause: keep only the rows that pass the test. Filter Status to Hot and every number in the view is now a hot-only number.</p></div></div>`},
+    marks:{title:'The Marks card — color, size, labels',body:`<div class="glossary-grid"><div class="glossary-card"><strong>One more dimension, free</strong><p>Drop a field on Color and each mark is tinted by its category — value and category in one chart, no second chart needed. Size and Label work the same way.</p></div><div class="glossary-card"><strong>Don’t overdo it</strong><p>Color earns its keep when it adds meaning (status, region). Coloring bars just to be colorful adds noise. One encoding, one job.</p></div></div>`},
+    calc:{title:'Calculated fields — Tableau’s IF',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The shape</strong><p>IF [Revenue] &gt; 1000 THEN "Priority" ELSE "Later" END. Square brackets around a field, double quotes around text, and END to close it. It becomes a new field you can drop on any shelf.</p></div><div class="glossary-card"><strong>Three languages, one idea</strong><p>=IF(D2&gt;1000,"Priority","Later") in Excel, CASE WHEN revenue &gt; 1000 … in SQL, and this in Tableau are the same decision. Learn the logic once, rewrite the syntax.</p></div></div>`},
+    grouping:{title:'Counting & grouping',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Number of Records</strong><p>Tableau gives you a built-in measure that counts rows. Put it on Rows with a dimension on Columns and you get a count per category — leads per region, orders per month.</p></div><div class="glossary-card"><strong>Count vs. sum</strong><p>SUM(Revenue) totals a number; the row count answers “how many?” Same chart skeleton, different green field on Rows. It mirrors COUNT(*) … GROUP BY from SQL.</p></div></div>`},
+    chartchoice:{title:'Choosing the right chart',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Match chart to question</strong><p>Compare categories → bars. Change over time → line. Relationship between two measures → scatter. Part of a whole (a few slices) → maybe a pie, used sparingly.</p></div><div class="glossary-card"><strong>The default is bars</strong><p>When in doubt, a sorted bar chart is rarely wrong. Reach for fancier marks only when the question actually needs them.</p></div></div>`},
+    dashboard:{title:'Sheets, dashboards & story',body:`<div class="glossary-grid"><div class="glossary-card"><strong>Sheet → dashboard</strong><p>Each chart you build is a “sheet.” A dashboard is a canvas where you arrange several finished sheets into one screen, so the audience sees the whole picture together.</p></div><div class="glossary-card"><strong>The deliverable</strong><p>Stakeholders rarely want one chart — they want the story. A dashboard (and Tableau’s Story feature, for a guided sequence) is what you actually hand over.</p></div></div>`},
+    story:{title:'Turning a view into a recommendation',body:`<div class="glossary-grid"><div class="glossary-card"><strong>The structure</strong><p>1. Name the number or lead. 2. Say what it means. 3. Recommend an action. Keep it to one or two sentences — the chart already did the showing.</p></div><div class="glossary-card"><strong>Example</strong><p>“Iron Harbor is the top lead by revenue at 2100 and already Hot, so I’d prioritize that account for follow-up this week.”</p></div></div>`}
+  };
+
+  const state = { lesson:0, skill:10, sales:8, readiness:8, beans:0, orders:0, helper:false, unlocked:new Set(), solved:false, completed:new Set(), streak:0, missedThisLesson:false,
+    shelf:{cols:[],rows:[],filters:[],color:null,mark:'auto',sortDesc:false}, picked:null };
+
+  const el = id => document.getElementById(id);
+  const lessonBadge=el('lessonBadge'),lessonTitle=el('lessonTitle'),whatNowText=el('whatNowText'),objectiveText=el('objectiveText'),coachText=el('coachText'),hintText=el('hintText'),answerArea=el('answerArea'),feedbackBox=el('feedbackBox');
+  const dataStage=el('dataStage'),vizStage=el('vizStage');
+  const progressChip=el('progressChip'),skillFill=el('skillFill'),salesFill=el('salesFill'),readinessFill=el('readinessFill');
+  const modalBackdrop=el('modalBackdrop'),modalTitle=el('modalTitle'),modalBody=el('modalBody');
+
+  function setThemeIcon(){
+    const t=document.documentElement.getAttribute('data-theme');
+    document.querySelector('[data-theme-toggle]').textContent=t==='dark'?'☀️ Light':'🌙 Dark';
+  }
+  let theme=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',theme);setThemeIcon();
+  document.querySelector('[data-theme-toggle]').addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',theme);setThemeIcon();if(lessons[state.lesson].mode==='viz')drawViz();});
+
+  function openGlossary(key){
+    const item=glossary[key]; if(!item) return;
+    modalTitle.textContent=item.title; modalBody.innerHTML=item.body;
+    modalBackdrop.style.display='flex'; modalBackdrop.setAttribute('aria-hidden','false');
+  }
+  function closeGlossary(){modalBackdrop.style.display='none';modalBackdrop.setAttribute('aria-hidden','true');}
+  el('closeModal').addEventListener('click',closeGlossary);
+  modalBackdrop.addEventListener('click',e=>{if(e.target===modalBackdrop)closeGlossary();});
+  el('openGlossary').addEventListener('click',()=>openGlossary('barchart'));
+  document.querySelectorAll('[data-glossary]').forEach(btn=>btn.addEventListener('click',()=>openGlossary(btn.dataset.glossary)));
+  el('showPrereq').addEventListener('click',()=>openGlossary(lessons[state.lesson].prereq));
+
+  function updateMeters(){ skillFill.style.width=state.skill+'%'; salesFill.style.width=state.sales+'%'; readinessFill.style.width=state.readiness+'%'; }
+  function unlockAchievement(key){
+    if(!key||state.unlocked.has(key))return;
+    state.unlocked.add(key);
+    const ach=document.querySelector(`[data-ach="${key}"]`); if(ach)ach.classList.add('unlocked');
+  }
+  function explode(count=32){
+    const root=el('explosion'); root.innerHTML='';
+    const colors=['#01696f','#da7101','#d19900','#a12c7b','#437a22'];
+    for(let i=0;i<count;i++){
+      const p=document.createElement('span'); p.className='particle';
+      p.style.left='50%'; p.style.top='45%'; p.style.background=colors[i%colors.length];
+      p.style.setProperty('--dx',`${(Math.random()-.5)*500}px`);
+      p.style.setProperty('--dy',`${(Math.random()-.5)*360}px`);
+      root.appendChild(p);
+    }
+    setTimeout(()=>root.innerHTML='',1000);
+  }
+  function renderStepper(){
+    const root=el('stepper'); root.innerHTML='';
+    lessons.forEach((_,i)=>{
+      const d=document.createElement('div');
+      d.className='dot'+(state.completed.has(i)?' done':i===state.lesson?' current':'');
+      d.textContent=state.completed.has(i)?'✓':i+1; d.title=lessons[i].title;
+      root.appendChild(d);
+    });
+  }
+
+  /* ── Data preview table (concept + calc lessons) ── */
+  function buildDataTable(){
+    const dimCols=['lead','region','status','rep','month'], measCols=['calls','revenue'];
+    let th=dimCols.map(c=>`<th class="dim">${DIMS[c]}</th>`).join('')+measCols.map(c=>`<th class="meas">${MEAS[c]}</th>`).join('');
+    let body=DATA.map(r=>'<tr>'+dimCols.map(c=>`<td>${r[c]}</td>`).join('')+measCols.map(c=>`<td>${r[c]}</td>`).join('')+'</tr>').join('');
+    dataStage.innerHTML=`<div class="db-table"><div class="db-caption">leads &nbsp;·&nbsp; <span style="color:var(--color-dim)">blue = dimensions</span> &nbsp; <span style="color:var(--color-meas)">green = measures</span></div><div class="sheet-wrap"><table class="sheet"><thead><tr>${th}</tr></thead><tbody>${body}</tbody></table></div></div>`;
+  }
+
+  /* ── Tableau workspace (viz lessons) ── */
+  function placedHTML(id){const cls=isDim(id)?'dim':'meas';return `<span class="placed ${cls}" data-remove="${id}">${LABEL(id)} <span class="x">✕</span></span>`;}
+  function buildWorkspace(){
+    const dims=Object.keys(DIMS), meas=Object.keys(MEAS);
+    const pill=(id,cls)=>`<button class="pill ${cls}" data-field="${id}">${LABEL(id)}</button>`;
+    vizStage.innerHTML=`
+      <div class="data-pane">
+        <div class="pane-head">Data</div>
+        <div class="pane-group dims"><div class="pane-label">Dimensions</div>${dims.map(d=>pill(d,'dim')).join('')}</div>
+        <div class="pane-group meas"><div class="pane-label">Measures</div>${meas.map(m=>pill(m,'meas')).join('')}</div>
+      </div>
+      <div class="builder">
+        <div class="shelf-row"><div class="shelf-name">Columns</div><div class="shelf" data-shelf="cols"><span class="placeholder">click a field, then here</span></div></div>
+        <div class="shelf-row"><div class="shelf-name">Rows</div><div class="shelf" data-shelf="rows"><span class="placeholder">click a field, then here</span></div></div>
+        <div class="shelf-row"><div class="shelf-name">Filters</div><div class="shelf" data-shelf="filters"><span class="placeholder">optional</span></div></div>
+        <div class="marks-card">
+          <div class="marks-head">Marks</div>
+          <div class="marks-row"><label for="markType">Type</label><select id="markType"><option value="auto">Automatic</option><option value="bar">Bar</option><option value="line">Line</option><option value="circle">Circle</option></select></div>
+          <div class="marks-row"><label>Color</label><div class="shelf color-shelf" data-shelf="color"><span class="placeholder">optional</span></div></div>
+        </div>
+        <div class="viz-tools"><button class="tool-btn" id="sortBtn" data-on="0">Sort ↓</button><span class="footer-note">Click a field to pick it up, then click a shelf to drop it.</span></div>
+        <div class="viz-canvas" id="vizCanvas"></div>
+        <div id="filterPick"></div>
+      </div>`;
+    vizStage.querySelectorAll('[data-field]').forEach(b=>b.addEventListener('click',()=>pickField(b.dataset.field)));
+    vizStage.querySelectorAll('[data-shelf]').forEach(s=>s.addEventListener('click',()=>shelfClick(s.dataset.shelf)));
+    el('markType').addEventListener('change',e=>{state.shelf.mark=e.target.value;drawViz();});
+    el('sortBtn').addEventListener('click',()=>{state.shelf.sortDesc=!state.shelf.sortDesc;el('sortBtn').classList.toggle('on',state.shelf.sortDesc);drawViz();});
+  }
+  function pickField(id){ state.picked=(state.picked===id)?null:id; refreshShelves(); }
+  function shelfClick(shelf){
+    if(!state.picked){
+      // clicking a placed pill's row with nothing picked: ignore (removal handled on the ✕)
+      return;
+    }
+    const id=state.picked;
+    if(shelf==='cols'||shelf==='rows'){ state.shelf[shelf]=[id]; }
+    else if(shelf==='color'){ state.shelf.color=id; }
+    else if(shelf==='filters'){ if(!state.shelf.filters.some(f=>f.field===id)) state.shelf.filters.push({field:id,value:null}); }
+    state.picked=null; refreshShelves(); drawViz();
+  }
+  function removeField(id){
+    ['cols','rows'].forEach(s=>{ state.shelf[s]=state.shelf[s].filter(x=>x!==id); });
+    if(state.shelf.color===id) state.shelf.color=null;
+    state.shelf.filters=state.shelf.filters.filter(f=>f.field!==id);
+    refreshShelves(); drawViz();
+  }
+  function refreshShelves(){
+    if(!vizStage.querySelector('[data-shelf]')) return;
+    const fillShelf=(shelf,ids,ph)=>{
+      const elx=vizStage.querySelector(`[data-shelf="${shelf}"]`);
+      elx.classList.toggle('armed', !!state.picked);
+      elx.innerHTML = ids.length? ids.map(placedHTML).join('') : `<span class="placeholder">${ph}</span>`;
+    };
+    fillShelf('cols',state.shelf.cols,'click a field, then here');
+    fillShelf('rows',state.shelf.rows,'click a field, then here');
+    fillShelf('color',state.shelf.color?[state.shelf.color]:[],'optional');
+    const fIds=state.shelf.filters.map(f=>f.field);
+    fillShelf('filters',fIds,'optional');
+    // pills picked / in-use states
+    const used=new Set([...state.shelf.cols,...state.shelf.rows,...fIds,state.shelf.color].filter(Boolean));
+    vizStage.querySelectorAll('[data-field]').forEach(b=>{
+      b.classList.toggle('picked',state.picked===b.dataset.field);
+      b.classList.toggle('in-use',used.has(b.dataset.field)&&state.picked!==b.dataset.field);
+    });
+    vizStage.querySelectorAll('[data-remove]').forEach(x=>x.addEventListener('click',e=>{e.stopPropagation();removeField(x.dataset.remove);}));
+    renderFilterPicker();
+  }
+  function renderFilterPicker(){
+    const box=vizStage.querySelector('#filterPick'); if(!box) return;
+    if(!state.shelf.filters.length){ box.innerHTML=''; return; }
+    box.innerHTML=state.shelf.filters.map(f=>{
+      const vals=[...new Set(DATA.map(r=>r[f.field]))];
+      const btns=vals.map(v=>`<button class="fval ${String(f.value)===String(v)?'on':''}" data-fv="${f.field}|${v}">${v}</button>`).join('');
+      return `<div class="footer-note" style="margin-top:.35rem">Keep ${LABEL(f.field)}: <span class="filter-values">${btns}</span></div>`;
+    }).join('');
+    box.querySelectorAll('[data-fv]').forEach(b=>b.addEventListener('click',()=>{
+      const [field,val]=b.dataset.fv.split('|');
+      const f=state.shelf.filters.find(x=>x.field===field);
+      f.value=(String(f.value)===val)?null:val;
+      refreshShelves(); drawViz();
+    }));
+  }
+
+  function renderLesson(){
+    state.solved=false; state.missedThisLesson=false; state.picked=null;
+    state.shelf={cols:[],rows:[],filters:[],color:null,mark:'auto',sortDesc:false};
+    const l=lessons[state.lesson];
+    lessonBadge.textContent=l.badge; lessonTitle.textContent=l.title;
+    whatNowText.textContent=l.whatNow; objectiveText.innerHTML=l.objective;
+    coachText.textContent=l.coach; hintText.textContent=l.hint;
+    el('whyText').textContent=l.why?'💼 Why it matters: '+l.why:'';
+    el('kitMatchText').innerHTML=l.kitMatch?`📚 Prep-kit match: <a href="${KIT_URL}" target="_blank" rel="noopener">${l.kitMatch}</a>`:'';
+    progressChip.textContent=`Lesson ${state.lesson+1} of ${lessons.length}`;
+    renderStepper();
+    feedbackBox.className='feedback hidden'; feedbackBox.textContent='';
+    el('nextLessonBottom').classList.add('hidden');
+    el('nextLessonTop').textContent=state.lesson===lessons.length-1?'Finish':'Next lesson →';
+    answerArea.innerHTML='';
+
+    // stages
+    if(l.stage==='viz'){ dataStage.classList.add('hidden'); vizStage.classList.remove('hidden'); buildWorkspace(); refreshShelves(); drawViz(); }
+    else if(l.stage==='none'){ dataStage.classList.add('hidden'); vizStage.classList.add('hidden'); }
+    else { vizStage.classList.add('hidden'); dataStage.classList.remove('hidden'); buildDataTable(); }
+
+    if(l.mode==='buttons'){
+      const wrap=document.createElement('div'); wrap.className='answer-section';
+      const lbl=document.createElement('div'); lbl.className='answer-section-label'; lbl.textContent='Select your answer:';
+      wrap.appendChild(lbl);
+      l.options.forEach(opt=>{
+        const b=document.createElement('button'); b.className='answer-option'; b.textContent=opt; b.dataset.choice=opt;
+        b.addEventListener('click',()=>{
+          document.querySelectorAll('[data-choice]').forEach(x=>x.classList.remove('selected'));
+          b.classList.add('selected'); answerArea.dataset.answer=opt;
+        });
+        wrap.appendChild(b);
+      });
+      answerArea.appendChild(wrap);
+      answerArea.dataset.answer='';
+    } else if(l.mode==='calc'){
+      const box=document.createElement('div'); box.className='formula-box';
+      const label=document.createElement('label'); label.textContent='Calculated field';
+      const field=document.createElement('div'); field.className='formula-input multi';
+      const prefix=document.createElement('span'); prefix.textContent='ƒx'; prefix.style.marginTop='.55rem';
+      const input=document.createElement('textarea'); input.id='typedAnswer'; input.rows=2;
+      input.placeholder=l.placeholder+' — Enter checks it, Shift+Enter adds a line';
+      input.setAttribute('autocomplete','off'); input.setAttribute('spellcheck','false');
+      input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el('submitAnswer').click();}});
+      field.append(prefix,input); box.append(label,field); answerArea.appendChild(box);
+    } else if(l.mode==='text'){
+      const box=document.createElement('div'); box.className='formula-box';
+      const label=document.createElement('label'); label.textContent='Your recommendation';
+      const field=document.createElement('div'); field.className='formula-input';
+      const prefix=document.createElement('span'); prefix.textContent='✍';
+      const input=document.createElement('input'); input.id='typedAnswer'; input.placeholder=l.placeholder; input.setAttribute('autocomplete','off');
+      input.addEventListener('keydown',e=>{if(e.key==='Enter')el('submitAnswer').click();});
+      field.append(prefix,input); box.append(label,field); answerArea.appendChild(box);
+    }
+    // viz mode: the workspace IS the input, no answerArea content
+  }
+
+  function setFeedback(ok,msg){
+    feedbackBox.className=`feedback ${ok?'success':'error'}`;
+    feedbackBox.innerHTML=msg; feedbackBox.classList.remove('hidden');
+  }
+  function updateStreakChip(){ const chip=el('streakChip'); chip.textContent=`🔥 ${state.streak}`; chip.classList.toggle('hidden',state.streak===0); }
+  function markMiss(msg){ state.missedThisLesson=true; state.streak=0; updateStreakChip(); setFeedback(false,msg); }
+  function markSolved(l){
+    state.skill=Math.max(state.skill,l.skill); state.sales=Math.max(state.sales,l.sales); state.readiness=Math.max(state.readiness,l.readiness);
+    state.completed.add(state.lesson); renderStepper();
+    if(!state.missedThisLesson){ state.streak+=1; if(state.streak>=3)unlockAchievement('streak'); }
+    updateStreakChip(); updateMeters(); unlockAchievement(l.achievement);
+    const hot=state.streak>=3 && !state.missedThisLesson;
+    setFeedback(true,(hot?`🔥 ${state.streak} first-try wins in a row! `:'')+l.success);
+    explode(hot?72:32); state.solved=true;
+    el('nextLessonBottom').classList.remove('hidden');
+  }
+
+  /* ── Viz grading: compare what's on the shelves, not pixels ── */
+  function setEq(a,b){const x=[...a].sort(),y=[...b].sort();return x.length===y.length&&x.every((v,i)=>v===y[i]);}
+  function effMark(sh){ if(sh.mark&&sh.mark!=='auto') return sh.mark; return 'bar'; }
+  function checkViz(exp,sh){
+    if(exp.cols&&!setEq(exp.cols,sh.cols)) return false;
+    if(exp.rows&&!setEq(exp.rows,sh.rows)) return false;
+    if(exp.mark&&exp.mark!==effMark(sh)) return false;
+    if(exp.color&&exp.color!==sh.color) return false;
+    if(exp.sortDesc&&!sh.sortDesc) return false;
+    if(exp.filter){ const f=sh.filters.find(x=>x.field===exp.filter.field&&String(x.value)===String(exp.filter.value)); if(!f) return false; }
+    return true;
+  }
+  function vizNudge(l,sh){
+    const exp=l.expected;
+    if(sh.cols.some(isMeas)||sh.rows.some(isDim)) return 'Tableau draws a chart when the <strong>blue</strong> category is on Columns and the <strong>green</strong> number is on Rows. Check which pill is on which shelf.';
+    if(exp.cols&&!setEq(exp.cols,sh.cols)) return `That is not the field this view needs on Columns — it should be <strong>${LABEL(exp.cols[0])}</strong>.`;
+    if(exp.rows&&!setEq(exp.rows,sh.rows)) return `Rows should hold <strong>${LABEL(exp.rows[0])}</strong> for this one. Swap it in and check again.`;
+    if(exp.mark==='line'&&effMark(sh)!=='line') return 'The fields are right — now open the Marks <strong>Type</strong> dropdown and choose <strong>Line</strong>.';
+    if(exp.sortDesc&&!sh.sortDesc) return 'The chart is right; now click <strong>Sort ↓</strong> to order the bars biggest-first.';
+    if(exp.color&&sh.color!==exp.color) return 'Drop <strong>Status</strong> onto <strong>Color</strong> in the Marks card to tint the bars.';
+    if(exp.filter){ const f=sh.filters.find(x=>x.field===exp.filter.field); if(!f) return 'Click <strong>Status</strong>, then the <strong>Filters</strong> shelf, to add the filter.'; if(String(f.value)!==String(exp.filter.value)) return `Filter is on Status — now click <strong>${exp.filter.value}</strong> in the value picker to keep only those.`; }
+    return l.fail;
+  }
+
+  function submitCurrent(){
+    const l=lessons[state.lesson];
+    if(state.solved) return;
+    if(l.mode==='buttons'){
+      if(answerArea.dataset.answer===l.answer) markSolved(l); else markMiss(l.fail);
+    } else if(l.mode==='calc'||l.mode==='text'){
+      const v=(el('typedAnswer')?.value||'').trim();
+      if(!v) return;
+      if(l.validate(v)) markSolved(l); else markMiss(l.fail);
+    } else if(l.mode==='viz'){
+      if(!state.shelf.cols.length&&!state.shelf.rows.length){ markMiss('Nothing on the shelves yet. Click a field to pick it up, then click a shelf to drop it.'); return; }
+      if(checkViz(l.expected,state.shelf)) markSolved(l); else markMiss(vizNudge(l,state.shelf));
+    }
+  }
+
+  function nextLesson(){
+    if(state.lesson<lessons.length-1){ state.lesson+=1; renderLesson(); window.scrollTo({top:0,behavior:'smooth'}); }
+    else{
+      lessonBadge.textContent='All done'; lessonTitle.textContent='Srbina can show the story now.';
+      whatNowText.textContent='You have finished all 14 lessons. Open any glossary card to review, or rebuild the charts from memory.';
+      objectiveText.innerHTML='You covered how Tableau sees data, blue dimensions vs. green measures, aggregation, bar and line charts, sorting, filtering, the Marks card and color, calculated fields, counting with Number of Records, chart choice, dashboards, a memory checkpoint, and a written recommendation. That is the working core of analyst Tableau — and the end of Srbina’s three-part journey from spreadsheet to database to dashboard.';
+      el('whyText').textContent=''; el('kitMatchText').innerHTML='';
+      coachText.textContent='Come back tomorrow and rebuild a chart from a blank canvas. Spaced repetition is how the shelves become second nature.';
+      hintText.textContent='Try the Lunch Break mini-game when you need a reset between sessions.';
+      dataStage.classList.add('hidden'); vizStage.classList.add('hidden');
+      answerArea.innerHTML='<div class="achievement"><strong>Sprint complete. 🎉</strong><p>Three sprints, one analyst: Srbina went from a spreadsheet of leads to querying a database to building a dashboard that makes the room nod. Ready to go deeper? <a href="https://michaelnocito.github.io/analyst-prep-kit/tableau/">Continue in the Tableau Prep Kit — 28 free lessons →</a></p><p class="footer-note" style="margin-top:.5rem">Next part of the story — a <strong>Python Analyst Sprint</strong> — is on the way.</p></div>';
+      el('submitAnswer').classList.add('hidden'); el('showPrereq').classList.add('hidden'); el('nextLessonBottom').classList.add('hidden'); el('nextLessonTop').classList.add('hidden');
+      unlockAchievement('story'); state.skill=92; state.sales=88; state.readiness=92; updateMeters();
+      setFeedback(true,'✓ All 14 lessons complete. Well done.');
+    }
+  }
+
+  el('submitAnswer').addEventListener('click',submitCurrent);
+  el('nextLessonBottom').addEventListener('click',nextLesson);
+  el('nextLessonTop').addEventListener('click',()=>{
+    if(state.solved||state.lesson===lessons.length-1) nextLesson();
+    else setFeedback(false,'Complete the current task first before moving on.');
+  });
+
+  const beansChip=el('beansChip'),ordersChip=el('ordersChip'),moodChip=el('moodChip');
+  function updateBreakUI(){
+    beansChip.textContent=`Coffees: ${state.beans}`;
+    ordersChip.textContent=`Served: ${state.orders}`;
+    moodChip.textContent=`Vibe: ${state.orders>=15?'excellent':state.orders>=5?'lighter':'calm'}`;
+  }
+  function dropBean(){
+    state.beans+=1; if(state.beans%3===0){state.orders+=1;}
+    if(state.orders>=5)unlockAchievement('break');
+    updateBreakUI();
+    const scene=el('coffeeScene');
+    const dot=document.createElement('div'); dot.className='bean';
+    dot.style.left=`${20+Math.random()*60}%`; dot.style.top=`${18+Math.random()*45}%`;
+    scene.appendChild(dot); setTimeout(()=>dot.remove(),700);
+  }
+  el('brewButton').addEventListener('click',dropBean);
+  el('autoServe').addEventListener('change',e=>{state.helper=e.target.checked;});
+  setInterval(()=>{if(state.helper){state.beans+=1;if(state.beans%3===0)state.orders+=1;updateBreakUI();}},2000);
+
+  updateMeters(); updateBreakUI(); renderLesson();
+})();
+</script>
+</body>
+</html>

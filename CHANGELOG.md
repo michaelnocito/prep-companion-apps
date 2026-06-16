@@ -6,6 +6,35 @@ restructures or breaking changes.
 
 ---
 
+## v1.4.0 — June 16, 2026
+
+**Tableau Analyst Sprint (Part 3) — new game.** The third sprint, `tableau/`,
+continues Srbina's story: she can query the database now, but a grid of results
+lost the room, so she learns to *show* the data in Tableau. 14 bite-size lessons
+matched unit-for-unit to the Tableau Prep Kit (how Tableau sees data → blue
+dimensions vs. green measures → aggregation → bar & line charts → sorting →
+filtering → the Marks card & color → calculated fields → counting → chart choice
+→ dashboards → a from-memory checkpoint → a written recommendation).
+
+- **New interaction: a drag-to-shelf viz builder.** Instead of a typed formula
+  (Excel) or query (SQL), build lessons use a click-to-place Tableau workspace —
+  a Data pane of blue/green field pills, Columns/Rows/Filters shelves, a Marks
+  card (mark type + Color), and a Sort control. Placing fields draws a live SVG
+  chart (bars, lines, colored bars), and lessons are graded on **what's on the
+  shelves**, not pixels — the visual parallel to SQL's result-based grading.
+- **Same dataset as the SQL sprint** (the eight leads, same revenue/region
+  totals) plus a close Month and Rep, so the numbers carry across parts —
+  East 3600 / West 3050 / South 2740 is the same answer in a new tool.
+- **The IF thread continues:** the calculated-field lesson echoes Excel's
+  `=IF(...)` and SQL's `CASE WHEN` with Tableau's `IF [Revenue] > 1000 THEN
+  "Priority" ELSE "Later" END` — one decision, three languages.
+- **Story carries both ways:** Tableau opens with "the story so far" linking
+  back to Excel + SQL; the **SQL sprint's completion screen now funnels forward
+  to Tableau**; Tableau's completion teases the upcoming Python sprint.
+- Hub page: new Part 3 card (Tableau removed from "Coming next"); README,
+  ROADMAP (Tableau now Part 3, Python Part 4), and footer links updated.
+- `node tools/check-syntax.js` green on all four pages.
+
 ## v1.3.0 — June 13, 2026
 
 **Real spreadsheet coordinates on the Excel sprint's practice sheet**
