@@ -114,6 +114,11 @@
     .answer-section-label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted)}
     .hint{padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);background:transparent;border:none;border-left:3px solid var(--color-border);font-size:var(--text-sm);color:var(--color-text-muted)}
     .hint strong{color:var(--color-text-muted);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em}
+    .hint-toggle{border-left:3px solid var(--color-border)}
+    .hint-toggle>summary{list-style:none;cursor:pointer;padding:var(--space-2) var(--space-3);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-muted);user-select:none;transition:color var(--transition)}
+    .hint-toggle>summary::-webkit-details-marker{display:none}
+    .hint-toggle>summary:hover{color:var(--color-text)}
+    .hint-toggle>p{margin:0;padding:0 var(--space-3) var(--space-2);font-size:var(--text-sm);color:var(--color-text-muted)}
     .feedback,.achievement,.break-box,.stats,.glossary-card{padding:var(--space-3);border-radius:var(--radius-lg);background:var(--color-surface-2);border:1px solid color-mix(in oklab,var(--color-text) 8%, transparent)}
     .feedback.success{background:var(--color-success-highlight);border-color:color-mix(in oklab,var(--color-success) 24%, transparent)}
     .feedback.error{background:var(--color-error-highlight);border-color:color-mix(in oklab,var(--color-error) 24%, transparent)}
@@ -313,10 +318,10 @@
 
       <div id="resultArea"></div>
 
-      <div class="hint" id="hintBox">
-        <strong>Gentle nudge</strong>
+      <details class="hint-toggle" id="hintBox">
+        <summary>🤔 Stuck? Reveal a hint</summary>
         <p id="hintText">It is the same grid idea Srbina already knows — just with stricter rules.</p>
-      </div>
+      </details>
 
       <div id="feedbackBox" class="feedback hidden"></div>
 
@@ -811,7 +816,7 @@
     const l=lessons[state.lesson];
     lessonBadge.textContent=l.badge; lessonTitle.textContent=l.title;
     whatNowText.textContent=l.whatNow; objectiveText.textContent=l.objective;
-    coachText.textContent=l.coach; hintText.textContent=l.hint;
+    coachText.textContent=l.coach; hintText.textContent=l.hint; el('hintBox').open=false;
     el('whyText').textContent=l.why?'💼 Why it matters: '+l.why:'';
     el('kitMatchText').innerHTML=l.kitMatch?`📚 Prep-kit match: <a href="${KIT_URL}" target="_blank" rel="noopener">${l.kitMatch}</a>`:'';
     progressChip.textContent=`Lesson ${state.lesson+1} of ${lessons.length}`;
