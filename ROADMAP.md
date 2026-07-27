@@ -33,6 +33,43 @@ Planned order (matching the prep-kit learning order):
 
 ## Active items
 
+> ### 🧪 PLAYTEST TRIAGE — 2026-07-27 (tracker project "SQL analyst sprint")
+>
+> - 🔴 **[AS-1] The SQL sprint's screens are too busy — rebuild them the way SQL Trail
+>   and SQL Quest present a question.** Mike, three notes in one sitting: "Screens way
+>   too busy. Too much info." / "Redo like we did SQL trail and SQL quest. Simple
+>   screens. 1 concept. Always orientate user. Read all."
+>
+>   This is vision principle 1 ("one screen, one task") not actually holding on the SQL
+>   sprint. What the two reference builds do that this does not:
+>
+>   1. **Sequential cards, one ask per screen.** SQL Trail splits a question into three
+>      screens — the job (story) → the task (prompt + editor + only the schema lines that
+>      matter) → the payout (result + what it taught). Nothing else is on screen while the
+>      learner is answering. The sprint stacks story, tables, instruction, editor and
+>      results in one scroll.
+>   2. **One concept per card.** If a screen teaches two things, it is two screens.
+>   3. **Orientation on every screen** — where you are, what this one asks, what happens
+>      next (feedback_player_orientation / feedback_user_intent_per_page). Trail carries a
+>      step line ("The job · The task · The payout") plus progress dots.
+>   4. **"Read all"** — the read-it-out-loud habit, but see the paired Analyst Prep Kit
+>      item [P2]: it should be a click-to-open help popup next to the code, not a
+>      permanently-parked panel. Build the sprint version the same way so the two match.
+>
+>   **Scope decision needed from Mike before building:** SQL sprint only (where he was
+>   playing), or the same pass across Excel and Tableau sprints too? Recommend doing the
+>   SQL sprint alone first as the pattern, then porting — one sprint per chat, per backlog
+>   discipline. The Excel sprint's layout has never drawn this complaint, so it may not
+>   need the same surgery.
+>
+>   **Related:** the Analyst Prep Kit's lesson wrap-up item [P3] ("what you just did and
+>   why it matters on the job") is the same instinct applied to the kits — the sprint's
+>   third card is where that lands here. Keep the two designs consistent.
+>
+>   Status: **not started, roadmap only.** One junk note in the same batch ("Shsk") was
+>   dismissed as an accidental capture.
+
+
 > Mike playtest feedback batch (June 13, 2026 — 1:11 AM ET), rated by
 > friction-reduction impact first, then dev-practice sequencing
 > (smallest certain win → broad sweep). Suggested order: A → B → C → D.
