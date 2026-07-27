@@ -56,11 +56,13 @@ Planned order (matching the prep-kit learning order):
 >      item [P2]: it should be a click-to-open help popup next to the code, not a
 >      permanently-parked panel. Build the sprint version the same way so the two match.
 >
->   **Scope decision needed from Mike before building:** SQL sprint only (where he was
->   playing), or the same pass across Excel and Tableau sprints too? Recommend doing the
->   SQL sprint alone first as the pattern, then porting — one sprint per chat, per backlog
->   discipline. The Excel sprint's layout has never drawn this complaint, so it may not
->   need the same surgery.
+>   **Scope — DECIDED (Mike, 2026-07-27): all three sprints.** Excel and Tableau get the
+>   same pass, not SQL alone. Build order stays SQL first since that is where the complaint
+>   came from and it sets the card pattern, then Excel, then Tableau — **one sprint per
+>   chat**, per backlog discipline. Tableau needs its own thought before it starts: the
+>   drag-to-shelf viz builder is a workspace, not a prompt-and-answer screen, so the "task"
+>   card there is the shelf-building surface itself and cannot be thinned the same way.
+>   Treat that as identity, not friction (same test the SQL Quest battlefield art gets).
 >
 >   **Related:** the Analyst Prep Kit's lesson wrap-up item [P3] ("what you just did and
 >   why it matters on the job") is the same instinct applied to the kits — the sprint's
