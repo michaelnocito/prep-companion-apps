@@ -6,6 +6,25 @@ restructures or breaking changes.
 
 ---
 
+## v1.9.0 — November 27, 2026
+
+**SQL Analyst Sprint: Srbina gets a real face, three new colors, and your
+own data to query.**
+
+- Srbina is drawn with Open Peeps by Pablo Stanley (CC0), generated with
+  DiceBear: four moods (calm, smiling, thinking, celebrating), shirt in the
+  chosen flavor color.
+- New flavors: Black, Slate and Matrix (green-on-black, monospace headings).
+- Stats: every Check writes a row to `attempts` and every solved lesson a row
+  to `lesson_results`, with an active-time timer that skips time the page is
+  hidden. Saved in the browser (save v1 → v2, progress kept). Attempts capped
+  at 1,000 rows; ids never reused. Reset clears the logs.
+- My Data (under More): your `lessons`, `attempts` and `lesson_results`
+  tables, a free SQL box that runs on them, six challenges checked against
+  your own rows (unlocked as lessons are finished), and Copy CSV per table.
+- 158 headless checks pass (35 new); planted-bug check on the timer caught;
+  Chrome screenshots at 390px, light and dark, all new flavors.
+
 ## v1.8.0 — November 27, 2026
 
 **SQL Analyst Sprint: faces and spot art.** Srbina appears as a face only
