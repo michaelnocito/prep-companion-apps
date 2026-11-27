@@ -6,6 +6,17 @@ restructures or breaking changes.
 
 ---
 
+## v1.7.0 — November 27, 2026
+
+**SQL Analyst Sprint: a more inviting Home.** The story is an always-open,
+illustrated 3-panel strip (spreadsheet → overflow → database) that recolors
+with the chosen flavor, with a "Replay Part 1" link. The next-lesson hero
+card gets lesson and unit chips and a round arrow; All lessons, More and
+About get icon tiles and plain subtitles. Tappable cards are raised and
+press down on tap. A palette button in the header opens colors and light/dark
+on every screen. No content, grading or saved-data changes. 115 headless
+checks pass; Chrome screenshots at 390px and desktop, light and dark.
+
 ## v1.6.0 — November 27, 2026
 
 **SQL Analyst Sprint: calmer Home.** One tappable hero card for the next
