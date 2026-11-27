@@ -6,6 +6,17 @@ restructures or breaking changes.
 
 ---
 
+## v1.9.1 — November 27, 2026
+
+**SQL Analyst Sprint: art credit and a shared color setting.**
+
+- About shows "Art: Open Peeps by Pablo Stanley (CC0)".
+- Colors are saved to the shared key `candy.theme.v1`, so a color picked
+  here can follow the learner to other candy-design pages on this site.
+  The old `sqlSprint.theme.v1` is read as a fallback and left in place.
+- 175 headless checks pass (17 new); two planted bugs caught (read order,
+  wrong key); Chrome screenshots at 390px and desktop, light and dark.
+
 ## v1.9.0 — November 27, 2026
 
 **SQL Analyst Sprint: Srbina gets a real face, three new colors, and your

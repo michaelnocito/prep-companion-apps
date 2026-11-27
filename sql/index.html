@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <!--
-  File: sql/index.html  (local copy: 2026_sql-sprint_v05.html)
+  File: sql/index.html  (local copy: 2026_sql-sprint_v06.html)
   App: SQL Analyst Sprint (Part 2 of Analyst Sprint)
-  Version: 1.9.0
+  Version: 1.9.1
   Art: Srbina is drawn with Open Peeps by Pablo Stanley (CC0 1.0), generated with DiceBear.
   Changelog (newest first)
+  1.9.1  2026-11-27  Art credit line in About. Colors saved to the shared key candy.theme.v1 so the
+                     color follows across pages; sqlSprint.theme.v1 is read as a fallback (kept, not deleted).
   1.9.0  2026-11-27  Open Peeps Srbina (4 moods, shirt in the flavor color); Black, Slate and Matrix
                      flavors; stats logging (attempts, lesson_results, timer that skips hidden time);
                      My Data screen: your tables, free SQL box, 6 challenges, CSV copy. Save v1 -> v2.
@@ -312,9 +314,10 @@
 <script>
 (() => {
   'use strict';
-  const VERSION = '1.9.0';
+  const VERSION = '1.9.1';
   const KEY = 'sqlSprint.v1';
-  const THEME_KEY = 'sqlSprint.theme.v1';
+  const THEME_KEY = 'candy.theme.v1';
+  const OLD_THEME_KEY = 'sqlSprint.theme.v1';
   const KIT_URL = 'https://michaelnocito.github.io/analyst-prep-kit/sql/';
   const SQL_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/';
 
@@ -638,8 +641,9 @@
   const mq = q => !!(window.matchMedia && window.matchMedia(q).matches);
   const reduce = () => mq('(prefers-reduced-motion: reduce)');
   function loadTheme() {
-    let t = {};
-    try { t = JSON.parse(localStorage.getItem(THEME_KEY) || '{}') || {}; } catch (e) { t = {}; }
+    const okFlavor = o => !!o && typeof o === 'object' && FLAVORS.some(f => f.id === o.flavor);
+    const read = k => { try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return okFlavor(o) ? o : null; } catch (e) { return null; } };
+    const t = read(THEME_KEY) || read(OLD_THEME_KEY) || {};
     const saved = t.mode === 'dark' || t.mode === 'light';
     return { mode: saved ? t.mode : (mq('(prefers-color-scheme: dark)') ? 'dark' : 'light'),
              flavor: FLAVORS.some(f => f.id === t.flavor) ? t.flavor : 'aqua', saved };
@@ -841,7 +845,7 @@
       <div class="card raised">
         <button class="rowbtn press" data-act="toggleAbout" aria-expanded="${ui.aboutOpen}" aria-controls="aboutBody"><span class="rowicon" aria-hidden="true">${IC.info}</span><span class="rowtext"><span>About</span><small>Version ${VERSION}, prep kit, links</small></span>${IC.chev}</button>
         <div class="rowbody" id="aboutBody"${ui.aboutOpen ? '' : ' hidden'}>
-      <p class="ver">v${VERSION} · Runs on SQLite</p>
+      <p class="ver">v${VERSION} · Runs on SQLite<br><span class="credit">Art: Open Peeps by Pablo Stanley (CC0)</span></p>
       <footer class="foot">
         <p><b>Ready for the full course?</b> <a href="${KIT_URL}">SQL Prep Kit · 47 free lessons →</a></p>
         <p>Every query here was worked through line by line. <em>SQL for Analysts</em> does that for 239 pages, including the two ways a join silently breaks and how to find where a total went. <a href="https://michaelnocito.gumroad.com/l/sql-for-analysts" target="_blank" rel="noopener" data-ga="book">SQL for Analysts, $19 →</a></p>
@@ -1168,7 +1172,7 @@
   applyLook();
   render();
   if (window.initSqlJs) bootSQL().catch(() => { sqlPromise = null; }); /* warm up the database in the background */
-  window.__sqlSprint = { VERSION, lessons, glossary, DATA, SCHEMA, VARIANT, KEY, THEME_KEY, ui, get save() { return save; }, runQuery, resultsMatch, nextIdx, runMine, CHAL, T };
+  window.__sqlSprint = { VERSION, lessons, glossary, DATA, SCHEMA, VARIANT, KEY, THEME_KEY, OLD_THEME_KEY, ui, get save() { return save; }, runQuery, resultsMatch, nextIdx, runMine, CHAL, T };
 })();
 </script>
 </body>
