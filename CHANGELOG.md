@@ -6,6 +6,15 @@ restructures or breaking changes.
 
 ---
 
+## v1.6.0 — November 27, 2026
+
+**SQL Analyst Sprint: calmer Home.** One tappable hero card for the next
+lesson (with a one-line story and a "Story so far" link), and All lessons,
+More (Progress, Achievements, Lunch break, All sprints) and About (footer)
+as single collapsed rows. On a 390px phone, a new player sees the hero card
+and Start with no scrolling. No content, grading or saved-data changes.
+103 headless checks pass; Chrome screenshots at 390px and desktop.
+
 ## v1.5.0 — November 27, 2026
 
 **SQL Analyst Sprint: candy design N and a content pass** (roadmap AS-1 for

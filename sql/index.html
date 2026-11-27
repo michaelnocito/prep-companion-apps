@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <!--
-  File: sql/index.html  (local copy: 2026_sql-sprint_v01.html)
+  File: sql/index.html  (local copy: 2026_sql-sprint_v02.html)
   App: SQL Analyst Sprint (Part 2 of Analyst Sprint)
-  Version: 1.5.0
+  Version: 1.6.0
   Changelog (newest first)
+  1.6.0  2026-11-27  Calmer Home: one tappable hero card (next lesson + story line), All lessons,
+                     More and About as single collapsed rows.
   1.5.0  2026-11-27  Candy design N: Home, lesson intro, question, done and glossary screens,
                      six flavors, saved light/dark, gray progress, one main action per dock.
                      Saved progress (sqlSprint.v1) and theme (sqlSprint.theme.v1).
@@ -217,6 +219,17 @@
     #fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
     .pt{position:absolute;left:50%;top:40%;width:9px;height:9px;border-radius:2px;animation:blast .9s ease-out forwards}
     @keyframes blast{to{transform:translate(var(--dx),var(--dy)) rotate(260deg);opacity:0}}
+    .hero{padding:18px 18px 16px;cursor:pointer;display:flex;flex-direction:column;gap:6px;border:2px solid color-mix(in srgb,var(--fb) 30%,transparent)}
+    .hero h1{font-size:30px}
+    .hero .story{font-size:14px;color:var(--muted);font-weight:700}
+    .linkbtn{border:0;background:none;padding:6px 0 0;color:var(--tdeep);font-weight:800;font-size:13px;cursor:pointer;align-self:flex-start;text-decoration:underline}
+    .storyfull{font-size:14px;cursor:default}
+    .storyfull p{margin:4px 0 0}
+    .rowbtn{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;border:0;background:none;padding:10px 16px;cursor:pointer;text-align:left;color:inherit;border-radius:18px;font-weight:800;font-size:14px}
+    .rowbtn .grow{flex:1}
+    .rowbtn .mini{width:90px}
+    .rowbtn .cnt{color:var(--muted);font-size:13px}
+    .rowbody{padding:0 16px 14px;display:flex;flex-direction:column;gap:10px}
     [hidden]{display:none!important}
   </style>
 </head>
@@ -232,7 +245,7 @@
 <script>
 (() => {
   'use strict';
-  const VERSION = '1.5.0';
+  const VERSION = '1.6.0';
   const KEY = 'sqlSprint.v1';
   const THEME_KEY = 'sqlSprint.theme.v1';
   const KIT_URL = 'https://michaelnocito.github.io/analyst-prep-kit/sql/';
@@ -619,7 +632,7 @@
 
   /* ── UI state (not saved) ── */
   const ui = { screen: 'home', lesson: 0, misses: 0, missed: new Set(), order: [], pick: null, draft: '', fb: null, lastRes: null,
-               back: 'home', gOpen: null, gq: '', allOpen: false, resetArm: false, helper: false, beans: 0, busy: false };
+               back: 'home', gOpen: null, gq: '', allOpen: false, moreOpen: false, aboutOpen: false, storyOpen: false, resetArm: false, helper: false, beans: 0, busy: false };
   let helperTimer = null;
 
   /* ── Screens ── */
@@ -635,30 +648,38 @@
       <div class="flavors" role="group" aria-label="Color flavor">${FLAVORS.map(x => `<button class="dot" data-act="flavor" data-f="${x.id}" aria-label="${x.name}" aria-pressed="${x.id === f.id}"><span style="background:linear-gradient(160deg,${x.a},${x.b})"></span></button>`).join('')}
         <span class="fname">${esc(f.name)}</span>
         <button class="xbtn" data-act="lights" aria-label="Dark mode" aria-pressed="${theme.mode === 'dark'}">${theme.mode === 'dark' ? IC.sun : IC.moon}</button></div>
-      <details class="card story"><summary><span class="sumrow"><span>The story so far · Part 2</span>${IC.chev}</span></summary>
-        <div class="pad" style="padding-top:0"><p>Srbina’s first recommendation impressed her manager, and the lead list outgrew the spreadsheet. It now lives in a real company database, and SQL is how she reaches it. You’re still her coach: one small task at a time.</p><p>New here? The story starts in the <a href="../excel/">Excel Analyst Sprint</a>.</p></div></details>
-      <div class="card">
-        <button class="allbtn" data-act="toggleAll" aria-expanded="${ui.allOpen}" aria-controls="allList"><span class="sumrow"><span class="label">All lessons</span>${IC.chev}</span><span class="mini" aria-hidden="true"><i style="width:${pct}%"></i></span>${stats3()}</button>
-        <div class="units" id="allList"${ui.allOpen ? '' : ' hidden'}>${units}</div>
-      </div>
-      <div class="card pad">
+      <div class="card hero" data-act="continue">
         <span class="eyebrow">${all ? 'Sprint complete' : `Up next · Lesson ${n + 1} of ${lessons.length}`}</span>
         <h1 tabindex="-1">${all ? 'Srbina speaks SQL now' : esc(lessons[n].title)}</h1>
-        <span class="label">${all ? `${lessons.length} of ${lessons.length} lessons` : esc(UNITS.find(u => u.lessons.includes(n)).name)}</span>
+        <span class="story">Part 2 · Srbina’s lead list moved into a database.</span>
+        <button class="linkbtn" data-act="story" aria-expanded="${ui.storyOpen}" aria-controls="storyFull">Story so far</button>
+        <div class="storyfull" id="storyFull"${ui.storyOpen ? '' : ' hidden'}><p>Her first recommendation impressed her manager, and the lead list outgrew the spreadsheet. SQL is how she reaches it now. You’re still her coach: one small task at a time.</p><p>New here? Start with the <a href="../excel/">Excel Analyst Sprint</a>.</p></div>
       </div>
-      <div class="grid2">
-        <button class="tilebtn" data-act="screen" data-s="progress"><b>Progress</b><span>${meters()[2][1]}% ready</span></button>
-        <button class="tilebtn" data-act="screen" data-s="achievements"><b>Achievements</b><span>${ACH.filter(a => a.ok(save)).length}/${ACH.length}</span></button>
-        <button class="tilebtn warm" data-act="screen" data-s="lunch"><b>Lunch break</b><span>Served ${save.served}</span></button>
-        <a class="tilebtn" href="../"><b>All sprints</b><span>Excel · SQL · Tableau</span></a>
+      <div class="card">
+        <button class="rowbtn" data-act="toggleAll" aria-expanded="${ui.allOpen}" aria-controls="allList"><span class="grow">All lessons</span><span class="mini" aria-hidden="true"><i style="width:${pct}%"></i></span><span class="cnt">${save.done.length}/${lessons.length}</span>${IC.chev}</button>
+        <div class="units" id="allList"${ui.allOpen ? '' : ' hidden'}>${stats3()}${units}</div>
       </div>
+      <div class="card">
+        <button class="rowbtn" data-act="toggleMore" aria-expanded="${ui.moreOpen}" aria-controls="moreList"><span class="grow">More</span><span class="cnt">Progress · Badges · Break</span>${IC.chev}</button>
+        <div class="rowbody" id="moreList"${ui.moreOpen ? '' : ' hidden'}><div class="grid2">
+          <button class="tilebtn" data-act="screen" data-s="progress"><b>Progress</b><span>${meters()[2][1]}% ready</span></button>
+          <button class="tilebtn" data-act="screen" data-s="achievements"><b>Achievements</b><span>${ACH.filter(a => a.ok(save)).length}/${ACH.length}</span></button>
+          <button class="tilebtn warm" data-act="screen" data-s="lunch"><b>Lunch break</b><span>Served ${save.served}</span></button>
+          <a class="tilebtn" href="../"><b>All sprints</b><span>Excel · SQL · Tableau</span></a>
+        </div></div>
+      </div>
+      <div class="card">
+        <button class="rowbtn" data-act="toggleAbout" aria-expanded="${ui.aboutOpen}" aria-controls="aboutBody"><span class="grow">About</span><span class="cnt">v${VERSION}</span>${IC.chev}</button>
+        <div class="rowbody" id="aboutBody"${ui.aboutOpen ? '' : ' hidden'}>
       <p class="ver">v${VERSION} · Runs on SQLite</p>
       <footer class="foot">
         <p><b>Ready for the full course?</b> <a href="${KIT_URL}">SQL Prep Kit · 47 free lessons →</a></p>
         <p>Every query here was worked through line by line. <em>SQL for Analysts</em> does that for 239 pages, including the two ways a join silently breaks and how to find where a total went. <a href="https://michaelnocito.gumroad.com/l/sql-for-analysts" target="_blank" rel="noopener" data-ga="book">SQL for Analysts, $19 →</a></p>
         <p>More free kits: <a href="https://michaelnocito.github.io/analyst-prep-kit/excel/">Excel</a> · <a href="https://michaelnocito.github.io/analyst-prep-kit/python/">Python</a> · <a href="https://michaelnocito.github.io/analyst-prep-kit/tableau/">Tableau</a> · <a href="https://michaelnocito.github.io/analyst-prep-kit/powerbi/">Power BI</a> · <a href="https://michaelnocito.github.io/analyst-prep-kit/stats/">Stats</a> · <a href="https://michaelnocito.github.io/analyst-prep-kit/chart-literacy/">Chart Literacy</a> · <a href="https://michaelnocito.github.io/analyst-prep-kit/forecasting/">Forecasting</a> · <a href="https://michaelnocito.github.io/analyst-prep-kit/interview/">Interview</a> · <a href="https://michaelnocito.github.io/analyst-prep-kit/">All kits ↗</a></p>
         <p>Played the prequel? <a href="../excel/">Excel Analyst Sprint ↗</a> · Built by <a href="https://michaelnocito.github.io">Michael Nocito</a> · <a href="https://github.com/michaelnocito/prep-companion-apps">GitHub ↗</a></p>
-      </footer>`;
+      </footer>
+        </div>
+      </div>`;
     const dock = dockGo(all ? 'See summary' : save.done.length ? 'Continue' : 'Start', 'continue');
     return [top, body, dock, ''];
   }
@@ -885,6 +906,9 @@
       case 'retry': ui.fb = null; if (L().mode === 'buttons') ui.pick = null; render(); focusSel(L().mode === 'buttons' ? '.opt' : '#q'); break;
       case 'next': if (ui.lesson >= lessons.length - 1) { ui.back = 'home'; go('done'); confetti(80); } else openLesson(ui.lesson + 1); break;
       case 'toggleAll': { ui.allOpen = !ui.allOpen; $('allList').hidden = !ui.allOpen; el.setAttribute('aria-expanded', String(ui.allOpen)); break; }
+      case 'toggleMore': { ui.moreOpen = !ui.moreOpen; $('moreList').hidden = !ui.moreOpen; el.setAttribute('aria-expanded', String(ui.moreOpen)); break; }
+      case 'toggleAbout': { ui.aboutOpen = !ui.aboutOpen; $('aboutBody').hidden = !ui.aboutOpen; el.setAttribute('aria-expanded', String(ui.aboutOpen)); break; }
+      case 'story': { ui.storyOpen = !ui.storyOpen; $('storyFull').hidden = !ui.storyOpen; el.setAttribute('aria-expanded', String(ui.storyOpen)); break; }
       case 'flavor': theme.flavor = el.dataset.f; saveTheme(); applyLook(); render(); focusSel(`[data-f="${theme.flavor}"]`); say(flavor().name); break;
       case 'lights': theme.mode = theme.mode === 'dark' ? 'light' : 'dark'; theme.saved = true; saveTheme(); applyLook(); render(); focusSel('[data-act="lights"]'); say(theme.mode === 'dark' ? 'Dark mode on' : 'Dark mode off'); break;
       case 'screen': ui.back = 'home'; go(el.dataset.s); break;
@@ -899,6 +923,7 @@
   }
   document.addEventListener('click', e => {
     const g = e.target.closest('[data-ga="book"]'); if (g && window.gtag) window.gtag('event', 'book_click', { from: 'prep-companion-sql' });
+    if (e.target.closest('a') || e.target.closest('.storyfull')) return;
     const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
     act(b.dataset.act, b);
   });
