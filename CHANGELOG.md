@@ -6,6 +6,15 @@ restructures or breaking changes.
 
 ---
 
+## v1.8.0 — November 27, 2026
+
+**SQL Analyst Sprint: faces and spot art.** Srbina appears as a face only
+(no body shapes) in the story strip. Each of the 8 units has its own small
+picture on the lesson intro, and Srbina's face reacts in the result panel
+(smiling or thinking). Done, Progress and Achievements show her face. The
+question and glossary screens stay art-free. All art is decorative and
+hidden from screen readers. 123 headless checks pass; Chrome screenshots.
+
 ## v1.7.0 — November 27, 2026
 
 **SQL Analyst Sprint: a more inviting Home.** The story is an always-open,
