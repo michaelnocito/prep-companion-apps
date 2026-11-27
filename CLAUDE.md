@@ -18,9 +18,11 @@ repos pointing here — don't push game changes there.
 
 ## Product identity (don't regress these)
 
-- **One screen, one task.** Focused single-column layout (max 860px).
-  Overview and extras live in collapsed `<details class="collapser">`
-  rows. No mode toggles.
+- **One screen, one task.** Single-column layout. SQL (v1.5.0 on) uses
+  candy design N: max 560px, screens Home → lesson intro → question →
+  summary, one main button in the bottom dock, long lists collapsed.
+  Excel and Tableau (max 860px) move to it in their AS-1 pass. No mode
+  toggles.
 - **The story carries.** Srbina's arc runs Part 1 (Excel) → Part 2 (SQL)
   → onward. A new sprint opens with "the story so far" and links back
   with relative URLs (`../excel/`).
@@ -28,8 +30,8 @@ repos pointing here — don't push game changes there.
   answers (missing `=` gets a teaching nudge and breaks the streak).
   SQL: queries actually run (sql.js) and are graded on the result
   returned, not the text typed.
-- **Wording rules:** glossary button is "💡 Explain it to me" (never
-  "Learn this first"). Don't use the phrase "plain English" in UI copy
+- **Wording rules:** glossary button is "Explain it to me" (never
+  "Learn this first"; no emoji in buttons from SQL v1.5.0 on). Don't use the phrase "plain English" in UI copy
   (removed as insensitive); say "plain-language".
 - Every lesson has a `why` (career context) and a `kitMatch` link to the
   matching prep-kit lesson.
@@ -38,7 +40,8 @@ repos pointing here — don't push game changes there.
 
 1. Copy the closest existing game (`sql/index.html` is the newest) into
    a new folder named after the skill (`python/`, `tableau/`, `stats/`).
-2. Re-theme title/subtitle/logo SVG; keep the shared design tokens.
+2. Re-theme title and copy; use candy design N (tokens and screen
+   patterns from `sql/index.html`).
 3. Write 14 lessons matched unit-for-unit to that skill's prep-kit
    curriculum, ending with a from-memory checkpoint + a written/business
    recommendation lesson.

@@ -68,7 +68,7 @@ Planned order (matching the prep-kit learning order):
 >   why it matters on the job") is the same instinct applied to the kits — the sprint's
 >   third card is where that lands here. Keep the two designs consistent.
 >
->   Status: **not started, roadmap only.** One junk note in the same batch ("Shsk") was
+>   Status: **SQL shipped in v1.5.0 (Nov 27, 2026) using candy design N. Excel next, then Tableau.** One junk note in the same batch ("Shsk") was
 >   dismissed as an accidental capture.
 
 
@@ -83,7 +83,8 @@ Planned order (matching the prep-kit learning order):
     A–E + row numbers 1–4 in grey Excel chrome. SQL sprint deliberately
     unchanged (queries use column names, not grid refs).
   - **B. Prep-kit match links should deep-link to the LESSON, not the
-    kit root (both sprints).** Needs (1) `#lesson-<id>` hash routing on
+    kit root (both sprints).** ✅ SQL done in v1.5.0 (the kit now reads
+    `#lesson-<id>`); Excel still open. Needs (1) `#lesson-<id>` hash routing on
     load in analyst-prep-kit excel + sql kits (mirror the existing
     `#exam-<section>` pattern in the Final kit), (2) per-lesson `kitId`
     in both games' lesson data, URL = `KIT_URL + '#lesson-' + id`.
@@ -124,6 +125,11 @@ Planned order (matching the prep-kit learning order):
     reuse per-lesson visuals).
 
 ## Parking lot
+
+- SQL coverage pass (next SQL item): AS aliases, IS NULL, AND/OR,
+  COALESCE, a checkpoint that mixes 3 skills (audit v01, section 5)
+- Hub page in candy design N
+- Block-ordering (Parsons) questions for phone typing
 
 - Stats Analyst Sprint
 - Shared progress across sprints (e.g. "Part 1 complete" badge visible

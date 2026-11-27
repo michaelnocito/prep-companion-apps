@@ -6,6 +6,32 @@ restructures or breaking changes.
 
 ---
 
+## v1.5.0 — November 27, 2026
+
+**SQL Analyst Sprint: candy design N and a content pass** (roadmap AS-1 for
+SQL, item B for SQL; findings from `AUDIT_sql-analyst-sprint-content_v01`).
+
+- New flow: Home → lesson intro (the job) → question (the task) → green or
+  pink result panel (the payout) → summary. The glossary is a searchable
+  reference screen. Six color flavors, saved light/dark, max width 560px,
+  gray progress, one main button per screen.
+- Progress is saved in the browser (lessons done, first-try streak, coffees
+  served), so a reload no longer restarts at Lesson 1. Reset needs a second tap.
+- Grading: hidden extra rows check Lessons 11 and 12, so shortcuts such as
+  `HAVING region <> 'South'` or `>= 1000` no longer pass. Lesson 14 rejects
+  negated sentences and asks for the 2100 figure.
+- Teaching nudges for double-quoted text, wrong text case, a missing
+  GROUP BY, and WHERE on SUM.
+- Answer options shuffle. Hints show the query shape; the full answer appears
+  after two misses. Lesson intros show a worked example on different data.
+- Prep-kit links open the matching kit lesson (`#lesson-<id>`).
+- Copy: "47 free lessons" (was 20), softer claims, a full IS NULL example,
+  one instruction per lesson, "Explain it to me" without emoji, a
+  "Runs on SQLite" note.
+- Excel and Tableau sprints unchanged; their AS-1 pass is next.
+- Checked with 95 headless tests (jsdom + sql.js 1.10.2) and Chrome
+  screenshots at 390px and desktop. `node tools/check-syntax.js` green.
+
 ## v1.4.0 — June 16, 2026
 
 **Tableau Analyst Sprint (Part 3) — new game.** The third sprint, `tableau/`,

@@ -21,7 +21,7 @@ A family of free, browser-based games for people starting out in data analytics.
 - Read the one task on screen — one screen, one task, zero clutter
 - Type a real formula, run a real SQL query (queries actually run, against an in-browser SQLite database powered by [sql.js](https://sql.js.org/)), or drag fields onto Tableau-style shelves to build a real chart
 - Get instant feedback, earn achievements, build a 🔥 first-try streak
-- Stuck? Tap **💡 Explain it to me** for a plain-language breakdown
+- Stuck? Tap **Explain it to me** for a plain-language breakdown
 
 Every lesson says why it matters on the job.
 
