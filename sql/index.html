@@ -2,9 +2,11 @@
 <!--
   File: sql/index.html  (local copy: 2026_sql-sprint_v08.html)
   App: SQL Analyst Sprint (Part 2 of Analyst Sprint)
-  Version: 1.11.0
+  Version: 1.12.0
   Art: Srbina is drawn with Open Peeps by Pablo Stanley (CC0 1.0), generated with DiceBear.
   Changelog (newest first)
+  1.12.0 2026-11-28  Color picker open by default on every screen; one-time "New here?" color tip
+                     (shared key candy.hint.v1, hidden after Got it or the first color/mode pick).
   1.11.0 2026-11-27  Sample lead "Northwind" renamed to "Larkfield" (matches the Excel sprint).
   1.10.0 2026-11-27  Home tells the story: who Srbina is, your role as coach, the manager's question for
                      the current unit, the goal, and a "You are here" unit bar (replaces the comic strip).
@@ -299,6 +301,11 @@
     .mfb.ok{background:var(--ok-a);color:var(--ok-ink)}
     .mfb.bad{background:var(--bad-a);color:var(--bad-ink)}
     .csv{width:100%;min-height:90px;margin-top:8px;font-family:var(--mono);font-size:12px;border:2px solid var(--line);border-radius:12px;background:var(--code);color:var(--ink);padding:8px}
+    /* candy color tip v1: first-visit callout under the open palette strip */
+    .palhint{position:relative;display:flex;align-items:center;gap:10px;margin:8px 16px 6px;padding:8px 8px 8px 12px;border-radius:14px;background:var(--warm);color:var(--warm-ink);font-size:13px;font-weight:700;line-height:1.35}
+    .palhint::before{content:"";position:absolute;top:-5px;left:24px;width:12px;height:12px;background:var(--warm);transform:rotate(45deg);border-radius:2px}
+    .palhint>span{flex:1;min-width:0;position:relative}
+    .palhint button{flex:none;min-height:36px;padding:0 14px;border:0;border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-weight:800;cursor:pointer;box-shadow:0 1px 3px rgba(20,50,80,.12);position:relative}
     [hidden]{display:none!important}
   </style>
 </head>
@@ -308,6 +315,7 @@
 <div class="app" id="app">
   <header class="top" id="top"></header>
   <div class="palette" id="palette" role="group" aria-label="Colors and light mode" hidden></div>
+<div class="palhint" id="palhint" data-for="palette" role="note" hidden><span><b>New here?</b> Tap a color to make it yours. It follows you to every page.</span><button type="button" aria-label="Got it, hide the color tip">Got it</button></div>
   <main id="screen"><noscript><p>This game needs JavaScript turned on.</p></noscript></main>
   <div class="dock" id="dock"></div>
 </div>
@@ -315,7 +323,7 @@
 <script>
 (() => {
   'use strict';
-  const VERSION = '1.11.0';
+  const VERSION = '1.12.0';
   const KEY = 'sqlSprint.v1';
   const THEME_KEY = 'candy.theme.v1';
   const OLD_THEME_KEY = 'sqlSprint.theme.v1';
@@ -793,7 +801,7 @@
 
   /* ── UI state (not saved) ── */
   const ui = { screen: 'home', lesson: 0, misses: 0, missed: new Set(), order: [], pick: null, draft: '', fb: null, lastRes: null,
-               back: 'home', gOpen: null, gq: '', allOpen: false, paletteOpen: false, attemptNo: 0, lessonSecs: 0, chal: null, mdraft: '', mres: null, mfb: null, csv: null, moreOpen: false, aboutOpen: false, storyOpen: false, resetArm: false, helper: false, beans: 0, busy: false };
+               back: 'home', gOpen: null, gq: '', allOpen: false, paletteOpen: true, attemptNo: 0, lessonSecs: 0, chal: null, mdraft: '', mres: null, mfb: null, csv: null, moreOpen: false, aboutOpen: false, storyOpen: false, resetArm: false, helper: false, beans: 0, busy: false };
   let helperTimer = null;
 
   /* ── Home story: one object per sprint (reuse for Excel and Tableau); asks = one per unit ── */
@@ -1190,6 +1198,20 @@
   render();
   if (window.initSqlJs) bootSQL().catch(() => { sqlPromise = null; }); /* warm up the database in the background */
   window.__sqlSprint = { VERSION, STORY, UNITS, lessons, glossary, DATA, SCHEMA, VARIANT, KEY, THEME_KEY, OLD_THEME_KEY, ui, get save() { return save; }, runQuery, resultsMatch, nextIdx, runMine, CHAL, T };
+})();
+</script>
+<script>
+/* candy color tip v1: shown under the open palette until the visitor taps Got it or picks a color/mode. Shared key candy.hint.v1 = "1". */
+(function(){
+  var K='candy.hint.v1',h=document.getElementById('palhint');if(!h)return;
+  var pid=h.getAttribute('data-for')||'palette',seen=false;
+  try{seen=localStorage.getItem(K)==='1'}catch(e){}
+  function sync(){var p=document.getElementById(pid),show=!seen&&!!p&&!p.hidden&&p.offsetParent!==null;
+    if(p&&p.nextElementSibling!==h)p.after(h);if(h.hidden===show)h.hidden=!show}
+  function done(){if(seen)return;seen=true;try{localStorage.setItem(K,'1')}catch(e){}sync()}
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(b&&(h.contains(b)||b.closest('#'+pid)))done()},true);
+  if(window.MutationObserver)new MutationObserver(sync).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','class']});
+  sync();
 })();
 </script>
 </body>
