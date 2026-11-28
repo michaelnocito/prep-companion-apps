@@ -6,6 +6,16 @@ restructures or breaking changes.
 
 ---
 
+## v1.12.0 — November 28, 2026
+
+**Color picker open by default.** In the Excel and SQL sprints the color strip
+(9 flavors + light/dark) now starts open on every screen instead of hiding
+behind the palette button. First-time visitors also see a one-time "New here?"
+tip under it; it goes away after Got it or the first color or mode pick, and
+stays away on every page of the site (shared key `candy.hint.v1`).
+
+---
+
 ## v1.11.0 — November 27, 2026
 
 **Excel Analyst Sprint rebuilt.** Candy design N with one screen per task, a
