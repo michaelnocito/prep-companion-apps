@@ -6,6 +6,29 @@ restructures or breaking changes.
 
 ---
 
+## v1.14.0 — November 28, 2026
+
+**Three ways to answer in the Excel sprint.** The 7 formula lessons (4–8, 11,
+13) get the same "How to answer" switch as SQL:
+
+- **Blocks:** tap tiles to build the formula; `=` is a tile, and functions,
+  cells, colons and commas are separate tiles. Two decoy tiles per lesson
+  target common slips (comma vs colon, SUM vs AVERAGE, `>=` vs `>`, single
+  quotes, a fixed cell instead of a lookup). A decoy explains itself when the
+  check fails.
+- **Fill:** the formula with the lesson's new piece left blank; `=` is shown
+  as fixed text.
+- **Type:** the fx box, with a key strip above it (`= ( ) , : $ "` plus the
+  lesson's function) that types at the cursor.
+
+The default is shared with SQL (`candy.answer.v1`): a mode picked in one
+sprint opens the other in that mode, and the one-time tip shows only once
+across both. The `=` is still required in every mode. Grading is unchanged:
+the formula runs in the page's evaluator and is checked on the result and
+on hidden data. The hint now sits above the answer on every question screen.
+
+---
+
 ## v1.13.0 — November 28, 2026
 
 **Three ways to answer in the SQL sprint.** Lessons 4–13 now have a "How to

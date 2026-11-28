@@ -129,7 +129,8 @@ Planned order (matching the prep-kit learning order):
 - SQL coverage pass (next SQL item): AS aliases, IS NULL, AND/OR,
   COALESCE, a checkpoint that mixes 3 skills (audit v01, section 5)
 - Hub page in candy design N
-- Answer modes (Blocks · Fill · Type) for Excel formulas, same switch and shared default (SQL shipped in v1.13.0)
+- Home at 390x664: since v1.12.0 the open color strip (plus the first-visit color tip) pushes the hero card 9–65px under the dock on short phones, in Excel and SQL. Fix: tighter strip, or close it on Home once a color is picked
+- Answer modes for Tableau calculated fields (Excel shipped in v1.14.0, SQL in v1.13.0)
 
 - Stats Analyst Sprint
 - Shared progress across sprints (e.g. "Part 1 complete" badge visible

@@ -23,7 +23,7 @@ repos pointing here — don't push game changes there.
   summary, one main button in the bottom dock, long lists collapsed.
   Tableau (max 860px) moves to it in its AS-1 pass. No mode
   toggles, with one exception: the answer-mode switch (Blocks · Fill · Type)
-  on question screens (SQL v1.13.0, Mike's call). The pick is saved in the
+  on question screens (SQL v1.13.0, Excel v1.14.0, Mike's call). The pick is saved in the
   shared key `candy.answer.v1` and becomes the default everywhere. Hints sit
   above the answer so they stay visible with a phone keyboard open.
 - **The story carries.** Srbina's arc runs Part 1 (Excel) → Part 2 (SQL)
