@@ -18,16 +18,17 @@ repos pointing here — don't push game changes there.
 
 ## Product identity (don't regress these)
 
-- **One screen, one task.** Single-column layout. SQL (v1.5.0 on) uses
-  candy design N: max 560px, screens Home → lesson intro → question →
+- **One screen, one task.** Single-column layout. SQL (v1.5.0 on) and Excel
+  (v1.11.0 on) use candy design N: max 560px, screens Home → lesson intro → question →
   summary, one main button in the bottom dock, long lists collapsed.
-  Excel and Tableau (max 860px) move to it in their AS-1 pass. No mode
+  Tableau (max 860px) moves to it in its AS-1 pass. No mode
   toggles.
 - **The story carries.** Srbina's arc runs Part 1 (Excel) → Part 2 (SQL)
   → onward. A new sprint opens with "the story so far" and links back
   with relative URLs (`../excel/`).
 - **Real-tool habits.** Excel: the typed `=` is REQUIRED in formula
-  answers (missing `=` gets a teaching nudge and breaks the streak).
+  answers (missing `=` gets a teaching nudge and breaks the streak); formulas
+  run in the page's evaluator and are graded on the result.
   SQL: queries actually run (sql.js) and are graded on the result
   returned, not the text typed.
 - **Wording rules:** glossary button is "Explain it to me" (never

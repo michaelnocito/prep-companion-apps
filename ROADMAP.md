@@ -68,7 +68,7 @@ Planned order (matching the prep-kit learning order):
 >   why it matters on the job") is the same instinct applied to the kits — the sprint's
 >   third card is where that lands here. Keep the two designs consistent.
 >
->   Status: **SQL shipped in v1.5.0 (Nov 27, 2026) using candy design N. Excel next, then Tableau.** One junk note in the same batch ("Shsk") was
+>   Status: **SQL shipped in v1.5.0 and Excel in v1.11.0 (Nov 27, 2026) using candy design N. Tableau next.** One junk note in the same batch ("Shsk") was
 >   dismissed as an accidental capture.
 
 

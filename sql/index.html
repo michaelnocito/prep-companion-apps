@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <!--
-  File: sql/index.html  (local copy: 2026_sql-sprint_v07.html)
+  File: sql/index.html  (local copy: 2026_sql-sprint_v08.html)
   App: SQL Analyst Sprint (Part 2 of Analyst Sprint)
-  Version: 1.10.0
+  Version: 1.11.0
   Art: Srbina is drawn with Open Peeps by Pablo Stanley (CC0 1.0), generated with DiceBear.
   Changelog (newest first)
+  1.11.0 2026-11-27  Sample lead "Northwind" renamed to "Larkfield" (matches the Excel sprint).
   1.10.0 2026-11-27  Home tells the story: who Srbina is, your role as coach, the manager's question for
                      the current unit, the goal, and a "You are here" unit bar (replaces the comic strip).
                      Lessons 5 and 8 name who is asking.
@@ -314,7 +315,7 @@
 <script>
 (() => {
   'use strict';
-  const VERSION = '1.10.0';
+  const VERSION = '1.11.0';
   const KEY = 'sqlSprint.v1';
   const THEME_KEY = 'candy.theme.v1';
   const OLD_THEME_KEY = 'sqlSprint.theme.v1';
@@ -352,7 +353,7 @@
   const DATA = {
     leads: { cols: ['lead_id','lead_name','region','calls','revenue','status','rep_id'],
              types: ['INTEGER PRIMARY KEY','TEXT','TEXT','INTEGER','INTEGER','TEXT','INTEGER'],
-             rows: [[1,'Northwind','East',4,1200,'Warm',1],[2,'BluePeak','West',6,850,'Hot',2],[3,'Maple Desk','South',3,990,'Cold',3],[4,'Iron Harbor','East',8,2100,'Hot',1],
+             rows: [[1,'Larkfield','East',4,1200,'Warm',1],[2,'BluePeak','West',6,850,'Hot',2],[3,'Maple Desk','South',3,990,'Cold',3],[4,'Iron Harbor','East',8,2100,'Hot',1],
                     [5,'Cobalt Labs','West',2,700,'Cold',2],[6,'Sunfield','South',5,1750,'Hot',3],[7,'Pinecrest','East',1,300,'Warm',1],[8,'Quartz & Co','West',7,1500,'Warm',2]] },
     reps:  { cols: ['rep_id','rep_name','region'], types: ['INTEGER PRIMARY KEY','TEXT','TEXT'],
              rows: [[1,'Srbina','East'],[2,'Marco','West'],[3,'Dana','South'],[4,'Theo','North']] }
@@ -390,7 +391,7 @@
     { badge: "Lesson 2 · Grain", title: "What does one row mean?",
       story: "Before any query, ask one question: what does a single row stand for?",
       task: "In the leads table, what does one row represent?",
-      tip: "Read one row left to right: Northwind, East, 4 calls, 1200 revenue, Warm. All facts about one thing.",
+      tip: "Read one row left to right: Larkfield, East, 4 calls, 1200 revenue, Warm. All facts about one thing.",
       tables: ['leads'], tablesOpen: true, prereq: 'grain', mode: 'buttons',
       options: ["One sales lead", "One region", "One phone call"], answer: "One sales lead",
       hint: "Each row has exactly one lead_name.",
@@ -453,7 +454,7 @@
       tables: ['leads','reps'], prereq: 'join', mode: 'sql',
       expected: "SELECT lead_name, rep_name FROM leads INNER JOIN reps ON leads.rep_id = reps.rep_id", keywords: ['JOIN'],
       hint: "`… FROM leads INNER JOIN reps ON ___.rep_id = ___.rep_id`",
-      success: "Eight leads, each with its owner. Srbina holds Northwind, Iron Harbor and Pinecrest. JOIN … ON matched the keys.",
+      success: "Eight leads, each with its owner. Srbina holds Larkfield, Iron Harbor and Pinecrest. JOIN … ON matched the keys.",
       fail: "Join reps to leads, then say in ON which rep_id must match which. Both tables have rep_id, so put the table name in front of each.",
       why: "Joins are a skill interviewers often test. They turn scattered data into one answer.",
       kit: { id: 4, name: "INNER JOIN" }, skill: 56, sales: 30, readiness: 46 },
@@ -525,7 +526,7 @@
       tables: ['leads'], prereq: 'where', mode: 'sql',
       expected: "SELECT lead_name, calls FROM leads WHERE status = 'Warm'", keywords: ['WHERE'],
       hint: "Text values need single quotes. calls is a column in leads.",
-      success: "Northwind, Pinecrest, Quartz & Co, written without looking back.",
+      success: "Larkfield, Pinecrest, Quartz & Co, written without looking back.",
       fail: "Same pattern as Lesson 5: two columns, FROM leads, then WHERE on status.",
       why: "Pulling a skill from memory, not rereading it, is what locks it in.",
       kit: { id: null, name: "Unit 1: Foundations (review)" }, skill: 90, sales: 62, readiness: 82 },

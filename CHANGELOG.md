@@ -6,6 +6,23 @@ restructures or breaking changes.
 
 ---
 
+## v1.11.0 — November 27, 2026
+
+**Excel Analyst Sprint rebuilt.** Candy design N with one screen per task, a
+Home story card, saved progress, stats and My data (CSV copy).
+
+- Formulas run in a built-in evaluator and are graded on the result, with
+  hidden data checks. Valid alternatives pass; typed constants do not.
+- New 8-lead sheet (read-only) with a zero-Calls row and a padded name. All
+  lessons re-keyed. XLOOKUP is labeled; INDEX/MATCH and VLOOKUP also count.
+- Hints no longer show the answer; it appears after two misses.
+- Content fixes: lesson count on the finish screen, stricter recommendation
+  check, unsupported claims removed, shuffled options.
+
+**SQL Analyst Sprint:** sample lead "Northwind" renamed to "Larkfield".
+
+---
+
 ## v1.10.0 — November 27, 2026
 
 **SQL Analyst Sprint: Home tells the story.** A story card replaces the comic
