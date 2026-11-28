@@ -6,6 +6,15 @@ restructures or breaking changes.
 
 ---
 
+## v1.10.0 — November 27, 2026
+
+**SQL Analyst Sprint: Home tells the story.** A story card replaces the comic
+strip: you coach Srbina, a sales rep; her manager's question changes with each
+unit; the goal is stated; and an 8-unit bar shows "You are here". Lessons 5
+and 8 name who is asking. No grading or saved-data changes. 70 headless Chrome
+checks pass (new test script; the v1.9.1 jsdom suite was not re-run); a planted
+wrong-question bug was caught; screenshots at 390x844, 390x664 and desktop.
+
 ## v1.9.1 — November 27, 2026
 
 **SQL Analyst Sprint: art credit and a shared color setting.**

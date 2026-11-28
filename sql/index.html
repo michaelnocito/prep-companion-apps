@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <!--
-  File: sql/index.html  (local copy: 2026_sql-sprint_v06.html)
+  File: sql/index.html  (local copy: 2026_sql-sprint_v07.html)
   App: SQL Analyst Sprint (Part 2 of Analyst Sprint)
-  Version: 1.9.1
+  Version: 1.10.0
   Art: Srbina is drawn with Open Peeps by Pablo Stanley (CC0 1.0), generated with DiceBear.
   Changelog (newest first)
+  1.10.0 2026-11-27  Home tells the story: who Srbina is, your role as coach, the manager's question for
+                     the current unit, the goal, and a "You are here" unit bar (replaces the comic strip).
+                     Lessons 5 and 8 name who is asking.
   1.9.1  2026-11-27  Art credit line in About. Colors saved to the shared key candy.theme.v1 so the
                      color follows across pages; sqlSprint.theme.v1 is read as a fallback (kept, not deleted).
   1.9.0  2026-11-27  Open Peeps Srbina (4 moods, shirt in the flavor color); Black, Slate and Matrix
@@ -231,10 +234,7 @@
     @keyframes blast{to{transform:translate(var(--dx),var(--dy)) rotate(260deg);opacity:0}}
     .hero{padding:18px 18px 16px;cursor:pointer;display:flex;flex-direction:column;gap:6px;border:2px solid color-mix(in srgb,var(--fb) 30%,transparent)}
     .hero h1{font-size:30px}
-    .hero .story{font-size:14px;color:var(--muted);font-weight:700}
     .linkbtn{border:0;background:none;padding:6px 0 0;color:var(--tdeep);font-weight:800;font-size:13px;cursor:pointer;align-self:flex-start;text-decoration:underline}
-    .storyfull{font-size:14px;cursor:default}
-    .storyfull p{margin:4px 0 0}
     .rowbtn{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;border:0;background:none;padding:10px 16px;cursor:pointer;text-align:left;color:inherit;border-radius:18px;font-weight:800;font-size:14px}
     .rowbtn .grow{flex:1}
     .rowbtn .mini{width:90px}
@@ -254,16 +254,16 @@
     .storycard{padding:14px 16px 12px;display:flex;flex-direction:column;gap:8px}
     .storyhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
     .storylink{display:inline-flex;align-items:center;height:30px;padding:0 12px;border-radius:999px;background:var(--tile);color:var(--tdeep);font-size:12px;font-weight:800;text-decoration:none}
-    .strip{display:block;width:100%;height:auto}
-    .caps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center;font-size:12px;font-weight:800;color:var(--muted);line-height:1.3}
-    .s-panel{fill:var(--tile)}
+    .storyrow{display:flex;gap:12px;align-items:center}
+    .storyrow p,.ask p{margin:0;font-weight:700;font-size:15px;line-height:1.4}
+    .storyrow p{flex:1}
+    .ask{background:var(--tile);border-radius:16px;padding:9px 12px}
+    .unitbar{flex:none;margin-top:2px}
     .s-a{fill:var(--fa)} .s-b{fill:var(--fb)} .s-c{fill:var(--fc)}
     .s-card{fill:var(--card)} .s-line{stroke:var(--line);stroke-width:2;fill:none}
     .s-ink{fill:#203040} .s-skin{fill:#f2c9a5} .s-hair{fill:#4a2f25}
     .fs{stroke:#203040;stroke-width:2.4;fill:none;stroke-linecap:round}
     .s-stroke{stroke:#203040;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-    .s-wh{stroke:var(--fink);stroke-width:2.5;fill:none;stroke-linecap:round}
-    .s-text{fill:var(--fink);font-family:var(--mono);font-size:11px;font-weight:700}
     .rowicon{width:38px;height:38px;flex:none;border-radius:12px;background:linear-gradient(160deg,var(--fa),var(--fb) 60%,var(--fc));color:var(--fink);display:flex;align-items:center;justify-content:center}
     .rowtext{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0}
     .rowtext small{font-size:12px;font-weight:700;color:var(--muted)}
@@ -314,7 +314,7 @@
 <script>
 (() => {
   'use strict';
-  const VERSION = '1.9.1';
+  const VERSION = '1.10.0';
   const KEY = 'sqlSprint.v1';
   const THEME_KEY = 'candy.theme.v1';
   const OLD_THEME_KEY = 'sqlSprint.theme.v1';
@@ -422,7 +422,7 @@
       why: "SELECT and FROM are the spine of every query.",
       kit: { id: 1, name: "SELECT & FROM" }, skill: 34, sales: 16, readiness: 26 },
     { badge: "Lesson 5 · Filtering", title: "Find the hot leads",
-      story: "“Which leads are hot right now?”",
+      story: "Her manager asks: “Which leads are hot right now?”",
       task: "Return lead_name and revenue for only the leads whose status is Hot.",
       tip: "WHERE goes after FROM. Text values go in single quotes.",
       example: { sql: "SELECT rep_name FROM reps WHERE region = 'West'", cols: ['rep_name'], rows: [['Marco']] },
@@ -458,7 +458,7 @@
       why: "Joins are a skill interviewers often test. They turn scattered data into one answer.",
       kit: { id: 4, name: "INNER JOIN" }, skill: 56, sales: 30, readiness: 46 },
     { badge: "Lesson 8 · Counting groups", title: "How many leads per region?",
-      story: "“Are we spread evenly across regions?”",
+      story: "Her manager asks: “Are we spread evenly across regions?”",
       task: "Count the leads in each region. Return the region and the count.",
       tip: "GROUP BY folds the table into one row per group. COUNT(*) counts the rows in each group.",
       example: { sql: "SELECT status, COUNT(*) FROM leads GROUP BY status", cols: ['status','COUNT(*)'], rows: [['Cold',2],['Hot',3],['Warm',3]] },
@@ -731,8 +731,6 @@
   function face(mood, size) {
     return `<span class="face" data-mood="${mood}" aria-hidden="true"><span class="peep" style="width:${size}px;height:${size}px">${PEEPS[mood] || PEEPS.calm}</span></span>`;
   }
-  /* A face inside the story strip SVG, at x, y with a given size. */
-  const peepAt = (m, x, y, size) => `<g class="facehead-svg" transform="translate(${x} ${y}) scale(${size / 704})">${peepInner(m)}</g>`;
   const SPOTS = [
     '<rect class="s-card" x="8" y="10" width="48" height="44" rx="6"/><rect class="s-b" x="8" y="10" width="48" height="10" rx="5"/><path class="s-line" d="M8 31h48M8 42h48M24 20v34M40 20v34"/>',
     '<rect class="s-b" x="6" y="12" width="52" height="40" rx="8"/><rect class="s-a" x="13" y="21" width="26" height="5" rx="2.5"/><rect class="s-a" x="13" y="31" width="34" height="5" rx="2.5"/><rect class="s-card" x="13" y="41" width="4" height="7" rx="1"/>',
@@ -797,6 +795,37 @@
                back: 'home', gOpen: null, gq: '', allOpen: false, paletteOpen: false, attemptNo: 0, lessonSecs: 0, chal: null, mdraft: '', mres: null, mfb: null, csv: null, moreOpen: false, aboutOpen: false, storyOpen: false, resetArm: false, helper: false, beans: 0, busy: false };
   let helperTimer = null;
 
+  /* ── Home story: one object per sprint (reuse for Excel and Tableau); asks = one per unit ── */
+  const STORY = {
+    part: 'Part 2 · SQL',
+    prev: { href: '../excel/', label: 'Replay Part 1 ↗' },
+    intro: 'You coach Srbina, a sales rep. Her lead list outgrew the spreadsheet and moved to a database.',
+    goal: 'name the lead to work first, and why.',
+    doneLine: 'Good call. Next, show the room.',
+    asks: [
+      'The leads moved. Can you find your way around the database?',
+      'What is each lead worth, and which ones are hot?',
+      'We have ten minutes. What are the three biggest leads?',
+      'Who owns each lead?',
+      'Are we spread evenly? How much revenue is in each region?',
+      'Theo just joined. Can you list every rep, with leads or not?',
+      'Which regions top 3000, and which leads are priority?',
+      'One more check on the warm leads. Then: what do we do first?'
+    ]
+  };
+  function storyCard(n) {
+    const all = n < 0, u = all ? -1 : unitOf(n);
+    const bar = UNITS.map((x, k) => `<span class="${x.lessons.every(i => save.done.includes(i)) ? 'f' : k === u ? 'c' : ''}"></span>`).join('');
+    return `<div class="card storycard">
+        <div class="storyhead"><span class="eyebrow">${esc(STORY.part)}</span>${STORY.prev ? `<a class="storylink" href="${STORY.prev.href}">${esc(STORY.prev.label)}</a>` : ''}</div>
+        <div class="storyrow">${face(all ? 'happy' : 'calm', 56)}<p>${esc(STORY.intro)}</p></div>
+        <div class="ask"><span class="label">${all ? 'Her manager says' : 'Her manager asks'}</span><p>“${esc(all ? STORY.doneLine : STORY.asks[u])}”</p></div>
+        <div class="warmnote goal">${all ? '<b>Goal reached.</b>' : `<b>Goal:</b> ${esc(STORY.goal)}`}</div>
+        <div class="steps unitbar" aria-hidden="true">${bar}</div>
+        <span class="label here">${all ? `${UNITS.length} of ${UNITS.length} units done` : `You are here: unit ${u + 1} of ${UNITS.length} · ${esc(UNITS[u].name)}`}</span>
+      </div>`;
+  }
+
   /* ── Screens ── */
   function homeView() {
     const n = nextIdx(), all = n < 0, f = flavor();
@@ -807,20 +836,7 @@
       return `<button class="lrow" data-act="open" data-i="${i}"${open ? '' : ' disabled'}><span class="mark ${done ? 'done' : nx ? 'next' : 'todo'}" aria-hidden="true">${done ? IC.check : ''}</span><span>Lesson ${i + 1} · ${esc(lessons[i].title)}<span class="sr-only">${done ? ' (done)' : nx ? ' (next)' : ' (locked)'}</span></span></button>`;
     }).join('')}</div>`).join('');
     const body = `
-      <div class="card storycard">
-        <div class="storyhead"><span class="eyebrow">The story so far</span><a class="storylink" href="../excel/">Replay Part 1 ↗</a></div>
-        <svg class="strip" viewBox="0 0 330 110" role="img" aria-label="Srbina with a spreadsheet, the list overflowing, then a database">
-          <defs><clipPath id="stripP1"><rect x="0" y="0" width="100" height="110" rx="14"/></clipPath><clipPath id="stripP3"><rect x="230" y="0" width="100" height="110" rx="14"/></clipPath></defs><rect class="s-panel" x="0" y="0" width="100" height="110" rx="14"/><rect class="s-panel" x="115" y="0" width="100" height="110" rx="14"/><rect class="s-panel" x="230" y="0" width="100" height="110" rx="14"/>
-          <g><rect class="s-card" x="44" y="24" width="46" height="56" rx="5"/><path class="s-line" d="M44 38h46M44 52h46M44 66h46M60 24v56M75 24v56"/><rect class="s-b" x="44" y="24" width="46" height="9" rx="4"/>
-            <g clip-path="url(#stripP1)">${peepAt('calm', 0, 50, 58)}</g></g>
-          <g><rect class="s-card" x="134" y="16" width="46" height="56" rx="5" transform="rotate(-9 157 44)"/><rect class="s-card" x="142" y="24" width="46" height="56" rx="5"/><path class="s-line" d="M142 38h46M142 52h46M142 66h46M158 24v56M173 24v56"/><rect class="s-c" x="142" y="24" width="46" height="9" rx="4"/>
-            <rect class="s-a" x="148" y="86" width="22" height="6" rx="3"/><rect class="s-a" x="176" y="94" width="18" height="6" rx="3"/><rect class="s-a" x="134" y="98" width="16" height="6" rx="3"/>
-            <circle class="s-b" cx="196" cy="18" r="10"/><path class="s-wh" d="M196 12.5v6.5M196 23v.5"/></g>
-          <g><path class="s-b" d="M266 30a23 8 0 0 1 46 0v44a23 8 0 0 1-46 0z"/><ellipse class="s-a" cx="289" cy="30" rx="23" ry="8"/><path class="s-wh" d="M266 45a23 8 0 0 0 46 0" style="opacity:.6"/><text class="s-text" x="278" y="66">SQL</text>
-            <g clip-path="url(#stripP3)">${peepAt('smile', 228, 58, 52)}</g></g>
-        </svg>
-        <div class="caps"><span>Part 1: the spreadsheet</span><span>The list outgrew it</span><span>Part 2: the database</span></div>
-      </div>
+      ${storyCard(n)}
       <div class="card hero raised press" data-act="continue">
         <div class="htext">
           <div class="chips"><span class="chip">${all ? 'Complete' : `Lesson ${n + 1} of ${lessons.length}`}</span><span class="chip unit">${all ? `${lessons.length} lessons` : esc(UNITS.find(u => u.lessons.includes(n)).name)}</span></div>
@@ -1154,7 +1170,7 @@
   }
   document.addEventListener('click', e => {
     const g = e.target.closest('[data-ga="book"]'); if (g && window.gtag) window.gtag('event', 'book_click', { from: 'prep-companion-sql' });
-    if (e.target.closest('a') || e.target.closest('.storyfull')) return;
+    if (e.target.closest('a')) return;
     const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
     act(b.dataset.act, b);
   });
@@ -1172,7 +1188,7 @@
   applyLook();
   render();
   if (window.initSqlJs) bootSQL().catch(() => { sqlPromise = null; }); /* warm up the database in the background */
-  window.__sqlSprint = { VERSION, lessons, glossary, DATA, SCHEMA, VARIANT, KEY, THEME_KEY, OLD_THEME_KEY, ui, get save() { return save; }, runQuery, resultsMatch, nextIdx, runMine, CHAL, T };
+  window.__sqlSprint = { VERSION, STORY, UNITS, lessons, glossary, DATA, SCHEMA, VARIANT, KEY, THEME_KEY, OLD_THEME_KEY, ui, get save() { return save; }, runQuery, resultsMatch, nextIdx, runMine, CHAL, T };
 })();
 </script>
 </body>
