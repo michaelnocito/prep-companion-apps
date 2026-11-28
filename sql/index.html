@@ -2,9 +2,12 @@
 <!--
   File: sql/index.html  (local copy: 2026_sql-sprint_v08.html)
   App: SQL Analyst Sprint (Part 2 of Analyst Sprint)
-  Version: 1.12.0
+  Version: 1.13.0
   Art: Srbina is drawn with Open Peeps by Pablo Stanley (CC0 1.0), generated with DiceBear.
   Changelog (newest first)
+  1.13.0 2026-11-28  Three ways to answer SQL lessons 4-13: Blocks (tap tiles), Fill (type the blanks), Type (free box
+                     with a key strip). Pick is saved as the default (shared key candy.answer.v1) with a one-time tip.
+                     Hint moves above the answer on every question screen.
   1.12.0 2026-11-28  Color picker open by default on every screen; one-time "New here?" color tip
                      (shared key candy.hint.v1, hidden after Got it or the first color/mode pick).
   1.11.0 2026-11-27  Sample lead "Northwind" renamed to "Larkfield" (matches the Excel sprint).
@@ -186,6 +189,31 @@
     .opt.pick .ring{border:7px solid var(--fb)}
     .editor{display:block;width:100%;min-height:96px;margin-top:4px;padding:12px 14px;border:2px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);font-family:var(--mono);font-size:16px;line-height:1.45;resize:vertical}
     .editor:focus{outline:none;border-color:var(--fb)}
+    .amode{display:flex;flex-direction:column;gap:6px}
+    .seg{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--line)}
+    .segb{flex:1;min-height:40px;border:0;border-radius:999px;background:transparent;color:var(--ink);font:inherit;font-weight:800;cursor:pointer}
+    .segb[aria-pressed="true"]{background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.18);color:var(--ink)}
+    .segb:disabled{cursor:default;opacity:.6}
+    .segb:focus-visible,.tile:focus-visible,.key:focus-visible,.linkb:focus-visible{outline:3px solid var(--fb);outline-offset:2px}
+    .amtip{position:relative;display:flex;align-items:center;gap:10px;margin-top:6px;padding:8px 8px 8px 12px;border-radius:14px;background:var(--warm);color:var(--warm-ink);font-size:13px}
+    .amtip::before{content:"";position:absolute;top:-5px;left:24px;width:12px;height:12px;background:var(--warm);transform:rotate(45deg);border-radius:2px}
+    .amtip>span{flex:1;min-width:0;position:relative}
+    .amtip button{flex:none;min-height:36px;padding:0 14px;border:0;border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-weight:800;cursor:pointer}
+    .bline{display:flex;flex-wrap:wrap;gap:6px;min-height:58px;margin-top:4px;padding:8px;border:2px dashed var(--line);border-radius:16px;background:var(--card);align-items:center}
+    .bph{color:var(--muted);font-size:14px;padding:0 6px}
+    .bpool{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+    .tile{font-family:var(--mono);font-size:15px;min-height:42px;padding:6px 12px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-weight:700;cursor:pointer;max-width:100%;overflow-wrap:anywhere}
+    .tile.on{border-color:var(--fb)}
+    .tile.used{visibility:hidden}
+    .tile:disabled{cursor:default}
+    .bnote{margin:8px 0 0;font-size:13px;color:var(--muted)}
+    .linkb{border:0;background:none;padding:4px 6px;color:var(--ink);font:inherit;font-weight:800;text-decoration:underline;cursor:pointer}
+    .linkb:disabled{opacity:.5;cursor:default}
+    .fillq{margin-top:4px;padding:12px 14px;border:2px solid var(--line);border-radius:16px;background:var(--card);font-family:var(--mono);font-size:16px;line-height:2.3;overflow-wrap:anywhere}
+    .fin{font:inherit;max-width:100%;min-width:4ch;margin:0 2px;padding:0 4px;border:0;border-bottom:2px solid var(--fb);border-radius:6px 6px 0 0;background:rgba(127,127,127,.12);color:var(--ink)}
+    .fin:focus{outline:2px solid var(--fb);outline-offset:1px}
+    .kstrip{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 2px}
+    .key{font-family:var(--mono);font-size:14px;min-height:36px;padding:0 10px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-weight:800;cursor:pointer;touch-action:manipulation}
     .editor.prose{font-family:var(--sans);font-weight:600}
     .rwrap{padding:10px 12px;max-height:260px}
     details.hint{background:var(--warm);color:var(--warm-ink);border-radius:12px;font-size:14px}
@@ -323,7 +351,7 @@
 <script>
 (() => {
   'use strict';
-  const VERSION = '1.12.0';
+  const VERSION = '1.13.0';
   const KEY = 'sqlSprint.v1';
   const THEME_KEY = 'candy.theme.v1';
   const OLD_THEME_KEY = 'sqlSprint.theme.v1';
@@ -552,6 +580,33 @@
       kit: null, skill: 92, sales: 84, readiness: 90 }
   ];
   lessons.forEach(l => { if (l.mode === 'sql') l.reveal = '`' + l.expected + '`'; });
+  /* Answer modes (v1.13.0): fill = the query with the lesson's new pieces in {braces}; extra = distractor tiles for Blocks. */
+  const MODEDATA = {
+    3:  { fill: "SELECT {lead_name}, {revenue} FROM {leads}", extra: ['WHERE', 'region'] },
+    4:  { fill: "SELECT lead_name, revenue FROM leads {WHERE} {status} = '{Hot}'", extra: ['"Hot"', 'HAVING'] },
+    5:  { fill: "SELECT lead_name, revenue FROM leads {ORDER BY} {revenue} {DESC} {LIMIT} {3}", extra: ['ASC', 'TOP'] },
+    6:  { fill: "SELECT lead_name, rep_name FROM leads {INNER JOIN} {reps} {ON} {leads.rep_id} = {reps.rep_id}", extra: ['LEFT JOIN', 'region'] },
+    7:  { fill: "SELECT region, {COUNT(*)} FROM leads {GROUP BY} {region}", extra: ['SUM(revenue)', 'ORDER BY'] },
+    8:  { fill: "SELECT region, {SUM(revenue)} FROM leads {GROUP BY} {region}", extra: ['COUNT(*)', 'WHERE'] },
+    9:  { fill: "SELECT rep_name, lead_name FROM reps {LEFT JOIN} {leads} ON reps.rep_id = leads.rep_id", extra: ['INNER JOIN', 'status'] },
+    10: { fill: "SELECT region, SUM(revenue) FROM leads GROUP BY region {HAVING} {SUM(revenue)} > {3000}", extra: ['WHERE', 'COUNT(*)'] },
+    11: { fill: "SELECT lead_name, {CASE} {WHEN} {revenue > 1000} {THEN} 'Priority' {ELSE} 'Later' {END} FROM leads", extra: ['IF', "'Hot'"] },
+    12: { fill: "SELECT {lead_name}, {calls} FROM leads {WHERE} {status} = '{Warm}'", extra: ["'Hot'", 'revenue'] }
+  };
+  const JOINED = ['ORDER BY', 'GROUP BY', 'INNER JOIN', 'LEFT JOIN'];
+  function tilesOf(q) {
+    const w = q.split(/\s+/), out = [];
+    for (let k = 0; k < w.length; k++) { const two = w[k] + ' ' + (w[k + 1] || ''); if (JOINED.includes(two.toUpperCase())) { out.push(two); k++; } else out.push(w[k]); }
+    return out;
+  }
+  const STRIPKEYS = ['ORDER BY', 'DESC', 'LIMIT', 'INNER JOIN', 'LEFT JOIN', 'ON', 'GROUP BY', 'COUNT(', 'SUM(', 'HAVING', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END'];
+  lessons.forEach((l, i) => {
+    if (l.mode !== 'sql') return;
+    const m = MODEDATA[i];
+    l.fillParts = m.fill.split(/\{([^}]*)\}/); /* even = fixed text, odd = blank answer */
+    l.tiles = tilesOf(l.expected).concat(m.extra);
+    l.keys = ['SELECT', 'FROM', 'WHERE'].concat(STRIPKEYS.filter(k => l.expected.includes(k)), ['*', ',', '=', "'", '(', ')']);
+  });
 
   const GLOSSARY_ORDER = ['database','grain','keys','select','where','orderby','join','groupby','leftjoin','nullval','having','casewhen','story','sqlite'];
   const glossary = {
@@ -800,7 +855,16 @@
   const csvOf = (cols, rows) => [cols, ...rows].map(r => r.map(v => { const t = v == null ? '' : String(v); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; }).join(',')).join('\n');
 
   /* ── UI state (not saved) ── */
-  const ui = { screen: 'home', lesson: 0, misses: 0, missed: new Set(), order: [], pick: null, draft: '', fb: null, lastRes: null,
+  /* Answer mode, shared across sprints: candy.answer.v1 = {mode, tip}. First visit: Blocks, tip shown. */
+  const ANS_KEY = 'candy.answer.v1', AMODES = [['blocks', 'Blocks'], ['fill', 'Fill'], ['type', 'Type']];
+  function loadAns() {
+    try { const o = JSON.parse(localStorage.getItem(ANS_KEY) || 'null');
+      if (o && typeof o === 'object' && AMODES.some(m => m[0] === o.mode)) return { mode: o.mode, tip: o.tip === 1 ? 1 : 0 }; } catch (e) {}
+    return { mode: 'blocks', tip: 0 };
+  }
+  function saveAns() { try { localStorage.setItem(ANS_KEY, JSON.stringify(ans)); } catch (e) {} }
+  let ans = loadAns();
+  const ui = { screen: 'home', blkOrder: [], blk: [], fillv: [], lesson: 0, misses: 0, missed: new Set(), order: [], pick: null, draft: '', fb: null, lastRes: null,
                back: 'home', gOpen: null, gq: '', allOpen: false, paletteOpen: true, attemptNo: 0, lessonSecs: 0, chal: null, mdraft: '', mres: null, mfb: null, csv: null, moreOpen: false, aboutOpen: false, storyOpen: false, resetArm: false, helper: false, beans: 0, busy: false };
   let helperTimer = null;
 
@@ -903,20 +967,82 @@
         const mark = fb && ui.pick === o ? (fb.kind === 'ok' ? ' right' : ' wrong') : '';
         return `<button class="opt${ui.pick === o ? ' pick' : ''}${mark}" data-act="pick" data-k="${k}" aria-pressed="${ui.pick === o}"><span class="ring" aria-hidden="true"></span><span>${esc(o)}</span></button>`;
       }).join('')}</div>`;
+    } else if (l.mode === 'sql') {
+      ans = answerModes(l, fb);
     } else {
-      const sql = l.mode === 'sql';
-      ans = `<div><label class="label" for="q">${sql ? 'Your query' : 'Your recommendation'}</label><textarea id="q" class="editor${sql ? '' : ' prose'}" rows="3" spellcheck="${sql ? 'false' : 'true'}" autocomplete="off" autocapitalize="${sql ? 'off' : 'sentences'}" autocorrect="off" placeholder="${sql ? 'SELECT …' : 'Write one sentence…'}"${fb && fb.kind === 'ok' ? ' readonly' : ''}>${esc(ui.draft)}</textarea></div>`;
+      ans = `<div><label class="label" for="q">Your recommendation</label><textarea id="q" class="editor prose" rows="3" spellcheck="true" autocomplete="off" autocapitalize="sentences" autocorrect="off" placeholder="Write one sentence…"${fb && fb.kind === 'ok' ? ' readonly' : ''}>${esc(ui.draft)}</textarea></div>`;
     }
     const res = ui.lastRes ? `<div><span class="label">What the database returned</span><div class="card tw rwrap">${ui.lastRes.columns.length ? tableHTML(ui.lastRes.columns, ui.lastRes.rows) : '<p class="label" style="margin:0">The query ran, but returned no rows.</p>'}</div></div>` : '';
     const reveal = ui.misses >= 2 && l.reveal ? `<p><b>Answer:</b> ${fmt(l.reveal)}</p>` : '';
     const body = `<span class="eyebrow">${esc(l.badge)}</span><h1 tabindex="-1" class="prompt">${esc(l.task)}</h1>
-      ${tablesHTML(l, !!l.tablesOpen)}${ans}${res}
-      <details class="hint"${reveal ? ' open' : ''}><summary>Hint</summary><p>${fmt(l.hint)}</p>${reveal}</details>`;
+      ${tablesHTML(l, !!l.tablesOpen)}
+      <details class="hint"${reveal ? ' open' : ''}><summary>Hint</summary><p>${fmt(l.hint)}</p>${reveal}</details>${ans}${res}`;
     let dock, cls = '';
     if (!fb) dock = `<button class="soft" data-act="explain">Explain it to me</button>${dockGo('Check', 'check', ' id="checkBtn"')}`;
     else if (fb.kind === 'ok') { cls = 'ok fb'; dock = `<div class="fbrow">${face('smile', 44)}<p class="fbt"><b>Correct</b>${fmt(fb.msg)}</p></div><p class="whyl">Why it matters: ${fmt(l.why)}</p><button class="cont" data-act="next">Continue</button>`; }
     else { cls = 'bad fb'; dock = `<div class="fbrow">${face('think', 44)}<p class="fbt"><b>${fb.boot ? 'Connection problem' : 'Not yet'}</b>${fmt(fb.msg)}</p></div><button class="cont" data-act="retry">Try again</button>`; }
     return [lessonTop(), body, dock, cls];
+  }
+
+  /* SQL answer: switch (Blocks / Fill / Type) + the chosen answer area. Every mode builds a query string for check(). */
+  function answerModes(l, fb) {
+    const m = ans.mode, solvedNow = !!(fb && fb.kind === 'ok');
+    const sw = `<div class="amode"><span class="label" id="amLab">How to answer</span><div class="seg" role="group" aria-labelledby="amLab">${AMODES.map(([id, name]) =>
+      `<button class="segb" data-act="amode" data-m="${id}" aria-pressed="${m === id}"${solvedNow ? ' disabled' : ''}>${name}</button>`).join('')}</div>
+      ${ans.tip ? '' : `<div class="amtip" role="note"><span><b>Three ways to answer.</b> Tap Blocks, Fill or Type. Your pick stays as your default.</span><button type="button" data-act="amtip">Got it</button></div>`}</div>`;
+    let area;
+    if (m === 'blocks') {
+      const placed = ui.blk.map((k, p) => `<button class="tile on" data-act="tileOut" data-p="${p}" aria-label="Remove ${esc(l.tiles[k])}"${solvedNow ? ' disabled' : ''}>${esc(l.tiles[k])}</button>`).join('');
+      const pool = ui.blkOrder.map(k => ui.blk.includes(k)
+        ? `<span class="tile used" aria-hidden="true">${esc(l.tiles[k])}</span>`
+        : `<button class="tile" data-act="tileIn" data-t="${k}"${solvedNow ? ' disabled' : ''}>${esc(l.tiles[k])}</button>`).join('');
+      area = `<div><span class="label" id="bLab">Your query</span><div class="bline" role="group" aria-labelledby="bLab">${placed || '<span class="bph">Tap the tiles below, in order.</span>'}</div>
+        <div class="bpool" role="group" aria-label="Tiles">${pool}</div>
+        ${solvedNow ? '' : `<p class="bnote">Tap a tile in your query to send it back. <button class="linkb" data-act="tileClear"${ui.blk.length ? '' : ' disabled'}>Clear</button></p>`}</div>`;
+    } else if (m === 'fill') {
+      const n = (l.fillParts.length - 1) / 2;
+      area = `<div><span class="label" id="fLab">Fill the blanks</span><div class="fillq" role="group" aria-labelledby="fLab">${l.fillParts.map((t, k) => {
+        if (k % 2 === 0) return esc(t);
+        const b = (k - 1) / 2;
+        return `<input class="fin" data-fi="${b}" type="text" name="f${ui.lesson}-${b}-${Date.now().toString(36)}" style="width:${Math.max(4, t.length + 1)}ch" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Blank ${b + 1} of ${n}" value="${esc(ui.fillv[b] || '')}"${solvedNow ? ' readonly' : ''}>`;
+      }).join('')}</div></div>`;
+    } else {
+      area = `<div><label class="label" for="q">Your query</label>
+        ${solvedNow ? '' : `<div class="kstrip" role="group" aria-label="SQL keys">${l.keys.map(k => `<button type="button" class="key" data-act="key" data-k="${esc(k)}">${esc(k)}</button>`).join('')}</div>`}
+        <textarea id="q" class="editor" rows="3" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" placeholder="SELECT …"${solvedNow ? ' readonly' : ''}>${esc(ui.draft)}</textarea></div>`;
+    }
+    return sw + area;
+  }
+  function builtQuery(l) {
+    if (l.mode !== 'sql') return (($('q') || {}).value || '').trim();
+    if (ans.mode === 'blocks') return ui.blk.map(k => l.tiles[k]).join(' ');
+    if (ans.mode === 'fill') return l.fillParts.map((t, k) => k % 2 ? (ui.fillv[(k - 1) / 2] || '').trim() : t).join('').trim();
+    return (($('q') || {}).value || '').trim();
+  }
+  function focusAnswer() {
+    const l = L();
+    if (l.mode === 'buttons') return focusSel('.opt');
+    if (l.mode === 'sql' && ans.mode === 'blocks') return focusSel('.bpool button.tile') || focusSel('.bline .tile');
+    if (l.mode === 'sql' && ans.mode === 'fill') { const e = [...document.querySelectorAll('.fin')].find(x => !x.value) || document.querySelector('.fin'); if (e) e.focus(); return; }
+    focusSel('#q');
+  }
+  function insertKey(k) {
+    const q = $('q'); if (!q || q.readOnly) return;
+    const v = q.value, a = q.selectionStart == null ? v.length : q.selectionStart, b = q.selectionEnd == null ? a : q.selectionEnd;
+    const before = v.slice(0, a), prev = before.slice(-1);
+    const needSp = prev && !/[\s(]/.test(prev);
+    let t;
+    if (k === "'" || k === ')') t = k;
+    else if (k === '(') t = k;
+    else if (k === ',') t = ', ';
+    else if (k === '=') t = (needSp ? ' ' : '') + '= ';
+    else if (k.endsWith('(')) t = (needSp ? ' ' : '') + k;
+    else t = (needSp ? ' ' : '') + k + ' ';
+    if (t.endsWith(' ') && /^\s/.test(v.slice(b))) t = t.slice(0, -1); /* no double space before existing text */
+    q.value = before + t + v.slice(b);
+    const c = a + t.length;
+    try { q.setSelectionRange(c, c); } catch (e) {}
+    ui.draft = q.value; q.focus();
   }
 
   function doneView() {
@@ -1023,9 +1149,11 @@
     if (!isOpen(i)) return;
     ui.lesson = i; ui.misses = 0; ui.pick = null; ui.draft = ''; ui.fb = null; ui.lastRes = null; ui.attemptNo = 0; ui.lessonSecs = 0; stopTimer();
     ui.order = lessons[i].options ? shuffle(lessons[i].options) : [];
+    const l = lessons[i];
+    ui.blkOrder = l.tiles ? shuffle(l.tiles.map((t, k) => k)) : []; ui.blk = []; ui.fillv = [];
     go('intro');
   }
-  function focusSel(sel) { const e = document.querySelector(sel); if (e) e.focus(); }
+  function focusSel(sel) { const e = document.querySelector(sel); if (e) e.focus(); return !!e; }
   function filterGlossary() {
     const q = ui.gq.trim().toLowerCase(); let n = 0;
     document.querySelectorAll('.gsec').forEach(d => { const hit = !q || d.textContent.toLowerCase().includes(q); d.hidden = !hit; if (hit) n++; if (q && hit) d.open = true; });
@@ -1072,9 +1200,10 @@
       if (!ui.pick) { say('Pick an answer first.'); return; }
       return ui.pick === l.answer ? solved() : missed(l.fail);
     }
-    const raw = (($('q') || {}).value || '').trim();
-    ui.draft = raw;
-    if (!raw) { say(l.mode === 'sql' ? 'Type a query first.' : 'Write your sentence first.'); focusSel('#q'); return; }
+    const raw = builtQuery(l);
+    if (l.mode !== 'sql' || ans.mode === 'type') ui.draft = raw;
+    if (l.mode === 'sql' && ans.mode === 'fill' && l.fillParts.some((t, k) => k % 2 && !(ui.fillv[(k - 1) / 2] || '').trim())) { say('Fill every blank first.'); focusAnswer(); return; }
+    if (!raw) { say(l.mode !== 'sql' ? 'Write your sentence first.' : ans.mode === 'blocks' ? 'Tap tiles to build the query first.' : 'Type a query first.'); focusAnswer(); return; }
     if (l.mode === 'text') return l.validate(raw) ? solved() : missed(l.fail);
     if (!/\bselect\b/i.test(raw) || !/\bfrom\b/i.test(raw)) return missed('A complete query names the columns (SELECT …) and the table (FROM …). Add the missing piece.');
     const dq = dqValue(raw);
@@ -1151,7 +1280,28 @@
       case 'start': go('question'); startTimer(); break;
       case 'pick': if (ui.fb) return; ui.pick = ui.order[+el.dataset.k]; render(); focusSel(`[data-act="pick"][data-k="${el.dataset.k}"]`); break;
       case 'check': check(); break;
-      case 'retry': ui.fb = null; if (L().mode === 'buttons') ui.pick = null; render(); focusSel(L().mode === 'buttons' ? '.opt' : '#q'); break;
+      case 'retry': ui.fb = null; if (L().mode === 'buttons') ui.pick = null; render(); focusAnswer(); break;
+      case 'amode': {
+        if (ui.fb && ui.fb.kind === 'ok') return;
+        if ($('q')) ui.draft = $('q').value;
+        ans.mode = el.dataset.m; ans.tip = 1; saveAns();
+        if (ui.fb) ui.fb = null;
+        render(); focusSel(`[data-act="amode"][data-m="${ans.mode}"]`);
+        say(AMODES.find(m => m[0] === ans.mode)[1] + ' mode. It stays your default.'); break;
+      }
+      case 'amtip': ans.tip = 1; saveAns(); render(); focusSel(`[data-act="amode"][data-m="${ans.mode}"]`); break;
+      case 'tileIn': case 'tileOut': case 'tileClear': {
+        if (ui.fb && ui.fb.kind === 'ok') return;
+        if (a === 'tileIn') ui.blk.push(+el.dataset.t);
+        else if (a === 'tileOut') ui.blk.splice(+el.dataset.p, 1);
+        else ui.blk = [];
+        if (ui.fb) ui.fb = null;
+        render();
+        if (a === 'tileIn') focusSel('.bpool button.tile') || focusSel('.bline .tile:last-child');
+        else focusSel('.bline .tile') || focusSel('.bpool button.tile');
+        break;
+      }
+      case 'key': insertKey(el.dataset.k); break;
       case 'next': if (ui.lesson >= lessons.length - 1) { ui.back = 'home'; go('done'); confetti(80); } else openLesson(ui.lesson + 1); break;
       case 'toggleAll': { ui.allOpen = !ui.allOpen; $('allList').hidden = !ui.allOpen; el.setAttribute('aria-expanded', String(ui.allOpen)); break; }
       case 'toggleMore': { ui.moreOpen = !ui.moreOpen; $('moreList').hidden = !ui.moreOpen; el.setAttribute('aria-expanded', String(ui.moreOpen)); break; }
@@ -1183,13 +1333,16 @@
     const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
     act(b.dataset.act, b);
   });
+  /* SQL keys keep the phone keyboard open: no focus change on press. */
+  document.addEventListener('mousedown', e => { if (e.target.closest && e.target.closest('.key')) e.preventDefault(); });
   document.addEventListener('input', e => {
     if (e.target.id === 'q') ui.draft = e.target.value;
+    if (e.target.classList && e.target.classList.contains('fin')) ui.fillv[+e.target.dataset.fi] = e.target.value;
     if (e.target.id === 'mq') ui.mdraft = e.target.value;
     if (e.target.id === 'gq') { ui.gq = e.target.value; filterGlossary(); }
   });
   document.addEventListener('keydown', e => {
-    if (e.target.id === 'q' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); check(); }
+    if ((e.target.id === 'q' || (e.target.classList && e.target.classList.contains('fin'))) && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); check(); }
     if (e.target.id === 'mq' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); myRun(); }
   });
 
@@ -1197,7 +1350,7 @@
   applyLook();
   render();
   if (window.initSqlJs) bootSQL().catch(() => { sqlPromise = null; }); /* warm up the database in the background */
-  window.__sqlSprint = { VERSION, STORY, UNITS, lessons, glossary, DATA, SCHEMA, VARIANT, KEY, THEME_KEY, OLD_THEME_KEY, ui, get save() { return save; }, runQuery, resultsMatch, nextIdx, runMine, CHAL, T };
+  window.__sqlSprint = { VERSION, STORY, UNITS, lessons, glossary, DATA, SCHEMA, VARIANT, KEY, THEME_KEY, OLD_THEME_KEY, ui, get save() { return save; }, get ans() { return ans; }, ANS_KEY, builtQuery, runQuery, resultsMatch, nextIdx, runMine, CHAL, T };
 })();
 </script>
 <script>

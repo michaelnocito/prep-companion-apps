@@ -6,6 +6,25 @@ restructures or breaking changes.
 
 ---
 
+## v1.13.0 — November 28, 2026
+
+**Three ways to answer in the SQL sprint.** Lessons 4–13 now have a "How to
+answer" switch above the answer:
+
+- **Blocks:** tap tiles to build the query in order, tap a placed tile to
+  send it back, Clear to start over. Each lesson adds two decoy tiles.
+- **Fill:** the query with the lesson's new pieces left blank.
+- **Type:** the free box, with a strip of SQL keys above it that types at the
+  cursor and keeps the phone keyboard open.
+
+New visitors start on Blocks. Whatever mode you tap becomes your default
+(shared key `candy.answer.v1`), and a one-time tip explains the switch. All
+modes are graded the same way: the query runs and the result is checked.
+The hint now sits above the answer on every question screen, so it stays in
+view with the iPhone keyboard open.
+
+---
+
 ## v1.12.0 — November 28, 2026
 
 **Color picker open by default.** In the Excel and SQL sprints the color strip

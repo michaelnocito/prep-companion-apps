@@ -129,7 +129,7 @@ Planned order (matching the prep-kit learning order):
 - SQL coverage pass (next SQL item): AS aliases, IS NULL, AND/OR,
   COALESCE, a checkpoint that mixes 3 skills (audit v01, section 5)
 - Hub page in candy design N
-- Block-ordering (Parsons) questions for phone typing
+- Answer modes (Blocks · Fill · Type) for Excel formulas, same switch and shared default (SQL shipped in v1.13.0)
 
 - Stats Analyst Sprint
 - Shared progress across sprints (e.g. "Part 1 complete" badge visible
